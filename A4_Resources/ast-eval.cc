@@ -1,5 +1,6 @@
 #include "ast.hh"
 #include <stdlib.h>
+#include "local-environment.hh"
 
 using namespace std;
 

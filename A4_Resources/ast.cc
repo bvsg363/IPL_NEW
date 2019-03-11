@@ -1,6 +1,7 @@
 #include "ast.hh"
 #include <stdlib.h>
 #include <list>
+#include "symbol-table.hh"
 
 using namespace std;
 

@@ -39,7 +39,7 @@ Data_Type sample_data_type;
 %type <double_value>     DOUBLE_NUMBER
 %type <procedure>    procedure_definition
 %type <string_value> NAME
-%type <ast> assignment_statement expresssion variable constant identifier conditional_expr relational_expr logical_expr if_stmt while_stmt do_while_stmt
+%type <ast> assignment_statement expresssion variable constant conditional_expr relational_expr logical_expr if_stmt while_stmt do_while_stmt
 %type <symbol_table> variable_list variable_declaration variable_declaration_list global_variable_declaration_list
 %type <ast_list> statement_list
 
@@ -268,7 +268,7 @@ constant    :   INTEGER_NUMBER
 
 
 /* (a>b)&&(b<c) ? d : e */
-conditional_expr    :   logical_expr '?' identifier ':' identifier
+conditional_expr    :   logical_expr '?' expresssion ':' expresssion
                         {
                             $$ = new Conditional_Expression_Ast($1, $3, $5, yylineno);
                         }
@@ -392,42 +392,42 @@ logical_expr      :   logical_expr AND logical_expr
 
 
 
-relational_expr     :   identifier LESS_THAN identifier
+relational_expr     :   expresssion LESS_THAN expresssion
                         {
                             $$ = new Relational_Expr_Ast($1, less_than, $3, yylineno);
                             // $$->set_data_type($1->get_data_type());
                             $$->check_ast();
                         }
 
-                    |   identifier LESS_THAN_EQUAL identifier
+                    |   expresssion LESS_THAN_EQUAL expresssion
                         {
                             $$ = new Relational_Expr_Ast($1, less_equalto, $3, yylineno);
                             // $$->set_data_type($1->get_data_type());
                             $$->check_ast();
                         }
 
-                    |   identifier GREATER_THAN identifier
+                    |   expresssion GREATER_THAN expresssion
                         {
                             $$ = new Relational_Expr_Ast($1, greater_than, $3, yylineno);
                             // $$->set_data_type($1->get_data_type());
                             $$->check_ast();                            
                         }
 
-                    |   identifier GREATER_THAN_EQUAL identifier
+                    |   expresssion GREATER_THAN_EQUAL expresssion
                         {
                             $$ = new Relational_Expr_Ast($1, greater_equalto, $3, yylineno);
                             // $$->set_data_type($1->get_data_type());
                             $$->check_ast();                            
                         }
 
-                    |   identifier EQUAL identifier
+                    |   expresssion EQUAL expresssion
                         {
                             $$ = new Relational_Expr_Ast($1, equalto, $3, yylineno);
                             // $$->set_data_type($1->get_data_type());
                             $$->check_ast();                            
                         }
 
-                    |   identifier NOT_EQUAL identifier
+                    |   expresssion NOT_EQUAL expresssion
                         {
                             $$ = new Relational_Expr_Ast($1, not_equalto, $3, yylineno);
                             // $$->set_data_type($1->get_data_type());
@@ -441,23 +441,3 @@ relational_expr     :   identifier LESS_THAN identifier
                         }
 
                     ;
-
-identifier      :   constant
-                    {
-                        $$ = $1;
-                        $$->set_data_type($1->get_data_type());
-                    }
-
-                |   variable
-                    {
-                        $$ = $1;
-                        $$->set_data_type($1->get_data_type());
-                    }
-
-                |   '-' identifier
-                    {
-                        $$ = new UMinus_Ast($2, NULL, yylineno);
-                        $$->set_data_type($2->get_data_type());
-                    }
-
-                ;

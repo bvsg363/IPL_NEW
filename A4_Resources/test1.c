@@ -4,7 +4,7 @@ float perimeter;
 
 void main()
 {
-	int x, y;
+	int x, y,r;
 	float z;
 	z = 3.0;
 	x = 3;
@@ -19,6 +19,8 @@ void main()
 	}
 
 	do{
+		// int x;
+
 		if(x <= 5){
 			 x = 8;
 		}

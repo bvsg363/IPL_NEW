@@ -7,6 +7,7 @@
 #include<iomanip>
 #include<typeinfo>
 #include<list>
+#include "local-environment.hh"
 
 #define AST_SPACE "         "
 #define AST_NODE_SPACE "            "
