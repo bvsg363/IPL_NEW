@@ -5,6 +5,11 @@ using namespace std;
 
 void Symbol_Table::create(Local_Environment &local_global_variables_table){
 
+    for (list<Symbol_Table_Entry *>::iterator it = variable_table.begin(); it != variable_table.end(); ++it)
+    {
+        local_global_variables_table.put_variable_value();
+    }
+
 }
 
 //Eval_Result
