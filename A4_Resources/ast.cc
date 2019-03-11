@@ -1,14 +1,11 @@
 #include "ast.hh"
 #include <stdlib.h>
 #include <list>
-#include "symbol-table.hh"
 
 using namespace std;
 
 template class Number_Ast<double>;
 template class Number_Ast<int>;
-
-int Ast::labelCounter;
 
 Ast::Ast() {}
 Ast::~Ast() {}
@@ -351,37 +348,35 @@ bool Relational_Expr_Ast::check_ast()
 
 void Relational_Expr_Ast::print(ostream &file_buffer)
 {
-    file_buffer << "\n"
-                << AST_NODE_SPACE << "Condition: ";
+    file_buffer << "\n" << AST_NODE_SPACE << "Condition: ";
+    // printf("%d\n", rel_op);
     switch (rel_op)
     {
-    case 1:
+    case 0:
         file_buffer << "LE";
         break;
-    case 2:
+    case 1:
         file_buffer << "LT";
         break;
-    case 3:
+    case 2:
         file_buffer << "GT";
         break;
-    case 4:
+    case 3:
         file_buffer << "GE";
         break;
-    case 5:
+    case 4:
         file_buffer << "EQ";
         break;
-    case 6:
+    case 5:
         file_buffer << "NE";
         break;
     default:
         printf("wrong operator in Relational_Expr_Ast\n");
         break;
     }
-    file_buffer << "\n"
-                << AST_SUB_NODE_SPACE << "LHS (";
+    file_buffer << "\n" << AST_SUB_NODE_SPACE << "LHS (";
     lhs_condition->print(file_buffer);
-    file_buffer << ")\n"
-                << AST_SUB_NODE_SPACE << "RHS (";
+    file_buffer << ")\n" << AST_SUB_NODE_SPACE << "RHS (";
     rhs_condition->print(file_buffer);
     file_buffer << ")";
 }
@@ -437,7 +432,7 @@ void Logical_Expr_Ast::print(ostream &file_buffer)
         file_buffer << "NE";
         break;
     default:
-        printf("wrong operator in Relational_Expr_Ast\n");
+        printf("wrong operator in Logical_Expr_Ast\n");
         break;
     }
     file_buffer << "\n"
@@ -478,17 +473,17 @@ bool Selection_Statement_Ast::check_ast(){}
 void Selection_Statement_Ast::print(ostream &file_buffer)
 {
     file_buffer << "\n"
-                << AST_SPACE << "IF :\n"
+                << AST_SPACE << "IF : \n"
                 << AST_SPACE << "CONDITION (";
     cond->print(file_buffer);
     file_buffer << ")\n"
-                << AST_SPACE << "THEN (\n";
+                << AST_SPACE << "THEN (\n" << AST_NODE_SPACE;
     then_part->print(file_buffer);
     file_buffer << ")";
     if (else_part != NULL)
     {
         file_buffer << "\n"
-                    << AST_SPACE << "ELSE (\n";
+                    << AST_SPACE << "ELSE (\n" << AST_NODE_SPACE;
         else_part->print(file_buffer);
         file_buffer << ")";
     }
@@ -522,7 +517,7 @@ void Iteration_Statement_Ast::print(ostream &file_buffer)
     if (is_do_form)
     {
         file_buffer << "\n"
-                    << AST_SPACE << "DO (\n";
+                    << AST_SPACE << "DO (\n" << AST_NODE_SPACE;
         body->print(file_buffer);
         file_buffer << ")\n"
                     << AST_SPACE << "WHILE CONDITION (";
@@ -532,11 +527,11 @@ void Iteration_Statement_Ast::print(ostream &file_buffer)
     else
     {
         file_buffer << "\n"
-                    << AST_SPACE << "WHILE :\n"
+                    << AST_SPACE << "WHILE : \n"
                     << AST_SPACE << "CONDITION (";
         cond->print(file_buffer);
         file_buffer << ")\n"
-                    << AST_SPACE << "BODY (\n";
+                    << AST_SPACE << "BODY (\n" << AST_NODE_SPACE;
         body->print(file_buffer);
         file_buffer << ")";
     }
@@ -560,6 +555,6 @@ void Sequence_Ast::print(ostream &file_buffer)
     for (list<Ast *>::iterator it = statement_list.begin(); it != statement_list.end(); it++)
     {
         (*it)->print(file_buffer);
-        file_buffer << "\n";
+        // file_buffer << "\n";
     }
 }

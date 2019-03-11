@@ -5,13 +5,6 @@ using namespace std;
 
 void Symbol_Table::create(Local_Environment &local_global_variables_table){
 
-    for (list<Symbol_Table_Entry *>::iterator it = variable_table.begin(); it != variable_table.end(); ++it)
-    {
-        // seq_ast_then->ast_push_back(*it);
-    }
-
-    // local_global_variables_table.put_variable_value();
-
 }
 
 //Eval_Result
@@ -89,3 +82,5 @@ void Local_Environment::put_variable_value(Eval_Result &value, string name)
 bool Local_Environment::does_variable_exist(string name)
 {
 }
+
+
