@@ -45,38 +45,38 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    INTEGER_NUMBER = 260,
-    BBNUM = 261,
-    DOUBLE_NUMBER = 262,
-    NAME = 263,
-    RETURN = 264,
-    INTEGER = 265,
-    FLOAT = 266,
-    ASSIGN = 267,
-    VOID = 268,
-    UMINUS = 269,
-    WHILE = 270,
-    GREATER_THAN = 271,
-    NOT_EQUAL = 272,
-    LESS_THAN = 273,
-    LESS_THAN_EQUAL = 274,
-    EQUAL = 275,
-    GREATER_THAN_EQUAL = 276,
-    IF = 277,
-    ELSE = 278,
-    DO = 279,
-    AND = 280,
-    OR = 281,
-    NOT = 282
+    INTEGER_NUMBER = 258,
+    BBNUM = 259,
+    DOUBLE_NUMBER = 260,
+    NAME = 261,
+    RETURN = 262,
+    INTEGER = 263,
+    FLOAT = 264,
+    ASSIGN = 265,
+    VOID = 266,
+    UMINUS = 267,
+    WHILE = 268,
+    GREATER_THAN = 269,
+    NOT_EQUAL = 270,
+    LESS_THAN = 271,
+    LESS_THAN_EQUAL = 272,
+    EQUAL = 273,
+    GREATER_THAN_EQUAL = 274,
+    IF = 275,
+    ELSE = 276,
+    DO = 277,
+    AND = 278,
+    OR = 279,
+    NOT = 280
   };
 #endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-#line 22 "parser.y" /* yacc.c:1909  */
+#line 18 "parser.y" /* yacc.c:1909  */
 union YYSTYPE
 {
-#line 23 "parser.y" /* yacc.c:1909  */
+#line 19 "parser.y" /* yacc.c:1909  */
    int integer_value;
     double double_value;
     std::string * string_value;
@@ -89,7 +89,7 @@ union YYSTYPE
 
 #line 91 "parser.tab.h" /* yacc.c:1909  */
 };
-#line 22 "parser.y" /* yacc.c:1909  */
+#line 18 "parser.y" /* yacc.c:1909  */
 typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
