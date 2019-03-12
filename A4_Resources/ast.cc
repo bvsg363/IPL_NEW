@@ -472,13 +472,13 @@ void Selection_Statement_Ast::print(ostream &file_buffer)
                 << AST_SPACE << "CONDITION (";
     cond->print(file_buffer);
     file_buffer << ")\n"
-                << AST_SPACE << "THEN (\n" << AST_NODE_SPACE;
+                << AST_SPACE << "THEN (";
     then_part->print(file_buffer);
     file_buffer << ")";
     if (else_part != NULL)
     {
         file_buffer << "\n"
-                    << AST_SPACE << "ELSE (\n" << AST_NODE_SPACE;
+                    << AST_SPACE << "ELSE (";
         else_part->print(file_buffer);
         file_buffer << ")";
     }
@@ -512,7 +512,7 @@ void Iteration_Statement_Ast::print(ostream &file_buffer)
     if (is_do_form)
     {
         file_buffer << "\n"
-                    << AST_SPACE << "DO (\n" << AST_NODE_SPACE;
+                    << AST_SPACE << "DO (";
         body->print(file_buffer);
         file_buffer << ")\n"
                     << AST_SPACE << "WHILE CONDITION (";
@@ -526,7 +526,7 @@ void Iteration_Statement_Ast::print(ostream &file_buffer)
                     << AST_SPACE << "CONDITION (";
         cond->print(file_buffer);
         file_buffer << ")\n"
-                    << AST_SPACE << "BODY (\n" << AST_NODE_SPACE;
+                    << AST_SPACE << "BODY (";
         body->print(file_buffer);
         file_buffer << ")";
     }
@@ -549,7 +549,7 @@ void Sequence_Ast::print(ostream &file_buffer)
 {
     for (list<Ast *>::iterator it = statement_list.begin(); it != statement_list.end(); it++)
     {
+        file_buffer << "\n" << AST_NODE_SPACE;
         (*it)->print(file_buffer);
-        // file_buffer << "\n";
     }
 }

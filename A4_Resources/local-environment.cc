@@ -127,8 +127,6 @@ Local_Environment::Local_Environment(){}
 Local_Environment::~Local_Environment() {}
 
 void Local_Environment::print(ostream &file_buffer){
-    //need to implement
-
     for (map<string, Eval_Result *> ::iterator it = variable_table.begin(); it != variable_table.end(); ++it)
     {
         file_buffer << VAR_SPACE << it->first << " : ";
