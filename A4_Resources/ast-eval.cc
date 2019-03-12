@@ -118,7 +118,6 @@ Eval_Result & Number_Ast<T>::evaluate(Local_Environment & eval_env, ostream & fi
         eval_res->set_value(constant);
         return *eval_res;
     }
-        
 }
 
 
@@ -285,12 +284,180 @@ Eval_Result & Return_Ast::evaluate(Local_Environment & eval_env, ostream & file_
 
 // Relational Expr Ast
 
-Eval_Result & Relational_Expr_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer){}
+Eval_Result & Relational_Expr_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
+{
+    Eval_Result &lhs_result = lhs_condition->evaluate(eval_env, file_buffer);
+    Eval_Result &rhs_result = rhs_condition->evaluate(eval_env, file_buffer);
+
+    Eval_Result *eval_res = new Eval_Result_Value_Int();
+    eval_res->set_result_enum(int_result);
+
+    switch (rel_op)
+    {
+    case 0:
+        // file_buffer << "LE";
+        if(lhs_result.get_result_enum() == int_result)
+        {
+            if(lhs_result.get_int_value() <= rhs_result.get_int_value())
+                eval_res->set_value(1);
+            else
+                eval_res->set_value(0);
+        }
+        else
+        {
+            if (lhs_result.get_double_value() <= rhs_result.get_double_value())
+                eval_res->set_value(1);
+            else
+                eval_res->set_value(0);
+        }
+        break;
+
+    case 1:
+        // file_buffer << "LT";
+        if (lhs_result.get_result_enum() == int_result)
+        {
+            if (lhs_result.get_int_value() < rhs_result.get_int_value())
+                eval_res->set_value(1);
+            else
+                eval_res->set_value(0);
+        }
+        else
+        {
+            if (lhs_result.get_double_value() < rhs_result.get_double_value())
+                eval_res->set_value(1);
+            else
+                eval_res->set_value(0);
+        }
+        break;
+
+    case 2:
+        // file_buffer << "GT";
+        if (lhs_result.get_result_enum() == int_result)
+        {
+            if (lhs_result.get_int_value() > rhs_result.get_int_value())
+                eval_res->set_value(1);
+            else
+                eval_res->set_value(0);
+        }
+        else
+        {
+            if (lhs_result.get_double_value() > rhs_result.get_double_value())
+                eval_res->set_value(1);
+            else
+                eval_res->set_value(0);
+        }
+        break;
+
+    case 3:
+        // file_buffer << "GE";
+        if(lhs_result.get_result_enum() == int_result)
+        {
+            if(lhs_result.get_int_value() >= rhs_result.get_int_value())
+                eval_res->set_value(1);
+            else
+                eval_res->set_value(0);
+        }
+        else
+        {
+            if (lhs_result.get_double_value() >= rhs_result.get_double_value())
+                eval_res->set_value(1);
+            else
+                eval_res->set_value(0);
+        }
+        break;
+
+    case 4:
+        // file_buffer << "EQ";
+        if (lhs_result.get_result_enum() == int_result)
+        {
+            if (lhs_result.get_int_value() == rhs_result.get_int_value())
+                eval_res->set_value(1);
+            else
+                eval_res->set_value(0);
+        }
+        else
+        {
+            if (lhs_result.get_double_value() == rhs_result.get_double_value())
+                eval_res->set_value(1);
+            else
+                eval_res->set_value(0);
+        }
+        break;
+
+    case 5:
+        // file_buffer << "NE";
+        if (lhs_result.get_result_enum() == int_result)
+        {
+            if (lhs_result.get_int_value() != rhs_result.get_int_value())
+                eval_res->set_value(1);
+            else
+                eval_res->set_value(0);
+        }
+        else
+        {
+            if (lhs_result.get_double_value() != rhs_result.get_double_value())
+                eval_res->set_value(1);
+            else
+                eval_res->set_value(0);
+        }
+        break;
+
+    default:
+        printf("wrong operator in Relational_Expr_Ast\n");
+        break;
+    }
+
+    return *eval_res;
+
+}
 
 
 // Logical Expr Ast
 
-Eval_Result & Logical_Expr_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer){}
+Eval_Result & Logical_Expr_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
+{
+    Eval_Result &rhs_result = rhs_op->evaluate(eval_env, file_buffer);
+    Eval_Result &lhs_result = lhs_op->evaluate(eval_env, file_buffer);
+
+    Eval_Result *eval_res = new Eval_Result_Value_Int();
+    eval_res->set_result_enum(int_result);
+
+    switch (bool_op)
+    {
+    case 0:
+        // file_buffer << "NOT";
+        if (!rhs_result.get_int_value())
+            eval_res->set_value(1);
+        else
+            eval_res->set_value(0);
+
+        break;
+    case 1:
+        // file_buffer << "OR";
+        // Eval_Result &lhs_result = lhs_op->evaluate(eval_env, file_buffer);
+        if (lhs_result.get_int_value() || rhs_result.get_int_value())
+            eval_res->set_value(1);
+        else
+            eval_res->set_value(0);
+        break;
+    case 2:
+        // file_buffer << "AND";
+        // Eval_Result &lhs_result1 = lhs_op->evaluate(eval_env, file_buffer);
+
+        // printf("\n%d\n", lhs_result1.get_int_value());
+        // printf("\n%d\n", rhs_result.get_int_value());
+        if (lhs_result.get_int_value() && rhs_result.get_int_value())
+            eval_res->set_value(1);
+        else
+            eval_res->set_value(0);
+        break;
+
+    default:
+        printf("wrong operator in Logical_Expr_Ast\n");
+        break;
+    }
+    return *eval_res;
+}
 
 
 // Selection Statement Ast
@@ -300,7 +467,10 @@ Eval_Result & Selection_Statement_Ast::evaluate(Local_Environment & eval_env, os
 
 // Iteration Statement Ast
 
-Eval_Result & Iteration_Statement_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer){}
+Eval_Result & Iteration_Statement_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
+{
+    
+}
 
 
 // Sequence Ast

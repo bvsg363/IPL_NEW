@@ -7,17 +7,24 @@ void main()
 	int x, y,r;
 	float z;
 	z = 3.0;
-	x = 3;
+	x = 2;
 	area = 4.0;
 
 
-	while(x < 2){
-		x = 3;
-	}
+	// while(x < 2){
+	// 	x = 3;
+	// }
 
-	if(x == 3){
+	x = (2.0<3.4) && 2 < 3?4:6;
+
+	if(x > 3){
 		x = 8;
 	}
+	else
+	{
+		x = 9;
+	}
+	
 
 	do{
 		// int x;
