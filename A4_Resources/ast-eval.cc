@@ -19,12 +19,21 @@ Eval_Result & Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
 
 // Assignment Ast
 
-Eval_Result & Assignment_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer){}
+Eval_Result & Assignment_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
+{
+    print(file_buffer);
+    // file_buffer << lhs->variable_symbol_entry->
+    Eval_Result & rhs_result = rhs->evaluate(eval_env, file_buffer);
+    lhs->print_value(eval_env, file_buffer);
+}
 
 
 // Name Ast
 
-void Name_Ast::print_value(Local_Environment & eval_env, ostream & file_buffer){}
+void Name_Ast::print_value(Local_Environment & eval_env, ostream & file_buffer)
+{
+
+}
 Eval_Result & Name_Ast::get_value_of_evaluation(Local_Environment & eval_env){}
 void Name_Ast::set_value_of_evaluation(Local_Environment & eval_env, Eval_Result & result){}
 Eval_Result & Name_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer){}
@@ -33,7 +42,13 @@ Eval_Result & Name_Ast::evaluate(Local_Environment & eval_env, ostream & file_bu
 // Number Ast
 
 template <class T>
-Eval_Result & Number_Ast<T>::evaluate(Local_Environment & eval_env, ostream & file_buffer){}
+Eval_Result & Number_Ast<T>::evaluate(Local_Environment & eval_env, ostream & file_buffer)
+{
+    if (get_data_type() == int_data_type){
+
+    }
+        // return 
+}
 
 
 // Arithmetic Expr Ast

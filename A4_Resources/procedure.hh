@@ -5,6 +5,9 @@
 #include<string>
 #include<map>
 #include<list>
+#include "symbol-table.hh"
+#include "local-environment.hh"
+#include "ast.hh"
 
 #define PROC_SPACE "   "
 #define LOC_VAR_SPACE "      "
