@@ -15,12 +15,6 @@ Data_Type sample_data_type;
 
 %}
 
-%start  program
-%right  '!'
-%left   "&&" "||"
-%left   '+' '-'
-%left   '*' '/'
-
 %union  YYSTYPE
 {   int integer_value;
     double double_value;
@@ -35,6 +29,15 @@ Data_Type sample_data_type;
 
 %token  INTEGER_NUMBER BBNUM DOUBLE_NUMBER NAME RETURN INTEGER FLOAT ASSIGN VOID UMINUS
 %token  WHILE GREATER_THAN NOT_EQUAL LESS_THAN LESS_THAN_EQUAL EQUAL GREATER_THAN_EQUAL IF ELSE DO AND OR NOT
+
+%start  program
+%left   OR
+%left   AND
+%left   EQUAL NOT_EQUAL
+%left   LESS_THAN LESS_THAN_EQUAL GREATER_THAN GREATER_THAN_EQUAL
+%left   '+' '-'
+%left   '*' '/'
+%right  NOT
 
 
 %type <integer_value>   INTEGER_NUMBER type
@@ -476,10 +479,6 @@ logical_expr    :   logical_expr AND logical_expr
                         $$ = $1;
                     }
                 ;
-
-
-
-
 
 relational_expr     :   expresssion LESS_THAN expresssion
                         {

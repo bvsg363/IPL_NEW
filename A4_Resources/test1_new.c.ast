@@ -15,17 +15,17 @@ Program:
             RHS (
          Cond:
             IF_ELSE
-            Condition: NOT
-               RHS (
             Condition: OR
                LHS (
+            Condition: NOT
+               RHS (
             Condition: LT
                LHS (Num : 2.00)
-               RHS (Num : 3.40))
+               RHS (Num : 3.40)))
                RHS (
             Condition: GT
                LHS (Num : 2)
-               RHS (Num : 3)))
+               RHS (Num : 3))
             LHS (Num : 4)
             RHS (Num : 6))
          IF : 
@@ -49,7 +49,11 @@ Program:
             
          Asgn:
             LHS (Name : x)
-            RHS (Num : 8))
+            RHS (Num : 8)
+            
+         Asgn:
+            LHS (Name : y)
+            RHS (Num : 7))
          ELSE (
             
          Asgn:
@@ -65,19 +69,19 @@ Program:
          CONDITION (
             Condition: OR
                LHS (
+            Condition: OR
+               LHS (
             Condition: LE
                LHS (Name : x)
                RHS (Num : 5))
                RHS (
-            Condition: OR
-               LHS (
             Condition: LT
                LHS (Name : x)
-               RHS (Num : 4))
+               RHS (Num : 4)))
                RHS (
             Condition: GT
                LHS (Name : x)
-               RHS (Num : 5))))
+               RHS (Num : 5)))
          THEN (
             
          Asgn:
@@ -92,3 +96,70 @@ Program:
             Condition: EQ
                LHS (Name : x)
                RHS (Num : 4))
+         IF : 
+         CONDITION (
+            Condition: AND
+               LHS (
+            Condition: GE
+               LHS (Name : x)
+               RHS (Num : 5))
+               RHS (
+            Condition: LT
+               LHS (Name : z)
+               RHS (Num : 4.00)))
+         THEN (
+            
+         IF : 
+         CONDITION (
+            Condition: NOT
+               RHS (
+            Condition: OR
+               LHS (
+            Condition: NE
+               LHS (Name : x)
+               RHS (Num : 9))
+               RHS (
+            Condition: EQ
+               LHS (Name : x)
+               RHS (Num : 9))))
+         THEN (
+            
+         IF : 
+         CONDITION (
+            Condition: GT
+               LHS (Name : x)
+               RHS (Num : 0))
+         THEN (
+            
+         Asgn:
+            LHS (Name : x)
+            RHS (Num : 8)
+            
+         Asgn:
+            LHS (Name : x)
+            RHS (
+         Cond:
+            IF_ELSE
+            Condition: AND
+               LHS (
+            Condition: GT
+               LHS (Num : 2.00)
+               RHS (Num : 3.40))
+               RHS (
+            Condition: LT
+               LHS (Num : 2)
+               RHS (Num : 3))
+            LHS (Num : 4)
+            RHS (Num : 6))
+            
+         Asgn:
+            LHS (Name : x)
+            RHS (Num : 9))
+            
+         Asgn:
+            LHS (Name : x)
+            RHS (Num : 5))
+            
+         Asgn:
+            LHS (Name : x)
+            RHS (Num : 8))
