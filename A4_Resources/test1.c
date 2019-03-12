@@ -8,6 +8,7 @@ void main()
 	float z;
 	z = 3.0;
 	x = 3;
+	area = 4.0;
 
 
 	while(x < 2){
