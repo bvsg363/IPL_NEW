@@ -271,6 +271,8 @@ constant    :   INTEGER_NUMBER
 conditional_expr    :   logical_expr '?' expresssion ':' expresssion
                         {
                             $$ = new Conditional_Expression_Ast($1, $3, $5, yylineno);
+                            $$->set_data_type($3->get_data_type());
+                            $$->check_ast();
                         }
 
 
@@ -373,7 +375,7 @@ logical_expr      :   logical_expr AND logical_expr
 
                     |   NOT logical_expr
                         {
-                            $$ = new Logical_Expr_Ast($2, _logical_not, NULL, yylineno);
+                            $$ = new Logical_Expr_Ast(NULL, _logical_not, $2, yylineno);
                         }
 
                     |   '(' logical_expr ')'

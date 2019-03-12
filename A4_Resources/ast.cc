@@ -389,7 +389,7 @@ Logical_Expr_Ast::Logical_Expr_Ast(Ast *lhs, Logical_Op bop, Ast *rhs, int line)
     lhs_op = lhs;
     rhs_op = rhs;
     bool_op = bop;
-    if (rhs_op == NULL)
+    if (lhs_op == NULL)
         ast_num_child = unary_arity;
     else
         ast_num_child = binary_arity;
@@ -414,32 +414,26 @@ void Logical_Expr_Ast::print(ostream &file_buffer)
                 << AST_NODE_SPACE << "Condition: ";
     switch (bool_op)
     {
+    case 0:
+        file_buffer << "NOT";
+        break;
     case 1:
-        file_buffer << "LE";
+        file_buffer << "OR";
         break;
     case 2:
-        file_buffer << "LT";
-        break;
-    case 3:
-        file_buffer << "GT";
-        break;
-    case 4:
-        file_buffer << "GE";
-        break;
-    case 5:
-        file_buffer << "EQ";
-        break;
-    case 6:
-        file_buffer << "NE";
+        file_buffer << "AND";
         break;
     default:
         printf("wrong operator in Logical_Expr_Ast\n");
         break;
     }
+    if(lhs_op != NULL){
+        file_buffer << "\n"
+                    << AST_SUB_NODE_SPACE << "LHS (";
+        lhs_op->print(file_buffer);
+        file_buffer << ")";
+    }
     file_buffer << "\n"
-                << AST_SUB_NODE_SPACE << "LHS (";
-    lhs_op->print(file_buffer);
-    file_buffer << ")\n"
                 << AST_SUB_NODE_SPACE << "RHS (";
     rhs_op->print(file_buffer);
     file_buffer << ")";
