@@ -7,7 +7,7 @@
 
 digit        [0-9]
 operator    [-+*/]
-metachar        [;,(){}]
+metachar        [;,(){}?:]
 name        [a-zA-Z_][a-zA-Z0-9_]*
 
 %%
@@ -57,6 +57,10 @@ else       {
 "||"       {
     store_token_name("OR", yytext, yylineno);
     return OR;
+}
+"!"       {
+    store_token_name("NOT", yytext, yylineno);
+    return NOT;
 }
 [>]       {
     store_token_name("GREATER_THAN", yytext, yylineno);

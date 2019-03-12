@@ -4,7 +4,7 @@ float perimeter;
 
 void main()
 {
-	int x, y;
+	int x, y,r;
 	float z;
 	z = 3.0;
 	x = 3;
@@ -19,6 +19,8 @@ void main()
 	}
 
 	do{
+		// int x;
+
 		if(x <= 5){
 			 x = 8;
 		}
@@ -31,8 +33,7 @@ void main()
 		if(!(x < 4) || x > 5){
 			if(x>0){
 				x = 8;
-				// x= ((2>3) && (2 < 3))?4:6;
-				// x > 3 ? x=4:x=6;
+				x = ((2.0>3.4) && (2 < 3))?4:6;
 				x = 9;
 			}
 		}

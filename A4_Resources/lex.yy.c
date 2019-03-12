@@ -394,8 +394,8 @@ static void yy_fatal_error (yyconst char msg[]  );
 	yy_flex_strncpy( yytext, (yytext_ptr), yyleng + 1 ); \
 	(yy_c_buf_p) = yy_cp;
 
-#define YY_NUM_RULES 27
-#define YY_END_OF_BUFFER 28
+#define YY_NUM_RULES 28
+#define YY_END_OF_BUFFER 29
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -405,12 +405,12 @@ struct yy_trans_info
 	};
 static yyconst flex_int16_t yy_accept[63] =
     {   0,
-        2,    2,   28,   26,    2,    3,   26,   26,   23,   20,
-       21,   20,   22,   16,   25,   14,   24,   24,   24,   24,
-       24,   24,   24,   24,   26,    2,   15,   12,   21,    1,
-       21,   22,   17,   18,   19,   24,    9,   24,   24,   10,
-       24,   24,   24,   24,   13,    1,   24,   24,    4,   24,
-       24,   24,   11,   24,   24,    6,   24,    5,   24,    8,
+        2,    2,   29,   27,    2,    3,   14,   27,   24,   21,
+       22,   21,   23,   17,   26,   15,   25,   25,   25,   25,
+       25,   25,   25,   25,   27,    2,   16,   12,   22,    1,
+       22,   23,   18,   19,   20,   25,    9,   25,   25,   10,
+       25,   25,   25,   25,   13,    1,   25,   25,    4,   25,
+       25,   25,   11,   25,   25,    6,   25,    5,   25,    8,
         7,    0
     } ;
 
@@ -421,8 +421,8 @@ static yyconst YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    2,    4,    1,    1,    1,    1,    5,    1,    6,
         6,    7,    7,    6,    7,    8,    9,   10,   10,   10,
-       10,   10,   10,   10,   10,   10,   10,    1,    6,   11,
-       12,   13,    1,    1,   14,   14,   14,   14,   14,   14,
+       10,   10,   10,   10,   10,   10,   10,    6,    6,   11,
+       12,   13,    6,    1,   14,   14,   14,   14,   14,   14,
        14,   14,   14,   14,   14,   14,   14,   14,   14,   14,
        14,   14,   14,   14,   14,   14,   14,   14,   14,   14,
         1,    1,    1,    1,   14,    1,   15,   14,   14,   16,
@@ -508,10 +508,10 @@ static yyconst flex_int16_t yy_chk[105] =
     } ;
 
 /* Table of booleans, true if rule could match eol. */
-static yyconst flex_int32_t yy_rule_can_match_eol[28] =
+static yyconst flex_int32_t yy_rule_can_match_eol[29] =
     {   0,
 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 0,     };
+    0, 0, 0, 0, 0, 0, 0, 0, 0,     };
 
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
@@ -929,62 +929,70 @@ case 14:
 YY_RULE_SETUP
 #line 61 "scanner.l"
 {
-    store_token_name("GREATER_THAN", yytext, yylineno);
-    return GREATER_THAN;
+    store_token_name("NOT", yytext, yylineno);
+    return NOT;
 }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
 #line 65 "scanner.l"
 {
-    store_token_name("NOT_EQUAL", yytext, yylineno);
-    return NOT_EQUAL;
+    store_token_name("GREATER_THAN", yytext, yylineno);
+    return GREATER_THAN;
 }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
 #line 69 "scanner.l"
 {
-    store_token_name("LESS_THAN", yytext, yylineno);
-    return LESS_THAN;
+    store_token_name("NOT_EQUAL", yytext, yylineno);
+    return NOT_EQUAL;
 }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
 #line 73 "scanner.l"
 {
-    store_token_name("LESS_THAN_EQUAL", yytext, yylineno);
-    return LESS_THAN_EQUAL;
+    store_token_name("LESS_THAN", yytext, yylineno);
+    return LESS_THAN;
 }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
 #line 77 "scanner.l"
 {
-    store_token_name("EQUAL", yytext, yylineno);
-    return EQUAL;
+    store_token_name("LESS_THAN_EQUAL", yytext, yylineno);
+    return LESS_THAN_EQUAL;
 }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
 #line 81 "scanner.l"
 {
-    store_token_name("GREATER_THAN_EQUAL", yytext, yylineno);
-    return GREATER_THAN_EQUAL;
+    store_token_name("EQUAL", yytext, yylineno);
+    return EQUAL;
 }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
 #line 85 "scanner.l"
 {
+    store_token_name("GREATER_THAN_EQUAL", yytext, yylineno);
+    return GREATER_THAN_EQUAL;
+}
+	YY_BREAK
+case 21:
+YY_RULE_SETUP
+#line 89 "scanner.l"
+{
 //    printf("ARITHOP    %c\n", yytext[0]);
     store_token_name("ARITHOP", yytext, yylineno);
     return yytext[0];
 }
 	YY_BREAK
-case 21:
+case 22:
 YY_RULE_SETUP
-#line 90 "scanner.l"
+#line 94 "scanner.l"
 {
 //    printf("DOUBLE_NUMBER    %s\n", yytext);
     store_token_name("FNUM", yytext, yylineno);
@@ -992,9 +1000,9 @@ YY_RULE_SETUP
     return DOUBLE_NUMBER;
 }
 	YY_BREAK
-case 22:
+case 23:
 YY_RULE_SETUP
-#line 96 "scanner.l"
+#line 100 "scanner.l"
 {
 //    printf("INTEGER_NUMBER    %s\n", yytext);
     store_token_name("NUM", yytext, yylineno);
@@ -1002,18 +1010,18 @@ YY_RULE_SETUP
     return INTEGER_NUMBER;
 }
 	YY_BREAK
-case 23:
+case 24:
 YY_RULE_SETUP
-#line 102 "scanner.l"
+#line 106 "scanner.l"
 {
 //    printf("META CHAR        %s\n", yytext);
     store_token_name("META CHAR", yytext, yylineno);
     return yytext[0];
 }
 	YY_BREAK
-case 24:
+case 25:
 YY_RULE_SETUP
-#line 107 "scanner.l"
+#line 111 "scanner.l"
 {
 //    printf("NAME        %s\n", yytext);
     store_token_name("NAME", yytext, yylineno);
@@ -1021,28 +1029,28 @@ YY_RULE_SETUP
     return NAME;
 }
 	YY_BREAK
-case 25:
+case 26:
 YY_RULE_SETUP
-#line 113 "scanner.l"
+#line 117 "scanner.l"
 {
 //    printf("ASSIGN\n");
     store_token_name("ASSIGN_OP", yytext, yylineno);
     return ASSIGN;
 }
 	YY_BREAK
-case 26:
+case 27:
 YY_RULE_SETUP
-#line 118 "scanner.l"
+#line 122 "scanner.l"
 {
     printf("cs316: Error recognizing the character\n");
 }
 	YY_BREAK
-case 27:
+case 28:
 YY_RULE_SETUP
-#line 121 "scanner.l"
+#line 125 "scanner.l"
 ECHO;
 	YY_BREAK
-#line 1046 "lex.yy.c"
+#line 1054 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2055,7 +2063,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 121 "scanner.l"
+#line 125 "scanner.l"
 
 
 

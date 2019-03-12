@@ -50,7 +50,7 @@ Program:
                RHS (Num : 4))
          IF : 
          CONDITION (
-            Condition: LT
+            Condition: AND
                LHS (
             Condition: GE
                LHS (Name : x)
@@ -63,7 +63,9 @@ Program:
             
          IF : 
          CONDITION (
-            Condition: LE
+            Condition: NOT
+               RHS (
+            Condition: OR
                LHS (
             Condition: LT
                LHS (Name : x)
@@ -71,7 +73,7 @@ Program:
                RHS (
             Condition: GT
                LHS (Name : x)
-               RHS (Num : 5)))
+               RHS (Num : 5))))
          THEN (
             
          IF : 
@@ -84,6 +86,22 @@ Program:
          Asgn:
             LHS (Name : x)
             RHS (Num : 8)
+         Asgn:
+            LHS (Name : x)
+            RHS (
+         Cond:
+            IF_ELSE
+            Condition: AND
+               LHS (
+            Condition: GT
+               LHS (Num : 2.00)
+               RHS (Num : 3.40))
+               RHS (
+            Condition: LT
+               LHS (Num : 2)
+               RHS (Num : 3))
+            LHS (Num : 4)
+            RHS (Num : 6))
          Asgn:
             LHS (Name : x)
             RHS (Num : 9))))
