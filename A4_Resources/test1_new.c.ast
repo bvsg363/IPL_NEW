@@ -10,6 +10,20 @@ Program:
          Asgn:
             LHS (Name : area)
             RHS (Num : 4.00)
+         WHILE : 
+         CONDITION (
+            Condition: LT
+               LHS (Name : x)
+               RHS (Num : 2))
+         BODY (
+            
+         Asgn:
+            LHS (Name : x)
+            RHS (Num : 3)
+            
+         Asgn:
+            LHS (Name : x)
+            RHS (Num : 6))
          Asgn:
             LHS (Name : x)
             RHS (
@@ -119,7 +133,7 @@ Program:
                LHS (Name : x)
                RHS (Num : 9))
                RHS (
-            Condition: EQ
+            Condition: GE
                LHS (Name : x)
                RHS (Num : 9))))
          THEN (
@@ -163,3 +177,15 @@ Program:
          Asgn:
             LHS (Name : x)
             RHS (Num : 8))
+         Asgn:
+            LHS (Name : area)
+            RHS (
+            Arith: MULT
+               LHS (Num : 2.00)
+               RHS (Num : 3.00))
+         Asgn:
+            LHS (Name : perimeter)
+            RHS (
+            Arith: MULT
+               LHS (Num : 2.00)
+               RHS (Num : 22.00))
