@@ -476,8 +476,8 @@ static const yytype_uint16 yyrline[] =
        0,    47,    47,    55,    68,    75,    83,    88,    94,    99,
      105,   118,   133,   137,   144,   150,   156,   164,   170,   177,
      184,   191,   198,   205,   211,   217,   223,   229,   235,   243,
-     258,   263,   271,   280,   293,   324,   344,   366,   371,   376,
-     381,   386,   397,   404,   411,   418,   425,   432,   439
+     258,   263,   271,   280,   293,   324,   345,   367,   372,   377,
+     382,   387,   398,   405,   412,   419,   426,   433,   440
 };
 #endif
 
@@ -1694,7 +1694,7 @@ yyreduce:
     break;
 
   case 36:
-#line 349 "parser.y" /* yacc.c:1646  */
+#line 350 "parser.y" /* yacc.c:1646  */
     {
                             if ((yyvsp[-6].ast_list)->empty())
                             {
@@ -1713,7 +1713,7 @@ yyreduce:
     break;
 
   case 37:
-#line 367 "parser.y" /* yacc.c:1646  */
+#line 368 "parser.y" /* yacc.c:1646  */
     {
                             (yyval.ast) = new Logical_Expr_Ast((yyvsp[-2].ast), _logical_and, (yyvsp[0].ast), yylineno);
                         }
@@ -1721,7 +1721,7 @@ yyreduce:
     break;
 
   case 38:
-#line 372 "parser.y" /* yacc.c:1646  */
+#line 373 "parser.y" /* yacc.c:1646  */
     {
                             (yyval.ast) = new Logical_Expr_Ast((yyvsp[-2].ast), _logical_or, (yyvsp[0].ast), yylineno);
                         }
@@ -1729,7 +1729,7 @@ yyreduce:
     break;
 
   case 39:
-#line 377 "parser.y" /* yacc.c:1646  */
+#line 378 "parser.y" /* yacc.c:1646  */
     {
                             (yyval.ast) = new Logical_Expr_Ast(NULL, _logical_not, (yyvsp[0].ast), yylineno);
                         }
@@ -1737,7 +1737,7 @@ yyreduce:
     break;
 
   case 40:
-#line 382 "parser.y" /* yacc.c:1646  */
+#line 383 "parser.y" /* yacc.c:1646  */
     {
                             (yyval.ast) = (yyvsp[-1].ast);
                         }
@@ -1745,7 +1745,7 @@ yyreduce:
     break;
 
   case 41:
-#line 387 "parser.y" /* yacc.c:1646  */
+#line 388 "parser.y" /* yacc.c:1646  */
     {
                             (yyval.ast) = (yyvsp[0].ast);
                         }
@@ -1753,7 +1753,7 @@ yyreduce:
     break;
 
   case 42:
-#line 398 "parser.y" /* yacc.c:1646  */
+#line 399 "parser.y" /* yacc.c:1646  */
     {
                             (yyval.ast) = new Relational_Expr_Ast((yyvsp[-2].ast), less_than, (yyvsp[0].ast), yylineno);
                             // $$->set_data_type($1->get_data_type());
@@ -1763,7 +1763,7 @@ yyreduce:
     break;
 
   case 43:
-#line 405 "parser.y" /* yacc.c:1646  */
+#line 406 "parser.y" /* yacc.c:1646  */
     {
                             (yyval.ast) = new Relational_Expr_Ast((yyvsp[-2].ast), less_equalto, (yyvsp[0].ast), yylineno);
                             // $$->set_data_type($1->get_data_type());
@@ -1773,7 +1773,7 @@ yyreduce:
     break;
 
   case 44:
-#line 412 "parser.y" /* yacc.c:1646  */
+#line 413 "parser.y" /* yacc.c:1646  */
     {
                             (yyval.ast) = new Relational_Expr_Ast((yyvsp[-2].ast), greater_than, (yyvsp[0].ast), yylineno);
                             // $$->set_data_type($1->get_data_type());
@@ -1783,7 +1783,7 @@ yyreduce:
     break;
 
   case 45:
-#line 419 "parser.y" /* yacc.c:1646  */
+#line 420 "parser.y" /* yacc.c:1646  */
     {
                             (yyval.ast) = new Relational_Expr_Ast((yyvsp[-2].ast), greater_equalto, (yyvsp[0].ast), yylineno);
                             // $$->set_data_type($1->get_data_type());
@@ -1793,7 +1793,7 @@ yyreduce:
     break;
 
   case 46:
-#line 426 "parser.y" /* yacc.c:1646  */
+#line 427 "parser.y" /* yacc.c:1646  */
     {
                             (yyval.ast) = new Relational_Expr_Ast((yyvsp[-2].ast), equalto, (yyvsp[0].ast), yylineno);
                             // $$->set_data_type($1->get_data_type());
@@ -1803,7 +1803,7 @@ yyreduce:
     break;
 
   case 47:
-#line 433 "parser.y" /* yacc.c:1646  */
+#line 434 "parser.y" /* yacc.c:1646  */
     {
                             (yyval.ast) = new Relational_Expr_Ast((yyvsp[-2].ast), not_equalto, (yyvsp[0].ast), yylineno);
                             // $$->set_data_type($1->get_data_type());
@@ -1813,7 +1813,7 @@ yyreduce:
     break;
 
   case 48:
-#line 440 "parser.y" /* yacc.c:1646  */
+#line 441 "parser.y" /* yacc.c:1646  */
     {
                             (yyval.ast) = (yyvsp[-1].ast);
                             // $$->set_data_type($2->get_data_type());

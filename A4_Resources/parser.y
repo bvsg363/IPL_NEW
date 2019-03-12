@@ -341,6 +341,7 @@ while_stmt      :   WHILE '(' logical_expr ')'
                     }
                 ;
 
+/* do{}while(){}; */
 do_while_stmt       :   DO
                         '{'
                             statement_list

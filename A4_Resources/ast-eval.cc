@@ -58,7 +58,7 @@ void Name_Ast::print_value(Local_Environment & eval_env, ostream & file_buffer)
         }
     }
         
-    file_buffer << "\n";    
+    file_buffer << "\n\n";    
 }
 
 Eval_Result & Name_Ast::get_value_of_evaluation(Local_Environment & eval_env)
@@ -417,7 +417,7 @@ Eval_Result & Relational_Expr_Ast::evaluate(Local_Environment & eval_env, ostrea
 Eval_Result & Logical_Expr_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
 {
     Eval_Result &rhs_result = rhs_op->evaluate(eval_env, file_buffer);
-    Eval_Result &lhs_result = lhs_op->evaluate(eval_env, file_buffer);
+    // Eval_Result &lhs_result = lhs_op->evaluate(eval_env, file_buffer);
 
     Eval_Result *eval_res = new Eval_Result_Value_Int();
     eval_res->set_result_enum(int_result);
@@ -430,23 +430,19 @@ Eval_Result & Logical_Expr_Ast::evaluate(Local_Environment & eval_env, ostream &
             eval_res->set_value(1);
         else
             eval_res->set_value(0);
-
         break;
+
     case 1:
         // file_buffer << "OR";
-        // Eval_Result &lhs_result = lhs_op->evaluate(eval_env, file_buffer);
-        if (lhs_result.get_int_value() || rhs_result.get_int_value())
+        if (lhs_op->evaluate(eval_env, file_buffer).get_int_value() || rhs_result.get_int_value())
             eval_res->set_value(1);
         else
             eval_res->set_value(0);
         break;
+
     case 2:
         // file_buffer << "AND";
-        // Eval_Result &lhs_result1 = lhs_op->evaluate(eval_env, file_buffer);
-
-        // printf("\n%d\n", lhs_result1.get_int_value());
-        // printf("\n%d\n", rhs_result.get_int_value());
-        if (lhs_result.get_int_value() && rhs_result.get_int_value())
+        if (lhs_op->evaluate(eval_env, file_buffer).get_int_value() && rhs_result.get_int_value())
             eval_res->set_value(1);
         else
             eval_res->set_value(0);
@@ -462,18 +458,48 @@ Eval_Result & Logical_Expr_Ast::evaluate(Local_Environment & eval_env, ostream &
 
 // Selection Statement Ast
 
-Eval_Result & Selection_Statement_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer){}
+Eval_Result & Selection_Statement_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
+{
+    
+    Eval_Result &cond_result = cond->evaluate(eval_env, file_buffer);
+
+    if(cond_result.get_int_value()){
+        then_part->evaluate(eval_env, file_buffer);
+    }
+    else{
+        if(else_part != NULL)
+            else_part->evaluate(eval_env, file_buffer);
+    }
+
+}
 
 
 // Iteration Statement Ast
 
 Eval_Result & Iteration_Statement_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
 {
+    if(is_do_form){
+        do{
+            body->evaluate(eval_env, file_buffer);
+        }
+        while(cond->evaluate(eval_env, file_buffer).get_int_value());
+    }
+    else{
+        while(cond->evaluate(eval_env, file_buffer).get_int_value()){
+            body->evaluate(eval_env, file_buffer);
+        }
+    }
     
 }
 
 
 // Sequence Ast
 
-Eval_Result & Sequence_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer){}
+Eval_Result & Sequence_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
+{
+    for (std::list<Ast*>::iterator it = statement_list.begin(); it != statement_list.end(); ++it){
+        (*it)->evaluate(eval_env, file_buffer);
+    }
+
+}
 
