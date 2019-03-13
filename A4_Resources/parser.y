@@ -298,9 +298,7 @@ if_stmt     :   IF '(' logical_expr ')'
             |   IF '(' logical_expr ')'
                     single_stmt
                 {
-                    Sequence_Ast * seq_ast_then = new Sequence_Ast(yylineno);
-                    seq_ast_then->ast_push_back($5);
-                    $$ = new Selection_Statement_Ast($3, seq_ast_then, NULL, yylineno);
+                    $$ = new Selection_Statement_Ast($3, $5, NULL, yylineno);
                 }
 
             |   IF '(' logical_expr ')'
@@ -344,15 +342,12 @@ if_stmt     :   IF '(' logical_expr ')'
                         exit(0);
                     }
 
-                    Sequence_Ast * seq_ast_then = new Sequence_Ast(yylineno);
-                    seq_ast_then->ast_push_back($5);
-
                     Sequence_Ast * seq_ast_else = new Sequence_Ast(yylineno);
                     for (std::list<Ast*>::iterator it = $8->begin(); it != $8->end(); ++it){
                         seq_ast_else->ast_push_back(*it);
                     }
 
-                    $$ = new Selection_Statement_Ast($3, seq_ast_then, seq_ast_else, yylineno);
+                    $$ = new Selection_Statement_Ast($3, $5, seq_ast_else, yylineno);
                 }
 
             |   IF '(' logical_expr ')'
@@ -373,10 +368,7 @@ if_stmt     :   IF '(' logical_expr ')'
                         seq_ast_then->ast_push_back(*it);
                     }
 
-                    Sequence_Ast * seq_ast_else = new Sequence_Ast(yylineno);
-                    seq_ast_else->ast_push_back($9);
-
-                    $$ = new Selection_Statement_Ast($3, seq_ast_then, seq_ast_else, yylineno);
+                    $$ = new Selection_Statement_Ast($3, seq_ast_then, $9, yylineno);
                 }
 
             |   IF '(' logical_expr ')'
@@ -384,13 +376,7 @@ if_stmt     :   IF '(' logical_expr ')'
                 ELSE
                     single_stmt
                 {
-                    Sequence_Ast * seq_ast_then = new Sequence_Ast(yylineno);
-                    seq_ast_then->ast_push_back($5);
-
-                    Sequence_Ast * seq_ast_else = new Sequence_Ast(yylineno);
-                    seq_ast_else->ast_push_back($7);
-
-                    $$ = new Selection_Statement_Ast($3, seq_ast_then, seq_ast_else, yylineno);
+                    $$ = new Selection_Statement_Ast($3, $5, $7, yylineno);
                 }
             ;
 
@@ -416,9 +402,7 @@ while_stmt      :   WHILE '(' logical_expr ')'
                 |   WHILE '(' logical_expr ')'
                         single_stmt
                     {
-                        Sequence_Ast * seq_ast_body = new Sequence_Ast(yylineno);
-                        seq_ast_body->ast_push_back($5);
-                        $$ = new Iteration_Statement_Ast($3, seq_ast_body, yylineno, false);
+                        $$ = new Iteration_Statement_Ast($3, $5, yylineno, false);
                     }
                 ;
 
@@ -447,9 +431,7 @@ do_while_stmt   :   DO
                         single_stmt
                     WHILE '(' logical_expr ')' ';'
                     {
-                        Sequence_Ast * seq_ast_body = new Sequence_Ast(yylineno);
-                        seq_ast_body->ast_push_back($2);
-                        $$ = new Iteration_Statement_Ast($5, seq_ast_body, yylineno, true);
+                        $$ = new Iteration_Statement_Ast($5, $2, yylineno, true);
                     }
                 ;
 

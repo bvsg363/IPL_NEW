@@ -476,9 +476,9 @@ static const yytype_uint16 yyrline[] =
        0,    52,    52,    60,    73,    80,    88,    93,    99,   104,
      110,   123,   138,   142,   150,   154,   158,   162,   168,   174,
      181,   188,   195,   202,   209,   215,   221,   227,   233,   239,
-     247,   262,   267,   275,   285,   298,   306,   334,   358,   382,
-     397,   416,   426,   446,   457,   462,   467,   472,   477,   483,
-     490,   497,   504,   511,   518,   525
+     247,   262,   267,   275,   285,   298,   304,   332,   353,   374,
+     383,   402,   410,   430,   439,   444,   449,   454,   459,   465,
+     472,   479,   486,   493,   500,   507
 };
 #endif
 
@@ -1671,15 +1671,13 @@ yyreduce:
   case 35:
 #line 300 "parser.y" /* yacc.c:1646  */
     {
-                    Sequence_Ast * seq_ast_then = new Sequence_Ast(yylineno);
-                    seq_ast_then->ast_push_back((yyvsp[0].ast));
-                    (yyval.ast) = new Selection_Statement_Ast((yyvsp[-2].ast), seq_ast_then, NULL, yylineno);
+                    (yyval.ast) = new Selection_Statement_Ast((yyvsp[-2].ast), (yyvsp[0].ast), NULL, yylineno);
                 }
-#line 1679 "parser.tab.c" /* yacc.c:1646  */
+#line 1677 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 314 "parser.y" /* yacc.c:1646  */
+#line 312 "parser.y" /* yacc.c:1646  */
     {
                     if ((yyvsp[-5].ast_list)->empty() || (yyvsp[-1].ast_list)->empty())
                     {
@@ -1699,11 +1697,11 @@ yyreduce:
 
                     (yyval.ast) = new Selection_Statement_Ast((yyvsp[-8].ast), seq_ast_then, seq_ast_else, yylineno);
                 }
-#line 1703 "parser.tab.c" /* yacc.c:1646  */
+#line 1701 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 340 "parser.y" /* yacc.c:1646  */
+#line 338 "parser.y" /* yacc.c:1646  */
     {
                     if ((yyvsp[-1].ast_list)->empty())
                     {
@@ -1711,21 +1709,18 @@ yyreduce:
                         exit(0);
                     }
 
-                    Sequence_Ast * seq_ast_then = new Sequence_Ast(yylineno);
-                    seq_ast_then->ast_push_back((yyvsp[-4].ast));
-
                     Sequence_Ast * seq_ast_else = new Sequence_Ast(yylineno);
                     for (std::list<Ast*>::iterator it = (yyvsp[-1].ast_list)->begin(); it != (yyvsp[-1].ast_list)->end(); ++it){
                         seq_ast_else->ast_push_back(*it);
                     }
 
-                    (yyval.ast) = new Selection_Statement_Ast((yyvsp[-6].ast), seq_ast_then, seq_ast_else, yylineno);
+                    (yyval.ast) = new Selection_Statement_Ast((yyvsp[-6].ast), (yyvsp[-4].ast), seq_ast_else, yylineno);
                 }
-#line 1725 "parser.tab.c" /* yacc.c:1646  */
+#line 1720 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 364 "parser.y" /* yacc.c:1646  */
+#line 359 "parser.y" /* yacc.c:1646  */
     {
                     if ((yyvsp[-3].ast_list)->empty())
                     {
@@ -1738,30 +1733,21 @@ yyreduce:
                         seq_ast_then->ast_push_back(*it);
                     }
 
-                    Sequence_Ast * seq_ast_else = new Sequence_Ast(yylineno);
-                    seq_ast_else->ast_push_back((yyvsp[0].ast));
+                    (yyval.ast) = new Selection_Statement_Ast((yyvsp[-6].ast), seq_ast_then, (yyvsp[0].ast), yylineno);
+                }
+#line 1739 "parser.tab.c" /* yacc.c:1646  */
+    break;
 
-                    (yyval.ast) = new Selection_Statement_Ast((yyvsp[-6].ast), seq_ast_then, seq_ast_else, yylineno);
+  case 39:
+#line 378 "parser.y" /* yacc.c:1646  */
+    {
+                    (yyval.ast) = new Selection_Statement_Ast((yyvsp[-4].ast), (yyvsp[-2].ast), (yyvsp[0].ast), yylineno);
                 }
 #line 1747 "parser.tab.c" /* yacc.c:1646  */
     break;
 
-  case 39:
-#line 386 "parser.y" /* yacc.c:1646  */
-    {
-                    Sequence_Ast * seq_ast_then = new Sequence_Ast(yylineno);
-                    seq_ast_then->ast_push_back((yyvsp[-2].ast));
-
-                    Sequence_Ast * seq_ast_else = new Sequence_Ast(yylineno);
-                    seq_ast_else->ast_push_back((yyvsp[0].ast));
-
-                    (yyval.ast) = new Selection_Statement_Ast((yyvsp[-4].ast), seq_ast_then, seq_ast_else, yylineno);
-                }
-#line 1761 "parser.tab.c" /* yacc.c:1646  */
-    break;
-
   case 40:
-#line 401 "parser.y" /* yacc.c:1646  */
+#line 387 "parser.y" /* yacc.c:1646  */
     {
                         if((yyvsp[-1].ast_list)->empty())
                         {
@@ -1776,21 +1762,19 @@ yyreduce:
 
                         (yyval.ast) = new Iteration_Statement_Ast((yyvsp[-4].ast), seq_ast_body, yylineno, false);
                     }
-#line 1780 "parser.tab.c" /* yacc.c:1646  */
+#line 1766 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 418 "parser.y" /* yacc.c:1646  */
+#line 404 "parser.y" /* yacc.c:1646  */
     {
-                        Sequence_Ast * seq_ast_body = new Sequence_Ast(yylineno);
-                        seq_ast_body->ast_push_back((yyvsp[0].ast));
-                        (yyval.ast) = new Iteration_Statement_Ast((yyvsp[-2].ast), seq_ast_body, yylineno, false);
+                        (yyval.ast) = new Iteration_Statement_Ast((yyvsp[-2].ast), (yyvsp[0].ast), yylineno, false);
                     }
-#line 1790 "parser.tab.c" /* yacc.c:1646  */
+#line 1774 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 431 "parser.y" /* yacc.c:1646  */
+#line 415 "parser.y" /* yacc.c:1646  */
     {
                         if ((yyvsp[-6].ast_list)->empty())
                         {
@@ -1805,130 +1789,128 @@ yyreduce:
 
                         (yyval.ast) = new Iteration_Statement_Ast((yyvsp[-2].ast), seq_ast_body, yylineno, true);
                     }
-#line 1809 "parser.tab.c" /* yacc.c:1646  */
+#line 1793 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 449 "parser.y" /* yacc.c:1646  */
+#line 433 "parser.y" /* yacc.c:1646  */
     {
-                        Sequence_Ast * seq_ast_body = new Sequence_Ast(yylineno);
-                        seq_ast_body->ast_push_back((yyvsp[-5].ast));
-                        (yyval.ast) = new Iteration_Statement_Ast((yyvsp[-2].ast), seq_ast_body, yylineno, true);
+                        (yyval.ast) = new Iteration_Statement_Ast((yyvsp[-2].ast), (yyvsp[-5].ast), yylineno, true);
                     }
-#line 1819 "parser.tab.c" /* yacc.c:1646  */
+#line 1801 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 458 "parser.y" /* yacc.c:1646  */
+#line 440 "parser.y" /* yacc.c:1646  */
     {
                         (yyval.ast) = new Logical_Expr_Ast((yyvsp[-2].ast), _logical_and, (yyvsp[0].ast), yylineno);
                     }
-#line 1827 "parser.tab.c" /* yacc.c:1646  */
+#line 1809 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 463 "parser.y" /* yacc.c:1646  */
+#line 445 "parser.y" /* yacc.c:1646  */
     {
                         (yyval.ast) = new Logical_Expr_Ast((yyvsp[-2].ast), _logical_or, (yyvsp[0].ast), yylineno);
                     }
-#line 1835 "parser.tab.c" /* yacc.c:1646  */
+#line 1817 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 468 "parser.y" /* yacc.c:1646  */
+#line 450 "parser.y" /* yacc.c:1646  */
     {
                         (yyval.ast) = new Logical_Expr_Ast(NULL, _logical_not, (yyvsp[0].ast), yylineno);
                     }
-#line 1843 "parser.tab.c" /* yacc.c:1646  */
+#line 1825 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 473 "parser.y" /* yacc.c:1646  */
+#line 455 "parser.y" /* yacc.c:1646  */
     {
                         (yyval.ast) = (yyvsp[-1].ast);
                     }
-#line 1851 "parser.tab.c" /* yacc.c:1646  */
+#line 1833 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 478 "parser.y" /* yacc.c:1646  */
+#line 460 "parser.y" /* yacc.c:1646  */
     {
                         (yyval.ast) = (yyvsp[0].ast);
                     }
-#line 1859 "parser.tab.c" /* yacc.c:1646  */
+#line 1841 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 484 "parser.y" /* yacc.c:1646  */
+#line 466 "parser.y" /* yacc.c:1646  */
     {
                             (yyval.ast) = new Relational_Expr_Ast((yyvsp[-2].ast), less_than, (yyvsp[0].ast), yylineno);
                             // $$->set_data_type($1->get_data_type());
                             (yyval.ast)->check_ast();
                         }
-#line 1869 "parser.tab.c" /* yacc.c:1646  */
+#line 1851 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 491 "parser.y" /* yacc.c:1646  */
+#line 473 "parser.y" /* yacc.c:1646  */
     {
                             (yyval.ast) = new Relational_Expr_Ast((yyvsp[-2].ast), less_equalto, (yyvsp[0].ast), yylineno);
                             // $$->set_data_type($1->get_data_type());
                             (yyval.ast)->check_ast();
                         }
-#line 1879 "parser.tab.c" /* yacc.c:1646  */
+#line 1861 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 498 "parser.y" /* yacc.c:1646  */
+#line 480 "parser.y" /* yacc.c:1646  */
     {
                             (yyval.ast) = new Relational_Expr_Ast((yyvsp[-2].ast), greater_than, (yyvsp[0].ast), yylineno);
                             // $$->set_data_type($1->get_data_type());
                             (yyval.ast)->check_ast();                            
                         }
-#line 1889 "parser.tab.c" /* yacc.c:1646  */
+#line 1871 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 505 "parser.y" /* yacc.c:1646  */
+#line 487 "parser.y" /* yacc.c:1646  */
     {
                             (yyval.ast) = new Relational_Expr_Ast((yyvsp[-2].ast), greater_equalto, (yyvsp[0].ast), yylineno);
                             // $$->set_data_type($1->get_data_type());
                             (yyval.ast)->check_ast();                            
                         }
-#line 1899 "parser.tab.c" /* yacc.c:1646  */
+#line 1881 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 512 "parser.y" /* yacc.c:1646  */
+#line 494 "parser.y" /* yacc.c:1646  */
     {
                             (yyval.ast) = new Relational_Expr_Ast((yyvsp[-2].ast), equalto, (yyvsp[0].ast), yylineno);
                             // $$->set_data_type($1->get_data_type());
                             (yyval.ast)->check_ast();                            
                         }
-#line 1909 "parser.tab.c" /* yacc.c:1646  */
+#line 1891 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 519 "parser.y" /* yacc.c:1646  */
+#line 501 "parser.y" /* yacc.c:1646  */
     {
                             (yyval.ast) = new Relational_Expr_Ast((yyvsp[-2].ast), not_equalto, (yyvsp[0].ast), yylineno);
                             // $$->set_data_type($1->get_data_type());
                             (yyval.ast)->check_ast();                            
                         }
-#line 1919 "parser.tab.c" /* yacc.c:1646  */
+#line 1901 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 526 "parser.y" /* yacc.c:1646  */
+#line 508 "parser.y" /* yacc.c:1646  */
     {
                             (yyval.ast) = (yyvsp[-1].ast);
                             // $$->set_data_type($2->get_data_type());
                         }
-#line 1928 "parser.tab.c" /* yacc.c:1646  */
+#line 1910 "parser.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1932 "parser.tab.c" /* yacc.c:1646  */
+#line 1914 "parser.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

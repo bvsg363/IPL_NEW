@@ -1,0 +1,105 @@
+#!/bin/bash
+clear
+pass=0
+fail=0
+pass1=0
+fail1=0
+pass2=0
+fail2=0
+pass3=0
+fail3=0
+pass4=0
+fail4=0
+
+for i in $(find Test -name "*.c"); 
+do 
+    ./sclp_old -ast -eval -symtab $i #>temp1.txt 2>&1
+    # ./sclp -icode $i
+    cp $i.ast temp1.txt
+    # cp $i.spim temp11.txt
+    cp $i.eval temp111.txt
+    cp $i.sym temp1111.txt
+    # cp $i.ic temp11111.txt
+
+    ./sclp_new -ast -eval -symtab $i #>temp2.txt 2>&1
+    # ./yoursclp -icode $i
+    cp $i.ast temp2.txt
+    # cp $i.spim temp22.txt
+    cp $i.eval temp222.txt
+    cp $i.sym temp2222.txt
+    # cp $i.ic temp22222.txt
+    
+    DIFF=$(diff temp1.txt temp2.txt) 
+    if [ "$DIFF" == "" ] 
+    then
+    pass=$((pass+1))
+     echo "Passed $i ast"
+   
+    else
+    fail=$((fail+1))
+    echo "Failed $i ast"
+    fi
+
+    # DIFF1=$(diff temp11.txt temp22.txt) 
+    # if [ "$DIFF1" == "" ] 
+    # then
+    # pass1=$((pass1+1))
+    #  echo "Passed $i spim"
+    
+    # else
+    # fail1=$((fail1+1))
+    # echo "Failed $i spim"
+    # fi
+
+    DIFF2=$(diff temp111.txt temp222.txt) 
+    if [ "$DIFF2" == "" ] 
+    then
+    pass2=$((pass2+1))
+     echo "Passed $i eval"
+    
+    else
+    fail2=$((fail2+1))
+    echo "Failed $i eval"
+    fi
+
+    DIFF2=$(diff temp1111.txt temp2222.txt) 
+    if [ "$DIFF2" == "" ] 
+    then
+    pass3=$((pass3+1))
+     echo "Passed $i symtab"
+    
+    else
+    fail3=$((fail3+1))
+    echo "Failed $i symtab"
+    fi
+
+    # DIFF2=$(diff temp11111.txt temp22222.txt) 
+    # if [ "$DIFF2" == "" ] 
+    # then
+    # pass4=$((pass4+1))
+    #  echo "Passed $i icode"
+    
+    # else
+    # fail4=$((fail4+1))
+    # echo "Failed $i icode"
+    # fi
+
+done
+#rm temp1.txt
+#rm temp2.txt
+
+echo "Passed Cases $pass ast"
+echo "Failed Cases $fail ast"
+
+# echo "Passed Cases $pass1 spim"
+# echo "Failed Cases $fail1 spim"
+
+echo "Passed Cases $pass2 eval"
+echo "Failed Cases $fail2 eval"
+
+echo "Passed Cases $pass3 symtab"
+echo "Failed Cases $fail3 symtab"
+
+# echo "Passed Cases $pass4 icode"
+# echo "Failed Cases $fail4 icode"
+

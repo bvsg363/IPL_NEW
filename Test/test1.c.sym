@@ -1,0 +1,17 @@
+Program:
+
+Global Declarations:
+   Name: areaType : Double Entity Type: VAR (No offset assigned yet)
+   Name: perimeterType : Double Entity Type: VAR (No offset assigned yet)
+   Name: xType : Double Entity Type: VAR (No offset assigned yet)
+   Name: a Type: INT Entity Type: VAR (No offset assigned yet)
+   Name: b Type: INT Entity Type: VAR (No offset assigned yet)
+   Procedure: main, Return Type: void
+   Local Declarartions
+   Name: rType : Double Entity Type: VAR (No offset assigned yet)
+   Name: x Type: INT Entity Type: VAR (No offset assigned yet)
+   Name: y Type: INT Entity Type: VAR (No offset assigned yet)
+   Name: k Type: INT Entity Type: VAR (No offset assigned yet)
+   Name: zType : Double Entity Type: VAR (No offset assigned yet)
+   Name: i Type: INT Entity Type: VAR (No offset assigned yet)
+   Name: j Type: INT Entity Type: VAR (No offset assigned yet)

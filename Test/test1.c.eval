@@ -1,10 +1,14 @@
 Evaluating Program
    Global Variables (before evaluating):
+         a : 0
          area : 0.00
+         b : 0
          perimeter : 0.00
          x : 0.00
    Evaluating Procedure main
       Local Variables (before evaluating):
+         i : undefined
+         j : undefined
          k : undefined
          r : undefined
          x : undefined
@@ -64,6 +68,12 @@ Evaluating Program
 
 
          Asgn:
+            LHS (Name : area)
+            RHS (Num : 1.00)
+         area : 1.00
+
+
+         Asgn:
             LHS (Name : x)
             RHS (Num : 8)
          x : 8
@@ -93,14 +103,66 @@ Evaluating Program
          perimeter : 44.00
 
 
+         Asgn:
+            LHS (Name : i)
+            RHS (Num : 0)
+         i : 0
+
+
+         Asgn:
+            LHS (Name : j)
+            RHS (Num : 1)
+         j : 1
+
+
+         Asgn:
+            LHS (Name : a)
+            RHS (Num : 0)
+         a : 0
+
+
+         Asgn:
+            LHS (Name : b)
+            RHS (Num : 4)
+         b : 4
+
+
+         Asgn:
+            LHS (Name : b)
+            RHS (Num : 4)
+         b : 4
+
+
+         Asgn:
+            LHS (Name : b)
+            RHS (Num : 4)
+         b : 4
+
+
+         Asgn:
+            LHS (Name : b)
+            RHS (Num : 4)
+         b : 4
+
+
+         Asgn:
+            LHS (Name : b)
+            RHS (Num : 6)
+         b : 6
+
+
 
       Local Variables (after evaluating):
+         i : 0
+         j : 1
          k : undefined
          r : undefined
          x : 8
          y : 6
          z : 3.00
    Global Variables (after evaluating):
+         a : 0
          area : 6.00
+         b : 6
          perimeter : 44.00
          x : 0.00
