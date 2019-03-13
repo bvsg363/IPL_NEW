@@ -23,6 +23,21 @@ Program:
                RHS (Num : 3)
             LHS (Num : 4)
             RHS (Num : 6)))
+            
+         Asgn:
+            LHS (Name : a)
+            RHS (Num : 1)
+         IF : 
+         CONDITION (
+            Condition: EQ
+               LHS (Name : x)
+               RHS (Num : 2))
+         THEN (
+            
+            
+         Asgn:
+            LHS (Name : z)
+            RHS (Num : 4.00))
          WHILE : 
          CONDITION (
             Condition: NOT

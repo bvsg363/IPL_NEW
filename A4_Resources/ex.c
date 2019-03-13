@@ -1,14 +1,12 @@
+void main(){
 
-void main()
+int a,b;
 
-{
-	float x;
+a=1;
 
+b=2;
 
-	x = 1.0;
-
-	if((1<2 && 2<3) && 3<4){
-		x = 2.0;
-	}
+if(a==b){}
 
 }
+

@@ -51,6 +51,12 @@ Evaluating Program
 
 
          Asgn:
+            LHS (Name : a)
+            RHS (Num : 1)
+         a : 1
+
+
+         Asgn:
             LHS (Name : x)
             RHS (
          Cond:
