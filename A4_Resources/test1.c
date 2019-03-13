@@ -1,4 +1,3 @@
-
 float area;
 float perimeter;
 
