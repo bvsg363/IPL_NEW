@@ -1,0 +1,221 @@
+
+	.data
+area:	.word 0
+perimeter:	.word 0
+x:	.word 0
+
+	.text 			# The .text assembler directive indicates
+	.globl main		# The following is the code (as oppose to data)
+main:				# .globl makes main know to the 
+				# outside of the program.
+# Prologue begins 
+	sw $fp, 0($sp)		# Save the frame pointer
+	sub $fp, $sp, 4		# Update the frame pointer
+
+	sub $sp, $sp, 32		# Make space for the locals
+# Prologue ends
+
+	li.d $f2, 3.00
+	s.d $f2, -20($fp)
+	li $v0, 2
+	sw $v0, -8($fp)
+	li.d $f2, 4.00
+	s.d $f2, area
+	j label1
+
+label0:    	
+	li $v0, 3
+	sw $v0, -8($fp)
+	li $v0, 6
+	sw $v0, -8($fp)
+
+label1:    	
+	li $v0, 1
+	lw $t0, -8($fp)
+	li $t1, 3
+	sne $t2, $t0, $t1
+	sltu $t0, $t2, $v0
+	bne $t0, $zero, label0 
+	li.d $f2, 1.00
+	li.d $f4, 0.00
+	div.d $f4, $f6, $f2
+	s.d $f6, -20($fp)
+	li $v0, 1
+	li.d $f2, 2.00
+	li.d $f4, 3.40
+	slt $t0, $f2, $f4
+	sltu $t1, $t0, $v0
+	li $v0, 2
+	li $t0, 3
+	sgt $t2, $v0, $t0
+	or $v0, $t1, $t2
+	beq $v0, $zero, label2 
+	li $t0, 4
+	or $t2, $t0, $zero
+	j label3
+
+label2:    	
+	li $t1, 6
+	or $t2, $t1, $zero
+
+label3:    	
+	sw $t2, -8($fp)
+	lw $v0, -8($fp)
+	li $t0, 5
+	sle $t1, $v0, $t0
+	lw $v0, -8($fp)
+	li $t0, 4
+	slt $t2, $v0, $t0
+	lw $v0, -8($fp)
+	li $t0, 5
+	sgt $t3, $v0, $t0
+	and $v0, $t2, $t3
+	or $t0, $t1, $v0
+	beq $t0, $zero, label4 
+	li $v0, 8
+	sw $v0, -8($fp)
+	li $v0, 7
+	sw $v0, -12($fp)
+	j label5
+
+label4:    	
+	li $v0, 9
+	sw $v0, -8($fp)
+	li $v0, 6
+	sw $v0, -12($fp)
+
+label5:    	
+
+label6:    	
+	lw $v0, -8($fp)
+	li $t0, 5
+	sle $t2, $v0, $t0
+	lw $v0, -8($fp)
+	li $t0, 4
+	slt $t3, $v0, $t0
+	or $v0, $t2, $t3
+	lw $t0, -8($fp)
+	li $t2, 5
+	sgt $t3, $t0, $t2
+	or $t0, $v0, $t3
+	beq $t0, $zero, label8 
+	li $v0, 8
+	sw $v0, -8($fp)
+	j label9
+
+label8:    	
+	li $v0, 9
+	sw $v0, -8($fp)
+
+label9:    	
+	j label11
+
+label10:    	
+	li $v0, 9
+	sw $v0, -12($fp)
+
+label11:    	
+	lw $v0, -8($fp)
+	li $t0, 0
+	seq $t2, $v0, $t0
+	bne $t2, $zero, label10 
+
+label7:    	
+	lw $v0, -8($fp)
+	li $t0, 4
+	seq $t1, $v0, $t0
+	bne $t1, $zero, label6 
+	lw $v0, -8($fp)
+	li $t0, 5
+	sge $t1, $v0, $t0
+	l.d $f2, -20($fp)
+	li.d $f4, 4.00
+	slt $v0, $f2, $f4
+	and $t0, $t1, $v0
+	beq $t0, $zero, label20 
+	j label13
+
+label12:    	
+	li $v0, 3
+	sw $v0, -8($fp)
+	li $v0, 2
+	li $t1, 3
+	sgt $t3, $v0, $t1
+	beq $t3, $zero, label14 
+	li $v0, 2
+	or $t4, $v0, $zero
+	j label15
+
+label14:    	
+	li $t1, 4
+	or $t4, $t1, $zero
+
+label15:    	
+	sw $t4, -8($fp)
+
+label13:    	
+	lw $v0, -8($fp)
+	li $t1, 0
+	seq $t2, $v0, $t1
+	bne $t2, $zero, label12 
+	li $v0, 1
+	lw $t1, -8($fp)
+	li $t2, 9
+	sne $t3, $t1, $t2
+	lw $t1, -8($fp)
+	li $t2, 9
+	sge $t4, $t1, $t2
+	or $t1, $t3, $t4
+	sltu $t2, $t1, $v0
+	beq $t2, $zero, label19 
+	lw $v0, -8($fp)
+	li $t1, 0
+	sgt $t3, $v0, $t1
+	beq $t3, $zero, label18 
+	li $v0, 8
+	sw $v0, -8($fp)
+	li.d $f2, 2.00
+	li.d $f4, 3.40
+	sgt $v0, $f2, $f4
+	li $t1, 2
+	li $t4, 3
+	slt $t5, $t1, $t4
+	and $t1, $v0, $t5
+	beq $t1, $zero, label16 
+	li $v0, 4
+	or $t5, $v0, $zero
+	j label17
+
+label16:    	
+	li $t4, 6
+	or $t5, $t4, $zero
+
+label17:    	
+	sw $t5, -8($fp)
+	li $v0, 9
+	sw $v0, -8($fp)
+
+label18:    	
+	li $v0, 5
+	sw $v0, -8($fp)
+
+label19:    	
+	li $v0, 8
+	sw $v0, -8($fp)
+
+label20:    	
+	li.d $f2, 2.00
+	li.d $f4, 3.00
+	mul.d $f4, $f6, $f2
+	s.d $f6, area
+	li.d $f2, 2.00
+	li.d $f4, 22.00
+	mul.d $f4, $f6, $f2
+	s.d $f6, perimeter
+
+# Epilogue Begins
+	add $sp, $sp, 32
+	lw $fp, 0($sp)  
+	jr        $31		# Jump back to the operating system.
+# Epilogue Ends
+
