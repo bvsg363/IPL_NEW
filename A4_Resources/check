@@ -11,7 +11,7 @@ fail3=0
 pass4=0
 fail4=0
 
-for i in $(find Test -name "*.c"); 
+for i in $(find TestCases -name "*.c"); 
 do 
     ./sclp_old -ast -eval -symtab $i #>temp1.txt 2>&1
     # ./sclp -icode $i

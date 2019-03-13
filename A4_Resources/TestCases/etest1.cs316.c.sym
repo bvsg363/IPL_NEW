@@ -1,0 +1,8 @@
+Program:
+
+Global Declarations:
+   Name: x Type: INT Entity Type: VAR (No offset assigned yet)
+   Procedure: main, Return Type: void
+   Local Declarartions
+   Name: y Type: INT Entity Type: VAR (No offset assigned yet)
+   Name: z Type: INT Entity Type: VAR (No offset assigned yet)

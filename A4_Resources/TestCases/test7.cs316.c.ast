@@ -1,0 +1,30 @@
+Program:
+   Procedure: main, Return Type: void
+
+         Asgn:
+            LHS (Name : d)
+            RHS (Num : 1.00)
+         Asgn:
+            LHS (Name : a)
+            RHS (Num : 3)
+         Asgn:
+            LHS (Name : b)
+            RHS (Num : 5)
+         Asgn:
+            LHS (Name : c)
+            RHS (Num : 6)
+         Asgn:
+            LHS (Name : a)
+            RHS (
+            Arith: PLUS
+               LHS (Name : a)
+               RHS (
+         Cond:
+            IF_ELSE
+            Condition: NOT
+               RHS (
+            Condition: EQ
+               LHS (Name : d)
+               RHS (Num : 1.00))
+            LHS (Name : b)
+            RHS (Name : c)))

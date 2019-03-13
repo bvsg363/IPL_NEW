@@ -10,6 +10,19 @@ Program:
          Asgn:
             LHS (Name : area)
             RHS (Num : 4.00)
+         Asgn:
+            LHS (Name : x)
+            RHS (
+            Arith: PLUS
+               LHS (Name : x)
+               RHS (
+         Cond:
+            IF_ELSE
+            Condition: LT
+               LHS (Num : 2)
+               RHS (Num : 3)
+            LHS (Num : 4)
+            RHS (Num : 6)))
          WHILE : 
          CONDITION (
             Condition: NOT

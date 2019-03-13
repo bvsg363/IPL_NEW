@@ -1,0 +1,17 @@
+Evaluating Program
+   Global Variables (before evaluating):
+         x : 0.00
+   Evaluating Procedure main
+      Local Variables (before evaluating):
+
+
+         Asgn:
+            LHS (Name : x)
+            RHS (Num : 1.00)
+         x : 1.00
+
+
+
+      Local Variables (after evaluating):
+   Global Variables (after evaluating):
+         x : 1.00
