@@ -2,8 +2,10 @@ Evaluating Program
    Global Variables (before evaluating):
          area : 0.00
          perimeter : 0.00
+         x : 0.00
    Evaluating Procedure main
       Local Variables (before evaluating):
+         k : undefined
          r : undefined
          x : undefined
          y : undefined
@@ -35,16 +37,18 @@ Evaluating Program
             IF_ELSE
             Condition: OR
                LHS (
+            Condition: NOT
+               RHS (
             Condition: LT
                LHS (Num : 2.00)
-               RHS (Num : 3.40))
+               RHS (Num : 3.40)))
                RHS (
             Condition: GT
                LHS (Num : 2)
                RHS (Num : 3))
             LHS (Num : 4)
             RHS (Num : 6))
-         x : 4
+         x : 6
 
 
          Asgn:
@@ -61,8 +65,8 @@ Evaluating Program
 
          Asgn:
             LHS (Name : x)
-            RHS (Num : 9)
-         x : 9
+            RHS (Num : 8)
+         x : 8
 
 
          Asgn:
@@ -71,12 +75,32 @@ Evaluating Program
          x : 8
 
 
+         Asgn:
+            LHS (Name : area)
+            RHS (
+            Arith: MULT
+               LHS (Num : 2.00)
+               RHS (Num : 3.00))
+         area : 6.00
+
+
+         Asgn:
+            LHS (Name : perimeter)
+            RHS (
+            Arith: MULT
+               LHS (Num : 2.00)
+               RHS (Num : 22.00))
+         perimeter : 44.00
+
+
 
       Local Variables (after evaluating):
+         k : undefined
          r : undefined
          x : 8
          y : 6
          z : 3.00
    Global Variables (after evaluating):
-         area : 4.00
-         perimeter : 0.00
+         area : 6.00
+         perimeter : 44.00
+         x : 0.00

@@ -185,14 +185,28 @@ Eval_Result & Divide_Ast::evaluate(Local_Environment & eval_env, ostream & file_
     {
         Eval_Result *eval_res = new Eval_Result_Value_Int();
         eval_res->set_result_enum(int_result);
-        eval_res->set_value(lhs_result.get_int_value() / rhs_result.get_int_value());
+        if(rhs_result.get_int_value() == 0){
+            printf("cs316: Error: Line: %d: Divide by 0\n", lineno);
+            exit(0);
+        }
+        else{
+            eval_res->set_value(lhs_result.get_int_value() / rhs_result.get_int_value());
+        }
         return *eval_res;
     }
     else
     {
         Eval_Result *eval_res = new Eval_Result_Value_Double();
         eval_res->set_result_enum(double_result);
-        eval_res->set_value(lhs_result.get_double_value() / rhs_result.get_double_value());
+        if (rhs_result.get_double_value() == 0.0)
+        {
+            printf("cs316: Error: Line: %d: Divide by 0\n", lineno);
+            exit(0);
+        }
+        else
+        {
+            eval_res->set_value(lhs_result.get_double_value() / rhs_result.get_double_value());
+        }
         return *eval_res;
     }
 }
