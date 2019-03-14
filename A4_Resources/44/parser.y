@@ -45,7 +45,7 @@ Data_Type sample_data_type;
 %type <double_value>     DOUBLE_NUMBER
 %type <procedure>    procedure_definition
 %type <string_value> NAME
-%type <ast> assignment_statement expression variable constant conditional_expr relational_expr logical_expr if_stmt while_stmt do_while_stmt single_stmt
+%type <ast> assignment_statement expression variable constant relational_expr logical_expr if_stmt while_stmt do_while_stmt single_stmt sequence_list
 %type <symbol_table> variable_list variable_declaration variable_declaration_list global_variable_declaration_list
 %type <ast_list> statement_list
 
@@ -144,7 +144,6 @@ statement_list  :   /* empty */
                     {
                         $1->push_back($2);
                         $$ = $1;
-                        // common_ast_list->push_back($2);
                     }
                 ;
 
@@ -152,15 +151,23 @@ single_stmt     :   assignment_statement
                     {
                         $$ = $1;
                     }
+
                 |   if_stmt
                     {
                         $$ = $1;
                     }
+
                 |   while_stmt
                     {
                         $$ = $1;
                     }
+
                 |   do_while_stmt
+                    {
+                        $$ = $1;
+                    }
+
+                |   sequence_list
                     {
                         $$ = $1;
                     }
@@ -172,16 +179,6 @@ assignment_statement    :   variable ASSIGN expression ';'
                                 $$->check_ast();
                             }
                         ;
-
-// expression1    :   expression
-//                     {
-//                         $$ = $1;
-//                     }
-//                 |   conditional_expr
-//                     {
-//                         $$ = $1;
-//                     }
-//                 ;
 
 expression :   expression '*' expression
                 {
@@ -282,111 +279,10 @@ constant    :   INTEGER_NUMBER
                 }
             ;
 
-
-/* (a>b)&&(b<c) ? d : e */
-// conditional_expr    :   logical_expr '?' expression ':' expression
-//                         {
-//                             $$ = new Conditional_Expression_Ast($1, $3, $5, yylineno);
-//                             $$->set_data_type($3->get_data_type());
-//                             $$->check_ast();
-//                         }
-//                     ;
-
-
-
 if_stmt     :   IF '(' logical_expr ')'
-                '{'
-                    statement_list
-                '}'
-                {
-                    if ($6->empty())
-                    {
-                        yyerror("cs316: Error : Block of statements cannot be empty (Invariant at line 404, file parser.y).");
-                        exit(0);
-                    }
-
-                    Sequence_Ast * seq_ast_then = new Sequence_Ast(yylineno);
-                    for (std::list<Ast*>::iterator it = $6->begin(); it != $6->end(); ++it)
-                    {
-                        seq_ast_then->ast_push_back(*it);
-                    }
-                    $$ = new Selection_Statement_Ast($3, seq_ast_then, NULL, yylineno);
-                }
-
-            |   IF '(' logical_expr ')'
                     single_stmt
                 {
                     $$ = new Selection_Statement_Ast($3, $5, NULL, yylineno);
-                }
-
-            |   IF '(' logical_expr ')'
-                '{'
-                    statement_list
-                '}'
-                ELSE
-                '{'
-                    statement_list
-                '}'
-                {
-                    if ($6->empty() || $10->empty())
-                    {
-                        yyerror("cs316: Error : Block of statements cannot be empty (Invariant at line 404, file parser.y).");
-                        exit(0);
-                    }
-
-                    Sequence_Ast * seq_ast_then = new Sequence_Ast(yylineno);
-                    for (std::list<Ast*>::iterator it = $6->begin(); it != $6->end(); ++it){
-                        seq_ast_then->ast_push_back(*it);
-                    }
-
-                    Sequence_Ast * seq_ast_else = new Sequence_Ast(yylineno);
-                    for (std::list<Ast*>::iterator it = $10->begin(); it != $10->end(); ++it){
-                        seq_ast_else->ast_push_back(*it);
-                    }
-
-                    $$ = new Selection_Statement_Ast($3, seq_ast_then, seq_ast_else, yylineno);
-                }
-
-            |   IF '(' logical_expr ')'
-                    single_stmt
-                ELSE
-                '{'
-                    statement_list
-                '}'
-                {
-                    if ($8->empty())
-                    {
-                        yyerror("cs316: Error : Block of statements cannot be empty (Invariant at line 404, file parser.y).");
-                        exit(0);
-                    }
-
-                    Sequence_Ast * seq_ast_else = new Sequence_Ast(yylineno);
-                    for (std::list<Ast*>::iterator it = $8->begin(); it != $8->end(); ++it){
-                        seq_ast_else->ast_push_back(*it);
-                    }
-
-                    $$ = new Selection_Statement_Ast($3, $5, seq_ast_else, yylineno);
-                }
-
-            |   IF '(' logical_expr ')'
-                '{'
-                    statement_list
-                '}'
-                ELSE
-                    single_stmt
-                {
-                    if ($6->empty())
-                    {
-                        yyerror("cs316: Error : Block of statements cannot be empty (Invariant at line 404, file parser.y).");
-                        exit(0);
-                    }
-
-                    Sequence_Ast * seq_ast_then = new Sequence_Ast(yylineno);
-                    for (std::list<Ast*>::iterator it = $6->begin(); it != $6->end(); ++it){
-                        seq_ast_then->ast_push_back(*it);
-                    }
-
-                    $$ = new Selection_Statement_Ast($3, seq_ast_then, $9, yylineno);
                 }
 
             |   IF '(' logical_expr ')'
@@ -399,60 +295,19 @@ if_stmt     :   IF '(' logical_expr ')'
             ;
 
 while_stmt      :   WHILE '(' logical_expr ')'
-                    '{'
-                        statement_list
-                    '}'
-                    {
-                        if($6->empty())
-                        {
-                            yyerror("cs316: Error : Block of statements cannot be empty (Invariant at line 404, file parser.y).");
-                            exit(0);
-                        }
-                        Sequence_Ast * seq_ast_body = new Sequence_Ast(yylineno);
-                        for (std::list<Ast*>::iterator it = $6->begin(); it != $6->end(); ++it)
-                        {
-                            seq_ast_body->ast_push_back(*it);
-                        }
-
-                        $$ = new Iteration_Statement_Ast($3, seq_ast_body, yylineno, false);
-                    }
-
-                |   WHILE '(' logical_expr ')'
                         single_stmt
                     {
                         $$ = new Iteration_Statement_Ast($3, $5, yylineno, false);
                     }
                 ;
 
-/* do{}while(){}; */
 do_while_stmt   :   DO
-                    '{'
-                        statement_list
-                    '}'
-                    WHILE '(' logical_expr ')' ';'
-                    {
-                        if ($3->empty())
-                        {
-                            yyerror("cs316: Error : Block of statements cannot be empty (Invariant at line 404, file parser.y).");
-                            exit(0);
-                        }
-                        Sequence_Ast * seq_ast_body = new Sequence_Ast(yylineno);
-                        for (std::list<Ast*>::iterator it = $3->begin(); it != $3->end(); ++it)
-                        {
-                            seq_ast_body->ast_push_back(*it);
-                        }
-
-                        $$ = new Iteration_Statement_Ast($7, seq_ast_body, yylineno, true);
-                    }
-
-                |   DO
                         single_stmt
                     WHILE '(' logical_expr ')' ';'
                     {
                         $$ = new Iteration_Statement_Ast($5, $2, yylineno, true);
                     }
                 ;
-
 
 logical_expr    :   logical_expr AND logical_expr
                     {
@@ -483,48 +338,59 @@ logical_expr    :   logical_expr AND logical_expr
 relational_expr     :   expression LESS_THAN expression
                         {
                             $$ = new Relational_Expr_Ast($1, less_than, $3, yylineno);
-                            // $$->set_data_type($1->get_data_type());
                             $$->check_ast();
                         }
 
                     |   expression LESS_THAN_EQUAL expression
                         {
                             $$ = new Relational_Expr_Ast($1, less_equalto, $3, yylineno);
-                            // $$->set_data_type($1->get_data_type());
                             $$->check_ast();
                         }
 
                     |   expression GREATER_THAN expression
                         {
                             $$ = new Relational_Expr_Ast($1, greater_than, $3, yylineno);
-                            // $$->set_data_type($1->get_data_type());
                             $$->check_ast();                            
                         }
 
                     |   expression GREATER_THAN_EQUAL expression
                         {
                             $$ = new Relational_Expr_Ast($1, greater_equalto, $3, yylineno);
-                            // $$->set_data_type($1->get_data_type());
                             $$->check_ast();                            
                         }
 
                     |   expression EQUAL expression
                         {
                             $$ = new Relational_Expr_Ast($1, equalto, $3, yylineno);
-                            // $$->set_data_type($1->get_data_type());
                             $$->check_ast();                            
                         }
 
                     |   expression NOT_EQUAL expression
                         {
                             $$ = new Relational_Expr_Ast($1, not_equalto, $3, yylineno);
-                            // $$->set_data_type($1->get_data_type());
                             $$->check_ast();                            
                         }
 
                     |   '(' relational_expr ')'
                         {
                             $$ = $2;
-                            // $$->set_data_type($2->get_data_type());
                         }
                     ;
+
+sequence_list   :   '{'
+                        statement_list
+                    '}'
+                    {
+                        if ($2->empty())
+                        {
+                            yyerror("cs316: Error : Block of statements cannot be empty (Invariant at line 404, file parser.y).");
+                            exit(0);
+                        }
+                        Sequence_Ast * seq_ast_body = new Sequence_Ast(yylineno);
+                        for (std::list<Ast*>::iterator it = $2->begin(); it != $2->end(); ++it)
+                        {
+                            seq_ast_body->ast_push_back(*it);
+                        }
+
+                        $$ = seq_ast_body;
+                    }
