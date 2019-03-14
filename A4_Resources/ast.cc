@@ -287,6 +287,7 @@ Conditional_Expression_Ast::Conditional_Expression_Ast(Ast *cond_Ast, Ast *l, As
     rhs = r;
     ast_num_child = binary_arity;
     lineno = line;
+    get_new_label();
 }
 
 void Conditional_Expression_Ast::print(ostream &file_buffer)
@@ -538,6 +539,7 @@ Sequence_Ast::Sequence_Ast(int line)
 {
     lineno = line;
     // list<Ast *> statement_list = new list<Ast *>;
+    get_new_label();
 }
 
 void Sequence_Ast::ast_push_back(Ast *ast)

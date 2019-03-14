@@ -1,8 +1,0 @@
-Program:
-
-Global Declarations:
-   Name: d Type: INT Entity Type: VAR (No offset assigned yet)
-   Procedure: main, Return Type: void
-   Local Declarartions
-   Name: aType : Double Entity Type: VAR (No offset assigned yet)
-   Name: dType : Double Entity Type: VAR (No offset assigned yet)

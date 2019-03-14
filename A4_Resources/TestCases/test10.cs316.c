@@ -11,4 +11,5 @@ void main()
 	d = 4.3;
 	a = a * -c + a + a;
 	d = -b * d / -d + b;
+	{{a=4.0;}}
 }

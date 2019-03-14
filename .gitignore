@@ -1,1 +1,8 @@
 .vscode/*
+A4_Resources/*.txt
+A4_Resources/sclp_new
+A4_Resources/*.spim
+A4_Resources/*.ic
+A4_Resources/*.eval
+A4_Resources/*.sym
+A4_Resources/*.ast

@@ -13,4 +13,11 @@ void main()
 	c = 50;
 	a = b <= c ? c >= b ? b : c : b * c;
 	a = b < c ? b : c > b ? c : b * c;
+	{
+		a = 3;
+		b = 8;
+		{
+			a = 7;
+		}
+	}
 }
