@@ -6,3 +6,11 @@ A4_Resources/*.ic
 A4_Resources/*.eval
 A4_Resources/*.sym
 A4_Resources/*.ast
+
+A5Resources/*.txt
+A5Resources/sclp_new
+A5Resources/*.spim
+A5Resources/*.ic
+A5Resources/*.eval
+A5Resources/*.sym
+A5Resources/*.ast
