@@ -9,11 +9,14 @@ void main()
 	int x, y, k;
 	float z;
 	int i, j;
+	
 
 	z = 3.0;
 	y = 9;
 	x = 2;
 	area = 4.0;
+
+	// print x;
 
 	x = 5 + !5 < 6 ? 67 : 68;
 
