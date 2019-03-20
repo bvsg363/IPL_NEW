@@ -226,22 +226,22 @@ expression :   expression '*' expression
                     $$->set_data_type($2->get_data_type());
                 }
 
-            |   '-' variable
+            // |   '-' variable
+            //     {
+            //         $$ = new UMinus_Ast($2, NULL, yylineno);
+            //         $$->set_data_type($2->get_data_type());
+            //     }
+
+            // |   '-' constant
+            //     {
+            //         $$ = new UMinus_Ast($2, NULL, yylineno);
+            //         $$->set_data_type($2->get_data_type());
+            //     }
+
+            |   '-' expression %prec '*'
                 {
                     $$ = new UMinus_Ast($2, NULL, yylineno);
                     $$->set_data_type($2->get_data_type());
-                }
-
-            |   '-' constant
-                {
-                    $$ = new UMinus_Ast($2, NULL, yylineno);
-                    $$->set_data_type($2->get_data_type());
-                }
-
-            |   '-' '(' expression ')'
-                {
-                    $$ = new UMinus_Ast($3, NULL, yylineno);
-                    $$->set_data_type($3->get_data_type());
                 }
 
             |   logical_expr '?' expression ':' expression
