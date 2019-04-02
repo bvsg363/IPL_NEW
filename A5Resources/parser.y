@@ -256,10 +256,10 @@ expression :   expression '*' expression
 variable    :   NAME
                 {
                     if(local_symbol_table->variable_in_symbol_list_check(*($1))){
-                        $$ = new Name_Ast(*($1), local_symbol_table->get_symbol_table_entry(*($1)), yylineno);
+                        $$ = new Name_Ast(*($1) + "_", local_symbol_table->get_symbol_table_entry(*($1)), yylineno);
                     }
                     else if(global_symbol_table->variable_in_symbol_list_check(*($1))){
-                        $$ = new Name_Ast(*($1), global_symbol_table->get_symbol_table_entry(*($1)), yylineno);
+                        $$ = new Name_Ast(*($1) + "_", global_symbol_table->get_symbol_table_entry(*($1)), yylineno);
                     }
                     else{
                         yyerror("cs316: Error : Variable has not been declared");

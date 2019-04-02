@@ -49,7 +49,9 @@ void Instruction_Descriptor::print_instruction_descriptor(ostream &file_buffer){
 
 
 ///////////////////////////// Icode statement operand ///////////////////////////////////
-Register_Descriptor* Ics_Opd::get_reg(){}
+Register_Descriptor* Ics_Opd::get_reg(){
+	return machine_desc_object.get_new_register();
+}
 
 void Ics_Opd::print_ics_opd(ostream &file_buffer){}
 void Ics_Opd::print_asm_opd(ostream &file_buffer){}
@@ -64,7 +66,9 @@ void Mem_Addr_Opd::print_ics_opd(ostream &file_buffer){
 	file_buffer << symbol_entry->get_variable_name();
 }
 void Mem_Addr_Opd::print_asm_opd(ostream &file_buffer){}
-Mem_Addr_Opd & Mem_Addr_Opd::operator=(const Mem_Addr_Opd &rhs){}
+Mem_Addr_Opd & Mem_Addr_Opd::operator=(const Mem_Addr_Opd &rhs){
+	*this->symbol_entry = rhs.symbol_entry;
+}
 
 
 /////// Register_Addr_Opd
@@ -80,7 +84,9 @@ void Register_Addr_Opd::print_ics_opd(ostream &file_buffer){
 }
 void Register_Addr_Opd::print_asm_opd(ostream &file_buffer){}
 
-Register_Addr_Opd & Register_Addr_Opd::operator=(const Register_Addr_Opd &rhs){}
+Register_Addr_Opd & Register_Addr_Opd::operator=(const Register_Addr_Opd &rhs){
+	*this->register_description = rhs.register_description;
+}
 
 
 ////// Const_Opd
@@ -100,6 +106,7 @@ void Const_Opd<T>::print_asm_opd(ostream &file_buffer){
 
 template <class T>
 Const_Opd<T> &Const_Opd<T>::operator=(const Const_Opd &rhs){
+	*this->num = rhs.num;
 }
 
 
@@ -121,14 +128,17 @@ void Icode_Stmt::print_assembly(ostream & file_buffer){}
 
 ///////// Move_IC_Stmt
 Move_IC_Stmt::Move_IC_Stmt(Tgt_Op inst, Ics_Opd *opd_1, Ics_Opd *result_opd){
-	op_desc = Instruction_Descriptor(inst, "", "", "", i_op_r_o1, a_op_r_o1);
+	op_desc = machine_desc_object.spim_instruction_table[inst];
 	opd1 = opd_1;
 	result = result_opd;
 }
-Move_IC_Stmt &Move_IC_Stmt::operator=(const Move_IC_Stmt &rhs){}
+Move_IC_Stmt &Move_IC_Stmt::operator=(const Move_IC_Stmt &rhs){
+	*this->opd1 = rhs.get_opd1();
+	*this->result = rhs.get_result();
+}
 
 Instruction_Descriptor &Move_IC_Stmt::get_inst_op_of_ics(){
-	return op_desc;
+	return get_op();
 }
 
 Ics_Opd *Move_IC_Stmt::get_opd1(){
@@ -158,7 +168,11 @@ Compute_IC_Stmt::Compute_IC_Stmt(Tgt_Op inst, Ics_Opd *opd_1, Ics_Opd *opd_2, Ic
 	opd2 = opd_2;
 	result = result_opd;
 }
-Compute_IC_Stmt &Compute_IC_Stmt::operator=(const Compute_IC_Stmt &rhs){}
+Compute_IC_Stmt &Compute_IC_Stmt::operator=(const Compute_IC_Stmt &rhs){
+	*this->opd1 = rhs.opd1;
+	*this->opd2 = rhs.opd2;
+	*this->result = rhs.result;
+}
 
 Instruction_Descriptor &Compute_IC_Stmt::get_inst_op_of_ics(){
 	return op_desc;
@@ -195,7 +209,10 @@ Control_Flow_IC_Stmt::Control_Flow_IC_Stmt(Tgt_Op inst, Ics_Opd *opd_1, string l
 	opd1 = opd_1;
 	label = label_given;
 }
-Control_Flow_IC_Stmt &Control_Flow_IC_Stmt::operator=(const Control_Flow_IC_Stmt &rhs){}
+Control_Flow_IC_Stmt &Control_Flow_IC_Stmt::operator=(const Control_Flow_IC_Stmt &rhs){
+	*this->opd1 = rhs.opd1;
+	*this->label = rhs.label;
+}
 
 Instruction_Descriptor &Control_Flow_IC_Stmt::get_inst_op_of_ics(){
 	return op_desc;
@@ -224,7 +241,9 @@ Label_IC_Stmt::Label_IC_Stmt(Tgt_Op inst, string label_given){
 	// inst_op = inst;
 	label = label_given;
 }
-Label_IC_Stmt &Label_IC_Stmt::operator=(const Label_IC_Stmt &rhs){}
+Label_IC_Stmt &Label_IC_Stmt::operator=(const Label_IC_Stmt &rhs){
+	*this->label = rhs.label;
+}
 
 Instruction_Descriptor &Label_IC_Stmt::get_inst_op_of_ics(){}
 
@@ -240,7 +259,9 @@ void Label_IC_Stmt::print_assembly(ostream &file_buffer){}
 
 
 //////////////////////// Intermediate code for Ast statements ////////////////////////
-Code_For_Ast::Code_For_Ast(){}
+Code_For_Ast::Code_For_Ast(){
+	ics_list = new list<Icode_Stmt *>;
+}
 Code_For_Ast::Code_For_Ast(list<Icode_Stmt *> &ic_l, Register_Descriptor *reg){
 	ics_list = ic_l;
 	result_register = reg;
@@ -260,4 +281,7 @@ void Code_For_Ast::set_reg(Register_Descriptor *reg){
 	result_register = reg;
 }
 
-Code_For_Ast &Code_For_Ast::operator=(const Code_For_Ast &rhs){}
+Code_For_Ast &Code_For_Ast::operator=(const Code_For_Ast &rhs){
+	*this->ics_list = rhs.ics_list;
+	*this->result_register = rhs.result_register;
+}
