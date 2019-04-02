@@ -46,20 +46,18 @@ Assembly_Format Instruction_Descriptor::get_assembly_format(){
 }
 
 void Instruction_Descriptor::print_instruction_descriptor(ostream &file_buffer){
-	file_buffer << "\n";
+	file_buffer << name;
 }
 
 
 ///////////////////////////// Icode statement operand ///////////////////////////////////
-Register_Descriptor* Ics_Opd::get_reg(){
-	return machine_desc_object.get_new_register();
-}
+Register_Descriptor* Ics_Opd::get_reg(){}
 
 void Ics_Opd::print_ics_opd(ostream &file_buffer){}
 void Ics_Opd::print_asm_opd(ostream &file_buffer){}
 
 
-/////// Mem_Addr_Opd
+/////// Mem_Addr_Opd /////////
 Mem_Addr_Opd::Mem_Addr_Opd(Symbol_Table_Entry &se){
 	symbol_entry = &se;
 }
@@ -67,13 +65,15 @@ Mem_Addr_Opd::Mem_Addr_Opd(Symbol_Table_Entry &se){
 void Mem_Addr_Opd::print_ics_opd(ostream &file_buffer){
 	file_buffer << symbol_entry->get_variable_name();
 }
+
 void Mem_Addr_Opd::print_asm_opd(ostream &file_buffer){}
+
 Mem_Addr_Opd & Mem_Addr_Opd::operator=(const Mem_Addr_Opd &rhs){
-	*this->symbol_entry = rhs.symbol_entry;
+	symbol_entry = rhs.symbol_entry;
 }
 
 
-/////// Register_Addr_Opd
+/////// Register_Addr_Opd /////////
 Register_Addr_Opd::Register_Addr_Opd(Register_Descriptor *rd){
 	register_description = rd;
 }
@@ -87,11 +87,11 @@ void Register_Addr_Opd::print_ics_opd(ostream &file_buffer){
 void Register_Addr_Opd::print_asm_opd(ostream &file_buffer){}
 
 Register_Addr_Opd & Register_Addr_Opd::operator=(const Register_Addr_Opd &rhs){
-	*this->register_description = rhs.register_description;
+	register_description = rhs.register_description;
 }
 
 
-////// Const_Opd
+////// Const_Opd ///////////
 template <class T>
 Const_Opd<T>::Const_Opd(T t_num){
 	num = t_num;
@@ -108,11 +108,11 @@ void Const_Opd<T>::print_asm_opd(ostream &file_buffer){
 
 template <class T>
 Const_Opd<T> &Const_Opd<T>::operator=(const Const_Opd &rhs){
-	*this->num = rhs.num;
+	num = rhs.num;
 }
 
 
-///////////////////////////////// Intermediate code statements //////////////////////////
+///////////////////////////////// Intermediate code statements //////////////////////////////
 Instruction_Descriptor & Icode_Stmt::get_op(){
 	return op_desc;
 }
@@ -128,15 +128,16 @@ void Icode_Stmt::print_icode(ostream & file_buffer){}
 void Icode_Stmt::print_assembly(ostream & file_buffer){}
 
 
-///////// Move_IC_Stmt
+///////// Move_IC_Stmt //////////
 Move_IC_Stmt::Move_IC_Stmt(Tgt_Op inst, Ics_Opd *opd_1, Ics_Opd *result_opd){
-	op_desc = machine_desc_object.spim_instruction_table[inst];
+	op_desc = *machine_desc_object.spim_instruction_table[inst];
 	opd1 = opd_1;
 	result = result_opd;
 }
-Move_IC_Stmt &Move_IC_Stmt::operator=(const Move_IC_Stmt &rhs){
-	*this->opd1 = rhs.get_opd1();
-	*this->result = rhs.get_result();
+
+Move_IC_Stmt & Move_IC_Stmt::operator=(const Move_IC_Stmt &rhs){
+	opd1 = rhs.opd1;
+	result = rhs.result;
 }
 
 Instruction_Descriptor &Move_IC_Stmt::get_inst_op_of_ics(){
@@ -158,22 +159,27 @@ void Move_IC_Stmt::set_result(Ics_Opd *io){
 }
 
 void Move_IC_Stmt::print_icode(ostream &file_buffer){
-	// file_buffer << op_desc->print_instruction_descriptor(file_buffer) << ":" << "\t\t" << result->print_ics_opd(file_buffer) << " <- " << opd1->print_ics_opd(file_buffer);
+	op_desc.print_instruction_descriptor(file_buffer);
+	file_buffer << ":\t\t";
+	result->print_ics_opd(file_buffer);
+	file_buffer << " <- ";
+	opd1->print_ics_opd(file_buffer);
+	file_buffer << "\n";
 }
 void Move_IC_Stmt::print_assembly(ostream &file_buffer){}
 
 
-/////// Compute_IC_Stmt
+/////// Compute_IC_Stmt ////////////
 Compute_IC_Stmt::Compute_IC_Stmt(Tgt_Op inst, Ics_Opd *opd_1, Ics_Opd *opd_2, Ics_Opd *result_opd){
-	// inst_op = inst;
+	op_desc = *machine_desc_object.spim_instruction_table[inst];
 	opd1 = opd_1;
 	opd2 = opd_2;
 	result = result_opd;
 }
 Compute_IC_Stmt &Compute_IC_Stmt::operator=(const Compute_IC_Stmt &rhs){
-	*this->opd1 = rhs.opd1;
-	*this->opd2 = rhs.opd2;
-	*this->result = rhs.result;
+	opd1 = rhs.opd1;
+	opd2 = rhs.opd2;
+	result = rhs.result;
 }
 
 Instruction_Descriptor &Compute_IC_Stmt::get_inst_op_of_ics(){
@@ -201,19 +207,28 @@ void Compute_IC_Stmt::set_result(Ics_Opd *io){
 	result = io;
 }
 
-void Compute_IC_Stmt::print_icode(ostream &file_buffer){}
+void Compute_IC_Stmt::print_icode(ostream &file_buffer){
+	op_desc.print_instruction_descriptor(file_buffer);
+	file_buffer << ":\t\t";
+	result->print_ics_opd(file_buffer);
+	file_buffer << " <- ";
+	opd1->print_ics_opd(file_buffer);
+	file_buffer << " , ";
+	opd2->print_ics_opd(file_buffer);
+	file_buffer << "\n";
+}
 void Compute_IC_Stmt::print_assembly(ostream &file_buffer){}
 
 
-///// Control_Flow_IC_Stmt
+///// Control_Flow_IC_Stmt //////////
 Control_Flow_IC_Stmt::Control_Flow_IC_Stmt(Tgt_Op inst, Ics_Opd *opd_1, string label_given){
-	// inst_op = inst;
+	op_desc = *machine_desc_object.spim_instruction_table[inst];
 	opd1 = opd_1;
 	label = label_given;
 }
 Control_Flow_IC_Stmt &Control_Flow_IC_Stmt::operator=(const Control_Flow_IC_Stmt &rhs){
-	*this->opd1 = rhs.opd1;
-	*this->label = rhs.label;
+	opd1 = rhs.opd1;
+	label = rhs.label;
 }
 
 Instruction_Descriptor &Control_Flow_IC_Stmt::get_inst_op_of_ics(){
@@ -234,17 +249,23 @@ void Control_Flow_IC_Stmt::set_label(string label_given){
 	label = label_given;
 }
 
-void Control_Flow_IC_Stmt::print_icode(ostream &file_buffer){}
+void Control_Flow_IC_Stmt::print_icode(ostream &file_buffer){
+	op_desc.print_instruction_descriptor(file_buffer);
+	file_buffer << ":\t\t";
+	opd1->print_ics_opd(file_buffer);
+	file_buffer << " , zero : goto " << label;
+	file_buffer << "\n";
+}
 void Control_Flow_IC_Stmt::print_assembly(ostream &file_buffer){}
 
 
-/////// Label_IC_Stmt
+/////// Label_IC_Stmt //////////
 Label_IC_Stmt::Label_IC_Stmt(Tgt_Op inst, string label_given){
-	// inst_op = inst;
+	op_desc = *machine_desc_object.spim_instruction_table[inst];
 	label = label_given;
 }
 Label_IC_Stmt &Label_IC_Stmt::operator=(const Label_IC_Stmt &rhs){
-	*this->label = rhs.label;
+	label = rhs.label;
 }
 
 Instruction_Descriptor &Label_IC_Stmt::get_inst_op_of_ics(){}
@@ -256,13 +277,15 @@ void Label_IC_Stmt::set_label(string label_given){
 	label = label_given;
 }
 
-void Label_IC_Stmt::print_icode(ostream &file_buffer){}
+void Label_IC_Stmt::print_icode(ostream &file_buffer){
+	file_buffer << "goto " << label << "\n";
+}
 void Label_IC_Stmt::print_assembly(ostream &file_buffer){}
 
 
 //////////////////////// Intermediate code for Ast statements ////////////////////////
 Code_For_Ast::Code_For_Ast(){
-	ics_list = new list<Icode_Stmt *>;
+	ics_list = *(new list<Icode_Stmt*>);
 }
 Code_For_Ast::Code_For_Ast(list<Icode_Stmt *> &ic_l, Register_Descriptor *reg){
 	ics_list = ic_l;
@@ -284,6 +307,6 @@ void Code_For_Ast::set_reg(Register_Descriptor *reg){
 }
 
 Code_For_Ast &Code_For_Ast::operator=(const Code_For_Ast &rhs){
-	*this->ics_list = rhs.ics_list;
-	*this->result_register = rhs.result_register;
+	ics_list = rhs.ics_list;
+	result_register = rhs.result_register;
 }

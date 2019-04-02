@@ -1587,10 +1587,10 @@ yyreduce:
 #line 257 "parser.y" /* yacc.c:1646  */
     {
                     if(local_symbol_table->variable_in_symbol_list_check(*((yyvsp[0].string_value)))){
-                        (yyval.ast) = new Name_Ast(*((yyvsp[0].string_value)), local_symbol_table->get_symbol_table_entry(*((yyvsp[0].string_value))), yylineno);
+                        (yyval.ast) = new Name_Ast(*((yyvsp[0].string_value)) + "_", local_symbol_table->get_symbol_table_entry(*((yyvsp[0].string_value))), yylineno);
                     }
                     else if(global_symbol_table->variable_in_symbol_list_check(*((yyvsp[0].string_value)))){
-                        (yyval.ast) = new Name_Ast(*((yyvsp[0].string_value)), global_symbol_table->get_symbol_table_entry(*((yyvsp[0].string_value))), yylineno);
+                        (yyval.ast) = new Name_Ast(*((yyvsp[0].string_value)) + "_", global_symbol_table->get_symbol_table_entry(*((yyvsp[0].string_value))), yylineno);
                     }
                     else{
                         yyerror("cs316: Error : Variable has not been declared");

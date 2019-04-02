@@ -74,8 +74,10 @@ Code_For_Ast & Name_Ast::compile(){
 }
 
 Code_For_Ast & Name_Ast::create_store_stmt(Register_Descriptor * store_register){
-	Code_For_Ast & cfa = new Code_For_Ast();
+	Code_For_Ast cfa = new Code_For_Ast();
+	Ics_Opd *result = new Mem_Addr_Opd(*variable_symbol_entry);
 	Register_Descriptor * r;
+
 	if(node_data_type == int_data_type){
 		r = machine_desc_object.get_new_register<int_reg>();
 		cfa.set_reg(r);
