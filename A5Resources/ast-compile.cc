@@ -504,17 +504,21 @@ Code_For_Ast & Selection_Statement_Ast::compile(){
 	}
 
 	Ics_Opd * zr = new Register_Addr_Opd(machine_desc_object.spim_register_table[zero]);
+	string lbl2;
 	if(else_part != NULL){
-		string lbl2 = get_new_label();
+		lbl2 = get_new_label();
 		cfa.append_ics(*(new Control_Flow_IC_Stmt(j, zr, lbl2)));
-
-	cfa.append_ics(*(new Label_IC_Stmt(label, lbl1)));
-
-	for(list<Icode_Stmt *>::iterator it = elsestmts.begin(); it != elsestmts.end(); ++it){
-		cfa.append_ics(**it);
 	}
 
-	cfa.append_ics(*(new Label_IC_Stmt(label, lbl2)));
+		cfa.append_ics(*(new Label_IC_Stmt(label, lbl1)));
+
+	if(else_part != NULL){
+		for(list<Icode_Stmt *>::iterator it = elsestmts.begin(); it != elsestmts.end(); ++it){
+			cfa.append_ics(**it);
+		}
+
+		cfa.append_ics(*(new Label_IC_Stmt(label, lbl2)));
+	}
 
 	cfa.set_reg(r);
 
@@ -526,9 +530,9 @@ Code_For_Ast & Selection_Statement_Ast::compile(){
 // Iteration Statement Ast
 Code_For_Ast &Iteration_Statement_Ast::compile(){
 	Code_For_Ast &condcfa = cond->compile();
-	Code_For_Ast &bodycfa = body_part->compile();
+	Code_For_Ast &bodycfa = body->compile();
 
-	Code_For_Ast &cfa = new Code_For_Ast();
+	Code_For_Ast &cfa = *(new Code_For_Ast());
 	Register_Descriptor *r;
 	Ics_Opd *zr = new Register_Addr_Opd(machine_desc_object.spim_register_table[zero]);
 	list<Icode_Stmt *> &condstmts = condcfa.get_icode_list();
