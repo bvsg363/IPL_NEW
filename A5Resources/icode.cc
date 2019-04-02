@@ -24,6 +24,8 @@ Instruction_Descriptor::Instruction_Descriptor(Tgt_Op op, string desc_name, stri
 	assem_format = af;
 }
 
+Instruction_Descriptor::Instruction_Descriptor(){}
+
 Tgt_Op Instruction_Descriptor::get_op(){
 	return inst_op;
 }
@@ -156,7 +158,7 @@ void Move_IC_Stmt::set_result(Ics_Opd *io){
 }
 
 void Move_IC_Stmt::print_icode(ostream &file_buffer){
-	file_buffer << op_desc->print_instruction_descriptor(file_buffer) << ":" << "\t\t" << result->print_ics_opd(file_buffer) << " <- " << opd1->print_ics_opd(file_buffer);
+	// file_buffer << op_desc->print_instruction_descriptor(file_buffer) << ":" << "\t\t" << result->print_ics_opd(file_buffer) << " <- " << opd1->print_ics_opd(file_buffer);
 }
 void Move_IC_Stmt::print_assembly(ostream &file_buffer){}
 
