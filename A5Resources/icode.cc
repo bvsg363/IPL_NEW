@@ -50,7 +50,7 @@ void Instruction_Descriptor::print_instruction_descriptor(ostream &file_buffer){
 }
 
 
-///////////////////////////// Icode statement operands ///////////////////////////////////
+///////////////////////////// Icode statement operand ///////////////////////////////////
 Register_Descriptor* Ics_Opd::get_reg(){}
 
 void Ics_Opd::print_ics_opd(ostream &file_buffer){}
@@ -128,20 +128,20 @@ void Icode_Stmt::print_icode(ostream & file_buffer){}
 void Icode_Stmt::print_assembly(ostream & file_buffer){}
 
 
-///////// Move_IC_Stmt
-Move_IC_Stmt::Move_IC_Stmt(Tgt_Op 
-
-, Ics_Opd *opd_1, Ics_Opd *result_opd){
-	op_desc = Instruction_Descriptor(inst, "", "", "", i_op_r_o1, a_op_r_o1); //TODO: where is 'new' before Instruction_Descriptor
+///////// Move_IC_Stmt //////////
+Move_IC_Stmt::Move_IC_Stmt(Tgt_Op inst, Ics_Opd *opd_1, Ics_Opd *result_opd){
+	op_desc = *machine_desc_object.spim_instruction_table[inst];
 	opd1 = opd_1;
 	result = result_opd;
 }
-Move_IC_Stmt &Move_IC_Stmt::operator=(const Move_IC_Stmt &rhs){
-	op_desc = 
+
+Move_IC_Stmt & Move_IC_Stmt::operator=(const Move_IC_Stmt &rhs){
+	opd1 = rhs.opd1;
+	result = rhs.result;
 }
 
 Instruction_Descriptor &Move_IC_Stmt::get_inst_op_of_ics(){
-	return op_desc;
+	return get_op();
 }
 
 Ics_Opd *Move_IC_Stmt::get_opd1(){
@@ -159,18 +159,28 @@ void Move_IC_Stmt::set_result(Ics_Opd *io){
 }
 
 void Move_IC_Stmt::print_icode(ostream &file_buffer){
+	op_desc.print_instruction_descriptor(file_buffer);
+	file_buffer << ":\t\t";
+	result->print_ics_opd(file_buffer);
+	file_buffer << " <- ";
+	opd1->print_ics_opd(file_buffer);
+	file_buffer << "\n";
 }
 void Move_IC_Stmt::print_assembly(ostream &file_buffer){}
 
 
-/////// Compute_IC_Stmt
+/////// Compute_IC_Stmt ////////////
 Compute_IC_Stmt::Compute_IC_Stmt(Tgt_Op inst, Ics_Opd *opd_1, Ics_Opd *opd_2, Ics_Opd *result_opd){
-	// inst_op = inst;
+	op_desc = *machine_desc_object.spim_instruction_table[inst];
 	opd1 = opd_1;
 	opd2 = opd_2;
 	result = result_opd;
 }
-Compute_IC_Stmt &Compute_IC_Stmt::operator=(const Compute_IC_Stmt &rhs){}
+Compute_IC_Stmt &Compute_IC_Stmt::operator=(const Compute_IC_Stmt &rhs){
+	opd1 = rhs.opd1;
+	opd2 = rhs.opd2;
+	result = rhs.result;
+}
 
 Instruction_Descriptor &Compute_IC_Stmt::get_inst_op_of_ics(){
 	return op_desc;
@@ -197,17 +207,29 @@ void Compute_IC_Stmt::set_result(Ics_Opd *io){
 	result = io;
 }
 
-void Compute_IC_Stmt::print_icode(ostream &file_buffer){}
+void Compute_IC_Stmt::print_icode(ostream &file_buffer){
+	op_desc.print_instruction_descriptor(file_buffer);
+	file_buffer << ":\t\t";
+	result->print_ics_opd(file_buffer);
+	file_buffer << " <- ";
+	opd1->print_ics_opd(file_buffer);
+	file_buffer << " , ";
+	opd2->print_ics_opd(file_buffer);
+	file_buffer << "\n";
+}
 void Compute_IC_Stmt::print_assembly(ostream &file_buffer){}
 
 
-///// Control_Flow_IC_Stmt
+///// Control_Flow_IC_Stmt //////////
 Control_Flow_IC_Stmt::Control_Flow_IC_Stmt(Tgt_Op inst, Ics_Opd *opd_1, string label_given){
-	// inst_op = inst;
+	op_desc = *machine_desc_object.spim_instruction_table[inst];
 	opd1 = opd_1;
 	label = label_given;
 }
-Control_Flow_IC_Stmt &Control_Flow_IC_Stmt::operator=(const Control_Flow_IC_Stmt &rhs){}
+Control_Flow_IC_Stmt &Control_Flow_IC_Stmt::operator=(const Control_Flow_IC_Stmt &rhs){
+	opd1 = rhs.opd1;
+	label = rhs.label;
+}
 
 Instruction_Descriptor &Control_Flow_IC_Stmt::get_inst_op_of_ics(){
 	return op_desc;
@@ -227,16 +249,24 @@ void Control_Flow_IC_Stmt::set_label(string label_given){
 	label = label_given;
 }
 
-void Control_Flow_IC_Stmt::print_icode(ostream &file_buffer){}
+void Control_Flow_IC_Stmt::print_icode(ostream &file_buffer){
+	op_desc.print_instruction_descriptor(file_buffer);
+	file_buffer << ":\t\t";
+	opd1->print_ics_opd(file_buffer);
+	file_buffer << " , zero : goto " << label;
+	file_buffer << "\n";
+}
 void Control_Flow_IC_Stmt::print_assembly(ostream &file_buffer){}
 
 
-/////// Label_IC_Stmt
+/////// Label_IC_Stmt //////////
 Label_IC_Stmt::Label_IC_Stmt(Tgt_Op inst, string label_given){
-	// inst_op = inst;
+	op_desc = *machine_desc_object.spim_instruction_table[inst];
 	label = label_given;
 }
-Label_IC_Stmt &Label_IC_Stmt::operator=(const Label_IC_Stmt &rhs){}
+Label_IC_Stmt &Label_IC_Stmt::operator=(const Label_IC_Stmt &rhs){
+	label = rhs.label;
+}
 
 Instruction_Descriptor &Label_IC_Stmt::get_inst_op_of_ics(){}
 
@@ -247,12 +277,16 @@ void Label_IC_Stmt::set_label(string label_given){
 	label = label_given;
 }
 
-void Label_IC_Stmt::print_icode(ostream &file_buffer){}
+void Label_IC_Stmt::print_icode(ostream &file_buffer){
+	file_buffer << "goto " << label << "\n";
+}
 void Label_IC_Stmt::print_assembly(ostream &file_buffer){}
 
 
 //////////////////////// Intermediate code for Ast statements ////////////////////////
-Code_For_Ast::Code_For_Ast(){}
+Code_For_Ast::Code_For_Ast(){
+	ics_list = *(new list<Icode_Stmt*>);
+}
 Code_For_Ast::Code_For_Ast(list<Icode_Stmt *> &ic_l, Register_Descriptor *reg){
 	ics_list = ic_l;
 	result_register = reg;
@@ -272,4 +306,7 @@ void Code_For_Ast::set_reg(Register_Descriptor *reg){
 	result_register = reg;
 }
 
-Code_For_Ast &Code_For_Ast::operator=(const Code_For_Ast &rhs){}
+Code_For_Ast &Code_For_Ast::operator=(const Code_For_Ast &rhs){
+	ics_list = rhs.ics_list;
+	result_register = rhs.result_register;
+}
