@@ -504,18 +504,21 @@ Code_For_Ast&Selection_Statement_Ast::compile(){
 	}
 
 	Ics_Opd * zr = new Register_Addr_Opd(machine_desc_object.spim_register_table[zero]);
+	string lbl2;
 	if(else_part != NULL){
-		string lbl2 = get_new_label();
+		lbl2 = get_new_label();
 		cfa.append_ics(*(new Control_Flow_IC_Stmt(j, zr, lbl2)));
 	}
 
-	cfa.append_ics(*(new Label_IC_Stmt(label, lbl1)));
+		cfa.append_ics(*(new Label_IC_Stmt(label, lbl1)));
 
-	for(list<Icode_Stmt *>::iterator it = elsestmts.begin(); it != elsestmts.end(); ++it){
-		cfa.append_ics(**it);
+	if(else_part != NULL){
+		for(list<Icode_Stmt *>::iterator it = elsestmts.begin(); it != elsestmts.end(); ++it){
+			cfa.append_ics(**it);
+		}
+
+		cfa.append_ics(*(new Label_IC_Stmt(label, lbl2)));
 	}
-
-	cfa.append_ics(*(new Label_IC_Stmt(label, lbl2)));
 
 	cfa.set_reg(r);
 

@@ -19,7 +19,7 @@ void main()
 		a = 2;
 	}
 
-	while(1 < 2){
+	if(1 < 2){
 		a = 3;
 	}
 
