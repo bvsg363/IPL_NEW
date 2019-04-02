@@ -9,16 +9,19 @@ void main()
 	int x, y, k;
 	float z;
 	int i, j;
+
+
 	
 
-	z = 3.0;
+	z = -3.0;
+
+	print z;
 	y = 9;
 	x = 2;
+	x = x+0;
 	area = 4.0;
 
 	x = 5 + !5 < 6 ? 67 : 68;
-
-	print x;
 
 	y = !5 < 6 ? 67 : 68 + !5 < 6 ? 67 : 68;
 
