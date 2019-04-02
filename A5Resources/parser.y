@@ -111,7 +111,8 @@ type    :   INTEGER
 variable_list   :   NAME
                     {
                         $$ = new Symbol_Table();
-                        Symbol_Table_Entry * sym = new Symbol_Table_Entry(*($1), sample_data_type, yylineno);
+                        string s = *($1)+"_";
+                        Symbol_Table_Entry * sym = new Symbol_Table_Entry(s, sample_data_type, yylineno);
                         $$->push_symbol(sym);
                         if(glob_scop == 1){
                             global_symbol_table->push_symbol(sym);
@@ -123,7 +124,8 @@ variable_list   :   NAME
 
                 |   variable_list ',' NAME
                     {
-                        Symbol_Table_Entry * sym = new Symbol_Table_Entry(*($3), sample_data_type, yylineno);
+                        string s = *($3) + "_";
+                        Symbol_Table_Entry * sym = new Symbol_Table_Entry(s, sample_data_type, yylineno);
                         $1->push_symbol(sym);
                         $$ = $1;
                         if(glob_scop == 1){
