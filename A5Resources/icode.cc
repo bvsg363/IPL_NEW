@@ -66,7 +66,9 @@ void Mem_Addr_Opd::print_ics_opd(ostream &file_buffer){
 	file_buffer << symbol_entry->get_variable_name();
 }
 
-void Mem_Addr_Opd::print_asm_opd(ostream &file_buffer){}
+void Mem_Addr_Opd::print_asm_opd(ostream &file_buffer){
+	file_buffer << "-" << symbol_entry->get_start_offset() << "($" << symbol_entry->get_register()->get_name() << ")";
+}
 
 Mem_Addr_Opd & Mem_Addr_Opd::operator=(const Mem_Addr_Opd &rhs){
 	symbol_entry = rhs.symbol_entry;
@@ -84,7 +86,9 @@ Register_Descriptor* Register_Addr_Opd::get_reg(){
 void Register_Addr_Opd::print_ics_opd(ostream &file_buffer){
 	file_buffer << register_description->get_name();
 }
-void Register_Addr_Opd::print_asm_opd(ostream &file_buffer){}
+void Register_Addr_Opd::print_asm_opd(ostream &file_buffer){
+	file_buffer << "$" << register_description->get_name();
+}
 
 Register_Addr_Opd & Register_Addr_Opd::operator=(const Register_Addr_Opd &rhs){
 	register_description = rhs.register_description;
@@ -104,6 +108,7 @@ void Const_Opd<T>::print_ics_opd(ostream &file_buffer){
 
 template <class T>
 void Const_Opd<T>::print_asm_opd(ostream &file_buffer){
+	file_buffer << num;
 }
 
 template <class T>
@@ -128,8 +133,19 @@ void Icode_Stmt::print_icode(ostream & file_buffer){}
 void Icode_Stmt::print_assembly(ostream & file_buffer){}
 
 
+///////// Print_IC_Stmt //////////
+Print_IC_Stmt::Print_IC_Stmt(){}
+Print_IC_Stmt::~Print_IC_Stmt(){}
+void Print_IC_Stmt::print_icode(ostream &file_buffer){
+	file_buffer << "print\n";
+}
+void Print_IC_Stmt::print_assembly(ostream &file_buffer){
+	file_buffer << "syscall\n";
+}
+
 ///////// Move_IC_Stmt //////////
-Move_IC_Stmt::Move_IC_Stmt(Tgt_Op inst, Ics_Opd *opd_1, Ics_Opd *result_opd){
+Move_IC_Stmt::Move_IC_Stmt(Tgt_Op inst, Ics_Opd *opd_1, Ics_Opd *result_opd)
+{
 	op_desc = *machine_desc_object.spim_instruction_table[inst];
 	opd1 = opd_1;
 	result = result_opd;
@@ -166,11 +182,17 @@ void Move_IC_Stmt::print_icode(ostream &file_buffer){
 	opd1->print_ics_opd(file_buffer);
 	file_buffer << "\n";
 }
-void Move_IC_Stmt::print_assembly(ostream &file_buffer){}
-
+void Move_IC_Stmt::print_assembly(ostream &file_buffer){
+	file_buffer << op_desc.get_mnemonic() << " ";
+	result->print_asm_opd(file_buffer);
+	file_buffer << ", ";
+	opd1->print_ics_opd(file_buffer);
+	file_buffer << "\n";
+}
 
 /////// Compute_IC_Stmt ////////////
-Compute_IC_Stmt::Compute_IC_Stmt(Tgt_Op inst, Ics_Opd *opd_1, Ics_Opd *opd_2, Ics_Opd *result_opd){
+Compute_IC_Stmt::Compute_IC_Stmt(Tgt_Op inst, Ics_Opd *opd_1, Ics_Opd *opd_2, Ics_Opd *result_opd)
+{
 	op_desc = *machine_desc_object.spim_instruction_table[inst];
 	opd1 = opd_1;
 	opd2 = opd_2;
@@ -217,8 +239,15 @@ void Compute_IC_Stmt::print_icode(ostream &file_buffer){
 	opd2->print_ics_opd(file_buffer);
 	file_buffer << "\n";
 }
-void Compute_IC_Stmt::print_assembly(ostream &file_buffer){}
-
+void Compute_IC_Stmt::print_assembly(ostream &file_buffer) {
+	file_buffer << op_desc.get_mnemonic() << " ";
+	result->print_asm_opd(file_buffer);
+	file_buffer << ", ";
+	opd1->print_ics_opd(file_buffer);
+	file_buffer << ", ";
+	opd2->print_ics_opd(file_buffer);
+	file_buffer << "\n";
+}
 
 ///// Control_Flow_IC_Stmt //////////
 Control_Flow_IC_Stmt::Control_Flow_IC_Stmt(Tgt_Op inst, Ics_Opd *opd_1, string label_given){
@@ -250,14 +279,29 @@ void Control_Flow_IC_Stmt::set_label(string label_given){
 }
 
 void Control_Flow_IC_Stmt::print_icode(ostream &file_buffer){
-	op_desc.print_instruction_descriptor(file_buffer);
-	file_buffer << ":\t\t";
-	opd1->print_ics_opd(file_buffer);
-	file_buffer << " , zero : goto " << label;
-	file_buffer << "\n";
+	if (op_desc.get_ic_format() == i_op_o1_o2_st){
+		op_desc.print_instruction_descriptor(file_buffer);
+		file_buffer << ":\t\t";
+		opd1->print_ics_opd(file_buffer);
+		file_buffer << " , zero : goto " << label << "\n";
+	}
+	else if (op_desc.get_ic_format() == i_op_st)
+	{
+		file_buffer << "goto " << label << "\n";
+	}
 }
-void Control_Flow_IC_Stmt::print_assembly(ostream &file_buffer){}
-
+void Control_Flow_IC_Stmt::print_assembly(ostream &file_buffer) {
+	if (op_desc.get_ic_format() == i_op_o1_o2_st)
+	{
+		file_buffer << op_desc.get_mnemonic() << " ";
+		opd1->print_ics_opd(file_buffer);
+		file_buffer << ", $zero, " << label << "\n";
+	}
+	else if (op_desc.get_ic_format() == i_op_st)
+	{
+		file_buffer << op_desc.get_mnemonic() << " " << label << "\n";
+	}
+}
 
 /////// Label_IC_Stmt //////////
 Label_IC_Stmt::Label_IC_Stmt(Tgt_Op inst, string label_given){
@@ -278,10 +322,11 @@ void Label_IC_Stmt::set_label(string label_given){
 }
 
 void Label_IC_Stmt::print_icode(ostream &file_buffer){
-	file_buffer << "goto " << label << "\n";
+	file_buffer<< "\n" << label << ":\t\t\n";
 }
-void Label_IC_Stmt::print_assembly(ostream &file_buffer){}
-
+void Label_IC_Stmt::print_assembly(ostream &file_buffer) {
+	file_buffer<< "\n" << label << ":\t\t\n";
+}
 
 //////////////////////// Intermediate code for Ast statements ////////////////////////
 Code_For_Ast::Code_For_Ast(){
