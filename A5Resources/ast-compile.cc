@@ -51,7 +51,7 @@ Code_For_Ast & Assignment_Ast::compile_and_optimize_ast(Lra_Outcome &lra){}
 // Name Ast
 
 Code_For_Ast & Name_Ast::compile(){
-	Code_For_Ast cfa = *(new Code_For_Ast());
+	Code_For_Ast &cfa = *(new Code_For_Ast());
 	Register_Descriptor * r;
 	if(node_data_type == int_data_type){
 		r = machine_desc_object.get_new_register<int_reg>();
@@ -73,7 +73,7 @@ Code_For_Ast & Name_Ast::compile(){
 }
 
 Code_For_Ast & Name_Ast::create_store_stmt(Register_Descriptor * store_register){
-	Code_For_Ast cfa = *(new Code_For_Ast());
+	Code_For_Ast &cfa = *(new Code_For_Ast());
 	Ics_Opd *result = new Mem_Addr_Opd(*variable_symbol_entry);
 	Register_Descriptor * r;
 
@@ -349,8 +349,7 @@ Code_For_Ast & Conditional_Expression_Ast::compile(){
 	for(list<Icode_Stmt *>::iterator it = rhsstmts.begin(); it != rhsstmts.end(); ++it){
 		cfa.append_ics(**it);
 	}
-
-	Ics_Opd * o5 = new Register_Addr_Opd(lhscfa.get_reg());
+	Ics_Opd * o5 = new Register_Addr_Opd(rhscfa.get_reg());
 	cfa.append_ics(*(new Compute_IC_Stmt(or_t, o5, zr, result)));
 
 	cfa.append_ics(*(new Label_IC_Stmt(label, lbl2)));
@@ -504,14 +503,18 @@ Code_For_Ast & Selection_Statement_Ast::compile(){
 		cfa.append_ics(**it);
 	}
 
-	string lbl2 = get_new_label();
-	cfa.append_ics(*(new Control_Flow_IC_Stmt(j, zr, lbl2)));
+	Ics_Opd * zr = new Register_Addr_Opd(machine_desc_object.spim_register_table[zero]);
+	if(else_part != NULL){
+		string lbl2 = get_new_label();
+		cfa.append_ics(*(new Control_Flow_IC_Stmt(j, zr, lbl2)));
 
 	cfa.append_ics(*(new Label_IC_Stmt(label, lbl1)));
 
 	for(list<Icode_Stmt *>::iterator it = elsestmts.begin(); it != elsestmts.end(); ++it){
 		cfa.append_ics(**it);
 	}
+
+	cfa.append_ics(*(new Label_IC_Stmt(label, lbl2)));
 
 	cfa.set_reg(r);
 
@@ -521,9 +524,63 @@ Code_For_Ast & Selection_Statement_Ast::compile(){
 
 
 // Iteration Statement Ast
+Code_For_Ast &Iteration_Statement_Ast::compile(){
+	Code_For_Ast &condcfa = cond->compile();
+	Code_For_Ast &bodycfa = body_part->compile();
 
-Code_For_Ast & Iteration_Statement_Ast::compile(){}
+	Code_For_Ast &cfa = new Code_For_Ast();
+	Register_Descriptor *r;
+	Ics_Opd *zr = new Register_Addr_Opd(machine_desc_object.spim_register_table[zero]);
+	list<Icode_Stmt *> &condstmts = condcfa.get_icode_list();
+	list<Icode_Stmt *> &bodystmts = bodycfa.get_icode_list();
 
+	string lbl1 = get_new_label();
+	string lbl2 = get_new_label();
 
-// Sequence Ast
-Code_For_Ast & Sequence_Ast::compile(){}
+	if (is_do_form)
+	{
+		cfa.append_ics(*(new Control_Flow_IC_Stmt(j, zr, lbl2)));
+	}
+	cfa.append_ics(*(new Label_IC_Stmt(label, lbl1)));
+
+	for (list<Icode_Stmt *>::iterator it = bodystmts.begin(); it != bodystmts.end(); ++it)
+	{
+		cfa.append_ics(**it);
+	}
+
+	cfa.append_ics(*(new Label_IC_Stmt(label, lbl2)));
+
+	for (list<Icode_Stmt *>::iterator it = condstmts.begin(); it != condstmts.end(); ++it)
+	{
+		cfa.append_ics(**it);
+	}
+
+	Ics_Opd *o3 = new Register_Addr_Opd(condcfa.get_reg());
+	cfa.append_ics(*(new Control_Flow_IC_Stmt(bne, o3, lbl1)));
+
+	cfa.set_reg(r);
+
+	return cfa;
+	// ToDo free the lhs register
+}
+
+	// Sequence Ast
+Code_For_Ast &	Sequence_Ast::compile(){
+	Code_For_Ast & cfa = *(new Code_For_Ast());
+	Register_Descriptor * r;
+
+	for(list<Ast *>::iterator it = statement_list.begin(); it != statement_list.end(); ++it){
+		Code_For_Ast & bodycfa = (*it)->compile();
+		list<Icode_Stmt *> & bodystmts = bodycfa.get_icode_list();
+
+		for(list<Icode_Stmt *>::iterator itr = bodystmts.begin(); itr != bodystmts.end(); ++itr){
+			cfa.append_ics(**itr);
+		}
+	}
+
+	cfa.set_reg(r);
+
+	return cfa;
+	// ToDo free the lhs register
+}
+

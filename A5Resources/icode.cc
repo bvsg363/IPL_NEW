@@ -330,7 +330,6 @@ void Label_IC_Stmt::print_assembly(ostream &file_buffer) {
 
 //////////////////////// Intermediate code for Ast statements ////////////////////////
 Code_For_Ast::Code_For_Ast(){
-	// ics_list = *(new list<Icode_Stmt*>);
 }
 Code_For_Ast::Code_For_Ast(list<Icode_Stmt *> &ic_l, Register_Descriptor *reg){
 	ics_list = ic_l;
