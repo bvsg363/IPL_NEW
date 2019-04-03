@@ -29,19 +29,19 @@ Code_For_Ast & Assignment_Ast::compile(){
 	list<Icode_Stmt *> & lhsstmts = lhscfa.get_icode_list();
 	list<Icode_Stmt *> & rhsstmts = rhscfa.get_icode_list();
 
-	for(list<Icode_Stmt *>::iterator it = lhsstmts.begin(); it != lhsstmts.end(); ++it){
-		cfa.append_ics(**it);
-	}
 	for(list<Icode_Stmt *>::iterator it = rhsstmts.begin(); it != rhsstmts.end(); ++it){
 		cfa.append_ics(**it);
 	}
-
-	if(node_data_type == int_data_type){
-		r = machine_desc_object.get_new_register<int_reg>();
-	} else{
-		r = machine_desc_object.get_new_register<float_reg>();
+	for(list<Icode_Stmt *>::iterator it = lhsstmts.begin(); it != lhsstmts.end(); ++it){
+		cfa.append_ics(**it);
 	}
-	cfa.set_reg(r);
+
+	// if(node_data_type == int_data_type){
+	// 	r = machine_desc_object.get_new_register<int_reg>();
+	// } else{
+	// 	r = machine_desc_object.get_new_register<float_reg>();
+	// }
+	// cfa.set_reg(r);
 
 	return cfa;
 	// TODO: free the lhs register
@@ -510,7 +510,7 @@ Code_For_Ast & Selection_Statement_Ast::compile(){
 		cfa.append_ics(*(new Control_Flow_IC_Stmt(j, zr, lbl2)));
 	}
 
-		cfa.append_ics(*(new Label_IC_Stmt(label, lbl1)));
+	cfa.append_ics(*(new Label_IC_Stmt(label, lbl1)));
 
 	if(else_part != NULL){
 		for(list<Icode_Stmt *>::iterator it = elsestmts.begin(); it != elsestmts.end(); ++it){
