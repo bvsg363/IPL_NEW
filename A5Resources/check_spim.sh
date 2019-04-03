@@ -78,10 +78,10 @@ do
 
     echo -e "-------------------\n\n"
     
-    # rm $i.ast
-    # rm $i.spim
-    # rm $i.sym
-    # rm $i.ic
+    rm $i.ast
+    rm $i.spim
+    rm $i.sym
+    rm $i.ic
 
 done
 #rm test_ast_old.txt
