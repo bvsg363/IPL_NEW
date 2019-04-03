@@ -257,11 +257,12 @@ expression :   expression '*' expression
 
 variable    :   NAME
                 {
-                    if(local_symbol_table->variable_in_symbol_list_check(*($1))){
-                        $$ = new Name_Ast(*($1), local_symbol_table->get_symbol_table_entry(*($1)), yylineno);
+                    string s = *($1) + "_";
+                    if(local_symbol_table->variable_in_symbol_list_check(s)){
+                        $$ = new Name_Ast(s, local_symbol_table->get_symbol_table_entry(s), yylineno);
                     }
-                    else if(global_symbol_table->variable_in_symbol_list_check(*($1))){
-                        $$ = new Name_Ast(*($1), global_symbol_table->get_symbol_table_entry(*($1)), yylineno);
+                    else if(global_symbol_table->variable_in_symbol_list_check(s)){
+                        $$ = new Name_Ast(s, global_symbol_table->get_symbol_table_entry(s), yylineno);
                     }
                     else{
                         yyerror("cs316: Error : Variable has not been declared");

@@ -67,7 +67,13 @@ void Mem_Addr_Opd::print_ics_opd(ostream &file_buffer){
 }
 
 void Mem_Addr_Opd::print_asm_opd(ostream &file_buffer){
-	file_buffer << "-" << symbol_entry->get_start_offset() << "($" << symbol_entry->get_register()->get_name() << ")";
+	if(symbol_entry->get_symbol_scope() == global){
+		file_buffer << symbol_entry->get_variable_name();
+	}
+	else
+	{
+		file_buffer << symbol_entry->get_start_offset() << "($fp)";
+	}
 }
 
 Mem_Addr_Opd & Mem_Addr_Opd::operator=(const Mem_Addr_Opd &rhs){
@@ -137,10 +143,10 @@ void Icode_Stmt::print_assembly(ostream & file_buffer){}
 Print_IC_Stmt::Print_IC_Stmt(){}
 Print_IC_Stmt::~Print_IC_Stmt(){}
 void Print_IC_Stmt::print_icode(ostream &file_buffer){
-	file_buffer << "print\n";
+	file_buffer << "\tprint\n";
 }
 void Print_IC_Stmt::print_assembly(ostream &file_buffer){
-	file_buffer << "syscall\n";
+	file_buffer << "\tsyscall\n";
 }
 
 ///////// Move_IC_Stmt //////////
@@ -175,18 +181,30 @@ void Move_IC_Stmt::set_result(Ics_Opd *io){
 }
 
 void Move_IC_Stmt::print_icode(ostream &file_buffer){
+	file_buffer << "\t" ;
 	op_desc.print_instruction_descriptor(file_buffer);
-	file_buffer << ":\t\t";
+	file_buffer << ":    \t";
 	result->print_ics_opd(file_buffer);
 	file_buffer << " <- ";
 	opd1->print_ics_opd(file_buffer);
 	file_buffer << "\n";
 }
 void Move_IC_Stmt::print_assembly(ostream &file_buffer){
-	file_buffer << op_desc.get_mnemonic() << " ";
-	result->print_asm_opd(file_buffer);
-	file_buffer << ", ";
-	opd1->print_ics_opd(file_buffer);
+	// printf("printAssem\n");
+	file_buffer << "\t" << op_desc.get_mnemonic() << " ";
+
+	if (op_desc.get_mnemonic() != "sw" && op_desc.get_mnemonic() != "s.d")
+	{
+		result->print_asm_opd(file_buffer);
+		file_buffer << ", ";
+		opd1->print_asm_opd(file_buffer);
+	}
+	else
+	{
+		opd1->print_asm_opd(file_buffer);
+		file_buffer << ", ";
+		result->print_asm_opd(file_buffer);
+	}
 	file_buffer << "\n";
 }
 
@@ -230,8 +248,9 @@ void Compute_IC_Stmt::set_result(Ics_Opd *io){
 }
 
 void Compute_IC_Stmt::print_icode(ostream &file_buffer){
+	file_buffer << "\t";
 	op_desc.print_instruction_descriptor(file_buffer);
-	file_buffer << ":\t\t";
+	file_buffer << ":    \t";
 	result->print_ics_opd(file_buffer);
 	file_buffer << " <- ";
 	opd1->print_ics_opd(file_buffer);
@@ -240,12 +259,15 @@ void Compute_IC_Stmt::print_icode(ostream &file_buffer){
 	file_buffer << "\n";
 }
 void Compute_IC_Stmt::print_assembly(ostream &file_buffer) {
-	file_buffer << op_desc.get_mnemonic() << " ";
+	file_buffer << "\t" << op_desc.get_mnemonic() << " ";
+	// printf("10\n");
 	result->print_asm_opd(file_buffer);
 	file_buffer << ", ";
-	opd1->print_ics_opd(file_buffer);
+	// printf("10\n");
+	opd1->print_asm_opd(file_buffer);
 	file_buffer << ", ";
-	opd2->print_ics_opd(file_buffer);
+	// printf("10\n");
+	opd2->print_asm_opd(file_buffer);
 	file_buffer << "\n";
 }
 
@@ -280,26 +302,27 @@ void Control_Flow_IC_Stmt::set_label(string label_given){
 
 void Control_Flow_IC_Stmt::print_icode(ostream &file_buffer){
 	if (op_desc.get_ic_format() == i_op_o1_o2_st){
+		file_buffer << "\t";
 		op_desc.print_instruction_descriptor(file_buffer);
-		file_buffer << ":\t\t";
+		file_buffer << ":    \t";
 		opd1->print_ics_opd(file_buffer);
 		file_buffer << " , zero : goto " << label << "\n";
 	}
 	else if (op_desc.get_ic_format() == i_op_st)
 	{
-		file_buffer << "goto " << label << "\n";
+		file_buffer << "\tgoto " << label << "\n";
 	}
 }
 void Control_Flow_IC_Stmt::print_assembly(ostream &file_buffer) {
 	if (op_desc.get_ic_format() == i_op_o1_o2_st)
 	{
-		file_buffer << op_desc.get_mnemonic() << " ";
-		opd1->print_ics_opd(file_buffer);
-		file_buffer << ", $zero, " << label << "\n";
+		file_buffer << "\t" << op_desc.get_mnemonic() << " ";
+		opd1->print_asm_opd(file_buffer);
+		file_buffer << ", $zero, " << label << " \n";
 	}
 	else if (op_desc.get_ic_format() == i_op_st)
 	{
-		file_buffer << op_desc.get_mnemonic() << " " << label << "\n";
+		file_buffer << "\t" << op_desc.get_mnemonic() << " " << label << "\n";
 	}
 }
 
@@ -322,10 +345,10 @@ void Label_IC_Stmt::set_label(string label_given){
 }
 
 void Label_IC_Stmt::print_icode(ostream &file_buffer){
-	file_buffer<< "\n" << label << ":\t\t\n";
+	file_buffer<< "\n" << label << ":    \t\n";
 }
 void Label_IC_Stmt::print_assembly(ostream &file_buffer) {
-	file_buffer<< "\n" << label << ":\t\t\n";
+	file_buffer<< "\n" << label << ":    \t\n";
 }
 
 //////////////////////// Intermediate code for Ast statements ////////////////////////
