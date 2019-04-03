@@ -548,6 +548,7 @@ Code_For_Ast&Selection_Statement_Ast::compile(){
 
 	// printf("selection1\n");
 	Code_For_Ast & condcfa = cond->compile();
+	Code_For_Ast & thencfa = then_part->compile();
 	Code_For_Ast & cfa = *(new Code_For_Ast());
 	// Register_Descriptor * r;
 
@@ -563,7 +564,6 @@ Code_For_Ast&Selection_Statement_Ast::compile(){
 	string lbl1 = get_new_label();
 	cfa.append_ics(*(new Control_Flow_IC_Stmt(beq, o3, lbl1)));
 
-	Code_For_Ast & thencfa = then_part->compile();
 	list<Icode_Stmt *> & thenstmts = thencfa.get_icode_list();
 
 	for(list<Icode_Stmt *>::iterator it = thenstmts.begin(); it != thenstmts.end(); ++it){
