@@ -327,16 +327,19 @@ print_stmt  :   PRINT variable ';'
 logical_expr    :   logical_expr AND logical_expr
                     {
                         $$ = new Logical_Expr_Ast($1, _logical_and, $3, yylineno);
+                        $$->check_ast();
                     }
 
                 |   logical_expr OR logical_expr
                     {
                         $$ = new Logical_Expr_Ast($1, _logical_or, $3, yylineno);
+                        $$->check_ast();
                     }
 
                 |   NOT logical_expr
                     {
                         $$ = new Logical_Expr_Ast(NULL, _logical_not, $2, yylineno);
+                        $$->check_ast();
                     }
 
                 |   '(' logical_expr ')'

@@ -10,8 +10,9 @@ void main()
 	float area, t;
 
 	// a=0;
-	// area = 1.0;
+	area = 1.0;
 	// b = 2;
+	t = 3.0;
 
 	// print 2;
 	print area;
@@ -19,7 +20,23 @@ void main()
 	print a;
 	print t;
 
-	y = !5 < 6 ? 67 : 68 + !5 < 6 ? 67 : 68;
+	if(1<2){
+		a = 1;
+	}
+
+	if(area <= t){
+		area = 7.0;
+	}
+	else{
+		if(2.0 <= 1.0){
+			area = 1.0;
+		}
+		if(1.0 == 2.0){
+			area = 1.0;
+		}
+	}
+
+	// y = !5 < 6 ? 67 : 68 + !5 < 6 ? 67 : 68;
 
 	// y = y + 3 + 1;
 
@@ -42,6 +59,9 @@ void main()
 
 	// if(2.0 < 3.0 ){
 	// 	area = 8.0;
+	// }
+	// else{
+	// 	area = 1.0;
 	// }
 
 	// if(!(2 < 4)){
