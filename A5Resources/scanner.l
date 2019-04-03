@@ -14,6 +14,10 @@ name        [a-zA-Z_][a-zA-Z0-9_]*
 "//".* ;
 [ \t]* ;
 [\n]    {}
+print   {
+    store_token_name("PRINT", yytext, yylineno);
+    return PRINT;
+}
 int            {
 //    printf("INTEGER\n");
     store_token_name("INTEGER", yytext, yylineno);

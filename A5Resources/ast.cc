@@ -555,3 +555,19 @@ void Sequence_Ast::print(ostream &file_buffer)
         (*it)->print(file_buffer);
     }
 }
+
+// Print_Ast
+Print_Ast::Print_Ast(Ast *v, int line){
+    var = v;
+    lineno = line;
+}
+Print_Ast::~Print_Ast(){}
+
+void Print_Ast::print(ostream &file_buffer)
+{
+    file_buffer << "\n"
+                << AST_SPACE << "Print :\n"
+                << AST_SUB_NODE_SPACE << "(";
+    var->print(file_buffer);
+    file_buffer << ")";
+}

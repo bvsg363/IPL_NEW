@@ -28,7 +28,7 @@ Data_Type sample_data_type;
 };
 
 %token  INTEGER_NUMBER BBNUM DOUBLE_NUMBER NAME RETURN INTEGER FLOAT ASSIGN VOID UMINUS
-%token  WHILE GREATER_THAN NOT_EQUAL LESS_THAN LESS_THAN_EQUAL EQUAL GREATER_THAN_EQUAL IF ELSE DO AND OR NOT
+%token  WHILE GREATER_THAN NOT_EQUAL LESS_THAN LESS_THAN_EQUAL EQUAL GREATER_THAN_EQUAL IF ELSE DO AND OR NOT PRINT
 
 %start  program
 %left   '?' ':'
@@ -45,7 +45,7 @@ Data_Type sample_data_type;
 %type <double_value>     DOUBLE_NUMBER
 %type <procedure>    procedure_definition
 %type <string_value> NAME
-%type <ast> assignment_statement expression variable constant relational_expr logical_expr if_stmt while_stmt do_while_stmt single_stmt sequence_list
+%type <ast> assignment_statement expression variable constant relational_expr logical_expr if_stmt while_stmt do_while_stmt single_stmt sequence_list print_stmt
 %type <symbol_table> variable_list variable_declaration variable_declaration_list global_variable_declaration_list
 %type <ast_list> statement_list
 
@@ -170,6 +170,11 @@ single_stmt     :   assignment_statement
                     }
 
                 |   sequence_list
+                    {
+                        $$ = $1;
+                    }
+
+                |   print_stmt
                     {
                         $$ = $1;
                     }
@@ -311,6 +316,13 @@ do_while_stmt   :   DO
                         $$ = new Iteration_Statement_Ast($5, $2, yylineno, true);
                     }
                 ;
+
+print_stmt  :   PRINT variable ';'
+                {
+                    $$ = new Print_Ast($2, yylineno);
+                }
+                
+            ;
 
 logical_expr    :   logical_expr AND logical_expr
                     {

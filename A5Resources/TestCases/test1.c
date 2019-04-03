@@ -15,7 +15,7 @@ void main()
 
 	z = -3.0;
 
-	// print z;
+	print z;
 	y = 9;
 	x = 2;
 	x = x+0;

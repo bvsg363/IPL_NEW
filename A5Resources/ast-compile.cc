@@ -673,3 +673,32 @@ Code_For_Ast&Sequence_Ast::compile(){
 	// ToDo free the lhs register
 }
 
+Code_For_Ast &Print_Ast::compile(){
+	Code_For_Ast &cfa = *(new Code_For_Ast());
+
+	Register_Descriptor* rd = machine_desc_object.get_new_register<int_reg>();
+	Ics_Opd *opd1 = new Register_Addr_Opd(rd);
+
+	Register_Descriptor * rd1;
+	Ics_Opd *opd2;
+
+	if(var->get_data_type() == int_data_type){
+		cfa.append_ics(*(new Move_IC_Stmt(imm_load, new Const_Opd<int>(1), opd1)));
+		rd1 = machine_desc_object.spim_register_table[a0];
+		opd2 = new Register_Addr_Opd(rd1);
+		cfa.append_ics(*(new Move_IC_Stmt(load, new Mem_Addr_Opd(var->get_symbol_entry()), opd2)));
+	}
+	else{
+		cfa.append_ics(*(new Move_IC_Stmt(imm_load, new Const_Opd<int>(3), opd1)));
+		rd1 = machine_desc_object.spim_register_table[f12];
+		opd2 = new Register_Addr_Opd(rd1);
+		cfa.append_ics(*(new Move_IC_Stmt(load_d, new Mem_Addr_Opd(var->get_symbol_entry()), opd2)));
+	}
+
+
+	cfa.append_ics(*(new Print_IC_Stmt()));
+
+	rd->reset_use_for_expr_result();
+	rd1->reset_use_for_expr_result();
+	return cfa;
+}
