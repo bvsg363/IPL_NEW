@@ -36,12 +36,6 @@ Code_For_Ast & Assignment_Ast::compile(){
 		cfa.append_ics(**it);
 	}
 
-	// if(node_data_type == int_data_type){
-	// 	r = machine_desc_object.get_new_register<int_reg>();
-	// } else{
-	// 	r = machine_desc_object.get_new_register<float_reg>();
-	// }
-
 	// cfa.set_reg(r);
 	rhscfa.get_reg()->reset_use_for_expr_result();
 	lhscfa.get_reg()->reset_use_for_expr_result();
