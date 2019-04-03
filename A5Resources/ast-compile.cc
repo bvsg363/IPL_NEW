@@ -475,22 +475,29 @@ Code_For_Ast & Relational_Expr_Ast::compile(){
 // Logical Expr Ast
 
 Code_For_Ast & Logical_Expr_Ast::compile(){
+
+	Ics_Opd *o1;
+	Register_Descriptor * rd;
+	Code_For_Ast &cfa = *(new Code_For_Ast());
 	Code_For_Ast & lhscfa = *(new Code_For_Ast());
 	// printf("9\n");
+
 	if(lhs_op != NULL){
 		lhscfa = lhs_op->compile();
 	}
+	else{
+		rd = machine_desc_object.get_new_register<int_reg>();
+		o1 = new Register_Addr_Opd(rd);
+		cfa.append_ics(*(new Move_IC_Stmt(imm_load, new Const_Opd<int>(1), o1)));
+	}
+
 	Code_For_Ast & rhscfa = rhs_op->compile();
 
-	Code_For_Ast & cfa = *(new Code_For_Ast());
 	Register_Descriptor * r;
 
 	list<Icode_Stmt *> &rhsstmts = rhscfa.get_icode_list();
 	list<Icode_Stmt *> & lhsstmts = *(new list<Icode_Stmt*>);
 	
-	Ics_Opd *o1;
-
-	// printf("10\n");
 
 	if(lhs_op != NULL){
 		lhsstmts = lhscfa.get_icode_list();
@@ -500,8 +507,6 @@ Code_For_Ast & Logical_Expr_Ast::compile(){
 		}
 		o1 = new Register_Addr_Opd(lhscfa.get_reg());
 	}
-
-	// printf("11\n");
 	
 
 	for(list<Icode_Stmt *>::iterator it = rhsstmts.begin(); it != rhsstmts.end(); ++it){
@@ -509,13 +514,13 @@ Code_For_Ast & Logical_Expr_Ast::compile(){
 	}
 
 	r = machine_desc_object.get_new_register<int_reg>();
-	// Ics_Opd * o1 = new Register_Addr_Opd(lhscfa.get_reg());
+
 	Ics_Opd * o2 = new Register_Addr_Opd(rhscfa.get_reg());
 	Ics_Opd * result = new Register_Addr_Opd(r);
 	switch(bool_op){
 	case 0:
 		// printf("12\n");
-		cfa.append_ics(*(new Compute_IC_Stmt(not_t, o1, o2, result)));
+		cfa.append_ics(*(new Compute_IC_Stmt(not_t, o2, o1, result)));
 		break;
 	case 1:
 		cfa.append_ics(*(new Compute_IC_Stmt(or_t, o1, o2, result)));
@@ -528,12 +533,13 @@ Code_For_Ast & Logical_Expr_Ast::compile(){
 		break;
 	}
 
-	// printf("13\n");
-
 	cfa.set_reg(r);
 
 	if(lhs_op != NULL){
 		lhscfa.get_reg()->reset_use_for_expr_result();
+	}
+	else{
+		rd->reset_use_for_expr_result();
 	}
 	rhscfa.get_reg()->reset_use_for_expr_result();
 

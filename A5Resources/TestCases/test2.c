@@ -7,8 +7,9 @@ void main()
 	int a;
 	int b;
 	// b = 0;
+	float area;
 
-	y = y + 3 + 1;
+	// y = y + 3 + 1;
 
 	// a = 1 + 2;
 
@@ -27,9 +28,13 @@ void main()
 	// 	a = 2;
 	// }
 
-	// if(1 < 2){
-	// 	a = 3;
-	// }
+	if(2.0 < 3.0 ){
+		area = 8.0;
+	}
+
+	if(!(2 < 4)){
+		a = 3;
+	}
 
 	// a = 3;
 
@@ -52,7 +57,7 @@ void main()
 	// b = a+1;
 
 	// a = a+b;
-	x = x+1.0 + 3.0;  //float spim failed
+	// x = x+1.0 + 3.0;  //float spim failed
 
 	// while(a == -189){
 	// 	a = -2;

@@ -25,6 +25,21 @@ Program:
             LHS (Name : x_)
             RHS (
             Arith: PLUS
+               LHS (Num : 5)
+               RHS (
+         Cond:
+            IF_ELSE
+            Condition: NOT
+               RHS (
+            Condition: LT
+               LHS (Num : 5)
+               RHS (Num : 6))
+            LHS (Num : 67)
+            RHS (Num : 68)))
+         Asgn:
+            LHS (Name : x_)
+            RHS (
+            Arith: PLUS
                LHS (Name : y_)
                RHS (
          Cond:
@@ -60,6 +75,18 @@ Program:
                RHS (Num : 3)
             LHS (Num : 4)
             RHS (Num : 6)))
+         IF : 
+         CONDITION (
+            Condition: NOT
+               RHS (
+            Condition: LT
+               LHS (Num : 2)
+               RHS (Num : 3)))
+         THEN (
+            
+         Asgn:
+            LHS (Name : x_)
+            RHS (Num : 3))
             
             
          Asgn:
@@ -94,6 +121,40 @@ Program:
          Asgn:
             LHS (Name : z_)
             RHS (Num : 4.00))
+         WHILE : 
+         CONDITION (
+            Condition: NOT
+               RHS (
+            Condition: NE
+               LHS (Name : x_)
+               RHS (Num : 3)))
+         BODY (
+            
+         Asgn:
+            LHS (Name : x_)
+            RHS (Num : 3)
+            
+         Asgn:
+            LHS (Name : x_)
+            RHS (Num : 6))
+         Asgn:
+            LHS (Name : x_)
+            RHS (
+         Cond:
+            IF_ELSE
+            Condition: OR
+               LHS (
+            Condition: NOT
+               RHS (
+            Condition: LT
+               LHS (Num : 2)
+               RHS (Num : 3)))
+               RHS (
+            Condition: GT
+               LHS (Num : 2)
+               RHS (Num : 3))
+            LHS (Num : 4)
+            RHS (Num : 6))
          IF : 
          CONDITION (
             Condition: OR
@@ -205,7 +266,53 @@ Program:
             
          Asgn:
             LHS (Name : x_)
-            RHS (Num : 3))
+            RHS (Num : 3)
+            
+         Asgn:
+            LHS (Name : x_)
+            RHS (
+         Cond:
+            IF_ELSE
+            Condition: OR
+               LHS (
+            Condition: OR
+               LHS (
+            Condition: NOT
+               RHS (
+            Condition: GT
+               LHS (Num : 2)
+               RHS (Num : 3)))
+               RHS (
+            Condition: AND
+               LHS (
+            Condition: LT
+               LHS (Name : x_)
+               RHS (Name : y_))
+               RHS (
+            Condition: GT
+               LHS (Name : x_)
+               RHS (Name : y_))))
+               RHS (
+            Condition: EQ
+               LHS (Name : x_)
+               RHS (Name : y_))
+            LHS (Num : 2)
+            RHS (Num : 4)))
+            
+         IF : 
+         CONDITION (
+            Condition: NOT
+               RHS (
+            Condition: OR
+               LHS (
+            Condition: NE
+               LHS (Name : x_)
+               RHS (Num : 9))
+               RHS (
+            Condition: GE
+               LHS (Name : x_)
+               RHS (Num : 9))))
+         THEN (
             
          IF : 
          CONDITION (
@@ -221,6 +328,10 @@ Program:
          Asgn:
             LHS (Name : x_)
             RHS (Num : 9))
+            
+         Asgn:
+            LHS (Name : x_)
+            RHS (Num : 5))
             
          Asgn:
             LHS (Name : x_)

@@ -30,54 +30,82 @@ main:				# .globl makes main know to the
 	sw $t1, -8($fp)
 	li.d $f2, 4.00
 	s.d $f2, area_
+	li $v0, 5
+	li $t0, 1
+	li $t1, 5
+	li $t2, 6
+	slt $t3, $t1, $t2
+	sltu $t1, $t3, $t0
+	beq $t1, $zero, label30 
+	li $t0, 67
+	or $t3, $t0, $zero
+	j label31
+
+label30:    	
+	li $t2, 68
+	or $t3, $t2, $zero
+
+label31:    	
+	add $t0, $v0, $t3
+	sw $t0, -8($fp)
 	lw $v0, -12($fp)
 	lw $t0, -8($fp)
 	li $t1, 0
 	seq $t2, $t0, $t1
-	beq $t2, $zero, label24 
+	beq $t2, $zero, label32 
 	li $t0, 7
 	or $t3, $t0, $zero
-	j label25
+	j label33
 
-label24:    	
+label32:    	
 	li $t1, 33
 	or $t3, $t1, $zero
 
-label25:    	
+label33:    	
 	add $t0, $v0, $t3
 	sw $t0, -8($fp)
 	lw $v0, -8($fp)
 	li $t0, 0
 	seq $t1, $v0, $t0
-	beq $t1, $zero, label26 
+	beq $t1, $zero, label34 
 	li $v0, 7
 	or $t0, $v0, $zero
-	j label27
+	j label35
 
-label26:    	
+label34:    	
 	li $t0, 33
 	lw $t2, -12($fp)
 	add $t3, $t0, $t2
 	or $t0, $t3, $zero
 
-label27:    	
+label35:    	
 	sw $t0, -8($fp)
 	lw $v0, -8($fp)
 	li $t0, 2
 	li $t1, 3
 	slt $t2, $t0, $t1
-	beq $t2, $zero, label28 
+	beq $t2, $zero, label36 
 	li $t0, 4
 	or $t3, $t0, $zero
-	j label29
+	j label37
 
-label28:    	
+label36:    	
 	li $t1, 6
 	or $t3, $t1, $zero
 
-label29:    	
+label37:    	
 	add $t0, $v0, $t3
 	sw $t0, -8($fp)
+	li $v0, 1
+	li $t0, 2
+	li $t1, 3
+	slt $t2, $t0, $t1
+	sltu $t0, $t2, $v0
+	beq $t0, $zero, label38 
+	li $v0, 3
+	sw $v0, -8($fp)
+
+label38:    	
 	li $v0, 9
 	sw $v0, -8($fp)
 	li $v0, 0
@@ -91,11 +119,46 @@ label29:
 	lw $v0, -8($fp)
 	li $t0, 2
 	seq $t1, $v0, $t0
-	beq $t1, $zero, label30 
+	beq $t1, $zero, label39 
 	li.d $f2, 4.00
 	s.d $f2, -20($fp)
 
-label30:    	
+label39:    	
+	j label41
+
+label40:    	
+	li $v0, 3
+	sw $v0, -8($fp)
+	li $v0, 6
+	sw $v0, -8($fp)
+
+label41:    	
+	li $v0, 1
+	lw $t0, -8($fp)
+	li $t1, 3
+	sne $t2, $t0, $t1
+	sltu $t0, $t2, $v0
+	bne $t0, $zero, label40 
+	li $v0, 1
+	li $t0, 2
+	li $t1, 3
+	slt $t2, $t0, $t1
+	sltu $t0, $t2, $v0
+	li $v0, 2
+	li $t1, 3
+	sgt $t2, $v0, $t1
+	or $v0, $t0, $t2
+	beq $v0, $zero, label42 
+	li $t0, 4
+	or $t2, $t0, $zero
+	j label43
+
+label42:    	
+	li $t1, 6
+	or $t2, $t1, $zero
+
+label43:    	
+	sw $t2, -8($fp)
 	lw $v0, -8($fp)
 	li $t0, 5
 	sle $t1, $v0, $t0
@@ -107,20 +170,20 @@ label30:
 	sgt $t3, $v0, $t0
 	and $v0, $t2, $t3
 	or $t0, $t1, $v0
-	beq $t0, $zero, label31 
+	beq $t0, $zero, label44 
 	li $v0, 8
 	sw $v0, -8($fp)
 	li $v0, 7
 	sw $v0, -12($fp)
-	j label32
+	j label45
 
-label31:    	
+label44:    	
 	li $v0, 9
 	sw $v0, -8($fp)
 
-label32:    	
+label45:    	
 
-label33:    	
+label46:    	
 	lw $v0, -8($fp)
 	li $t0, 5
 	sle $t2, $v0, $t0
@@ -132,46 +195,46 @@ label33:
 	li $t2, 5
 	sgt $t3, $t0, $t2
 	or $t0, $v0, $t3
-	beq $t0, $zero, label35 
+	beq $t0, $zero, label48 
 	li $v0, 8
 	sw $v0, -8($fp)
-	j label36
+	j label49
 
-label35:    	
+label48:    	
 	li $v0, 9
 	sw $v0, -8($fp)
 	li $v0, 8
 	sw $v0, -8($fp)
 
-label36:    	
-	j label38
+label49:    	
+	j label51
 
-label37:    	
+label50:    	
 	li $v0, 9
 	sw $v0, -12($fp)
 
-label38:    	
+label51:    	
 	lw $v0, -8($fp)
 	li $t0, 0
 	seq $t2, $v0, $t0
-	bne $t2, $zero, label37 
-	j label40
+	bne $t2, $zero, label50 
+	j label53
 
-label39:    	
+label52:    	
 	li $v0, 8
 	sw $v0, -12($fp)
 
-label40:    	
+label53:    	
 	lw $v0, -12($fp)
 	li $t0, 0
 	seq $t2, $v0, $t0
-	bne $t2, $zero, label39 
+	bne $t2, $zero, label52 
 
-label34:    	
+label47:    	
 	lw $v0, -8($fp)
 	li $t0, 4
 	seq $t1, $v0, $t0
-	bne $t1, $zero, label33 
+	bne $t1, $zero, label46 
 	lw $v0, -8($fp)
 	li $t0, 5
 	sge $t1, $v0, $t0
@@ -179,81 +242,123 @@ label34:
 	li $t0, 4
 	slt $t2, $v0, $t0
 	and $v0, $t1, $t2
-	beq $v0, $zero, label44 
-	j label42
+	beq $v0, $zero, label60 
+	j label55
 
-label41:    	
+label54:    	
 	li $t0, 3
 	sw $t0, -8($fp)
+	li $t0, 1
+	li $t1, 2
+	li $t3, 3
+	sgt $t4, $t1, $t3
+	sltu $t1, $t4, $t0
+	lw $t0, -8($fp)
+	lw $t3, -12($fp)
+	slt $t4, $t0, $t3
+	lw $t0, -8($fp)
+	lw $t3, -12($fp)
+	sgt $t5, $t0, $t3
+	and $t0, $t4, $t5
+	or $t3, $t1, $t0
+	lw $t0, -8($fp)
+	lw $t1, -12($fp)
+	seq $t4, $t0, $t1
+	or $t0, $t3, $t4
+	beq $t0, $zero, label56 
+	li $t1, 2
+	or $t4, $t1, $zero
+	j label57
 
-label42:    	
+label56:    	
+	li $t3, 4
+	or $t4, $t3, $zero
+
+label57:    	
+	sw $t4, -8($fp)
+
+label55:    	
 	lw $t0, -8($fp)
 	li $t1, 0
 	seq $t2, $t0, $t1
-	bne $t2, $zero, label41 
+	bne $t2, $zero, label54 
+	li $t0, 1
+	lw $t1, -8($fp)
+	li $t2, 9
+	sne $t3, $t1, $t2
+	lw $t1, -8($fp)
+	li $t2, 9
+	sge $t4, $t1, $t2
+	or $t1, $t3, $t4
+	sltu $t2, $t1, $t0
+	beq $t2, $zero, label59 
 	lw $t0, -8($fp)
 	li $t1, 0
-	sgt $t2, $t0, $t1
-	beq $t2, $zero, label43 
+	sgt $t3, $t0, $t1
+	beq $t3, $zero, label58 
 	li $t0, 8
 	sw $t0, -8($fp)
 	li $t0, 9
 	sw $t0, -8($fp)
 
-label43:    	
+label58:    	
+	li $t0, 5
+	sw $t0, -8($fp)
+
+label59:    	
 	li $t0, 8
 	sw $t0, -8($fp)
 
-label44:    	
-	j label46
+label60:    	
+	j label62
 
-label45:    	
+label61:    	
 	li $v0, 9
 	sw $v0, -12($fp)
 
-label46:    	
+label62:    	
 	lw $v0, -12($fp)
 	li $t0, 3
 	seq $t1, $v0, $t0
-	bne $t1, $zero, label45 
+	bne $t1, $zero, label61 
 	lw $v0, -8($fp)
 	li $t0, 3
 	seq $t1, $v0, $t0
-	beq $t1, $zero, label47 
+	beq $t1, $zero, label63 
 	li $v0, 9
 	sw $v0, -12($fp)
 
-label47:    	
-	j label49
+label63:    	
+	j label65
 
-label48:    	
-	j label51
+label64:    	
+	j label67
 
-label50:    	
+label66:    	
 	li $v0, 9
 	sw $v0, -8($fp)
 
-label51:    	
+label67:    	
 	lw $v0, -12($fp)
 	li $t0, 3
 	seq $t2, $v0, $t0
-	bne $t2, $zero, label50 
+	bne $t2, $zero, label66 
 
-label49:    	
+label65:    	
 	lw $v0, -12($fp)
 	li $t0, 3
 	seq $t1, $v0, $t0
-	bne $t1, $zero, label48 
+	bne $t1, $zero, label64 
 
-label52:    	
+label68:    	
 	li $v0, 1
 	sw $v0, -8($fp)
 
-label53:    	
+label69:    	
 	lw $v0, -8($fp)
 	li $t0, 2
 	seq $t1, $v0, $t0
-	bne $t1, $zero, label52 
+	bne $t1, $zero, label68 
 	li.d $f2, 2.00
 	li.d $f4, 3.00
 	mul.d $f6, $f2, $f4
@@ -271,79 +376,79 @@ label53:
 	lw $v0, -28($fp)
 	lw $t0, -32($fp)
 	sgt $t1, $v0, $t0
-	beq $t1, $zero, label54 
+	beq $t1, $zero, label70 
 	li $v0, 5
 	sw $v0, b_
-	j label55
+	j label71
 
-label54:    	
+label70:    	
 	li $v0, 4
 	sw $v0, b_
 
-label55:    	
+label71:    	
 	lw $v0, -28($fp)
 	lw $t0, -32($fp)
 	sgt $t1, $v0, $t0
-	beq $t1, $zero, label56 
+	beq $t1, $zero, label72 
 	li $v0, 5
 	sw $v0, b_
-	j label57
+	j label73
 
-label56:    	
+label72:    	
 	li $v0, 4
 	sw $v0, b_
 
-label57:    	
+label73:    	
 	lw $v0, -28($fp)
 	lw $t0, -32($fp)
 	sgt $t1, $v0, $t0
-	beq $t1, $zero, label58 
+	beq $t1, $zero, label74 
 	li $v0, 5
 	sw $v0, b_
-	j label59
+	j label75
 
-label58:    	
+label74:    	
 	li $v0, 4
 	sw $v0, b_
 
-label59:    	
+label75:    	
 	lw $v0, -28($fp)
 	lw $t0, -32($fp)
 	sgt $t1, $v0, $t0
-	beq $t1, $zero, label60 
+	beq $t1, $zero, label76 
 	li $v0, 5
 	sw $v0, b_
-	j label61
+	j label77
 
-label60:    	
+label76:    	
 	li $v0, 4
 	sw $v0, b_
 
-label61:    	
+label77:    	
 	lw $v0, -28($fp)
 	lw $t0, -32($fp)
 	sgt $t1, $v0, $t0
-	beq $t1, $zero, label64 
+	beq $t1, $zero, label80 
 	lw $v0, -28($fp)
 	lw $t0, -32($fp)
 	sgt $t2, $v0, $t0
-	beq $t2, $zero, label62 
+	beq $t2, $zero, label78 
 	li $v0, 4
 	sw $v0, b_
-	j label63
+	j label79
 
-label62:    	
+label78:    	
 	li $v0, 5
 	sw $v0, b_
 
-label63:    	
-	j label65
+label79:    	
+	j label81
 
-label64:    	
+label80:    	
 	li $v0, 6
 	sw $v0, b_
 
-label65:    	
+label81:    	
 
 # Epilogue Begins
 	add $sp, $sp, 40
