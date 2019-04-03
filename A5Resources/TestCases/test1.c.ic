@@ -1,0 +1,329 @@
+  Procedure: main
+  Intermediate Code Statements
+	iLoad.d:    	f2 <- 3.00
+	uminus.d:    	f4 <- f2
+	store.d:    	z_ <- f4
+	iLoad:    	v0 <- 9
+	store:    	y_ <- v0
+	iLoad:    	v0 <- 2
+	store:    	x_ <- v0
+	load:    	v0 <- x_
+	iLoad:    	t0 <- 0
+	add:    	t1 <- v0 , t0
+	store:    	x_ <- t1
+	iLoad.d:    	f2 <- 4.00
+	store.d:    	area_ <- f2
+	load:    	v0 <- y_
+	load:    	t0 <- x_
+	iLoad:    	t1 <- 0
+	seq:    	t2 <- t0 , t1
+	beq:    	t2 , zero : goto label24
+	iLoad:    	t0 <- 7
+	or:    	t3 <- t0 , zero
+	goto label25
+
+label24:    	
+	iLoad:    	t1 <- 33
+	or:    	t3 <- t1 , zero
+
+label25:    	
+	add:    	t0 <- v0 , t3
+	store:    	x_ <- t0
+	load:    	v0 <- x_
+	iLoad:    	t0 <- 0
+	seq:    	t1 <- v0 , t0
+	beq:    	t1 , zero : goto label26
+	iLoad:    	v0 <- 7
+	or:    	t0 <- v0 , zero
+	goto label27
+
+label26:    	
+	iLoad:    	t0 <- 33
+	load:    	t2 <- y_
+	add:    	t3 <- t0 , t2
+	or:    	t0 <- t3 , zero
+
+label27:    	
+	store:    	x_ <- t0
+	load:    	v0 <- x_
+	iLoad:    	t0 <- 2
+	iLoad:    	t1 <- 3
+	slt:    	t2 <- t0 , t1
+	beq:    	t2 , zero : goto label28
+	iLoad:    	t0 <- 4
+	or:    	t3 <- t0 , zero
+	goto label29
+
+label28:    	
+	iLoad:    	t1 <- 6
+	or:    	t3 <- t1 , zero
+
+label29:    	
+	add:    	t0 <- v0 , t3
+	store:    	x_ <- t0
+	iLoad:    	v0 <- 9
+	store:    	x_ <- v0
+	iLoad:    	v0 <- 0
+	store:    	y_ <- v0
+	iLoad.d:    	f2 <- 9.00
+	store.d:    	area_ <- f2
+	iLoad:    	v0 <- 8
+	store:    	x_ <- v0
+	iLoad:    	v0 <- 1
+	store:    	a_ <- v0
+	load:    	v0 <- x_
+	iLoad:    	t0 <- 2
+	seq:    	t1 <- v0 , t0
+	beq:    	t1 , zero : goto label30
+	iLoad.d:    	f2 <- 4.00
+	store.d:    	z_ <- f2
+
+label30:    	
+	load:    	v0 <- x_
+	iLoad:    	t0 <- 5
+	sle:    	t1 <- v0 , t0
+	load:    	v0 <- x_
+	iLoad:    	t0 <- 4
+	slt:    	t2 <- v0 , t0
+	load:    	v0 <- x_
+	iLoad:    	t0 <- 5
+	sgt:    	t3 <- v0 , t0
+	and:    	v0 <- t2 , t3
+	or:    	t0 <- t1 , v0
+	beq:    	t0 , zero : goto label31
+	iLoad:    	v0 <- 8
+	store:    	x_ <- v0
+	iLoad:    	v0 <- 7
+	store:    	y_ <- v0
+	goto label32
+
+label31:    	
+	iLoad:    	v0 <- 9
+	store:    	x_ <- v0
+
+label32:    	
+
+label33:    	
+	load:    	v0 <- x_
+	iLoad:    	t0 <- 5
+	sle:    	t2 <- v0 , t0
+	load:    	v0 <- x_
+	iLoad:    	t0 <- 4
+	slt:    	t3 <- v0 , t0
+	or:    	v0 <- t2 , t3
+	load:    	t0 <- x_
+	iLoad:    	t2 <- 5
+	sgt:    	t3 <- t0 , t2
+	or:    	t0 <- v0 , t3
+	beq:    	t0 , zero : goto label35
+	iLoad:    	v0 <- 8
+	store:    	x_ <- v0
+	goto label36
+
+label35:    	
+	iLoad:    	v0 <- 9
+	store:    	x_ <- v0
+	iLoad:    	v0 <- 8
+	store:    	x_ <- v0
+
+label36:    	
+	goto label38
+
+label37:    	
+	iLoad:    	v0 <- 9
+	store:    	y_ <- v0
+
+label38:    	
+	load:    	v0 <- x_
+	iLoad:    	t0 <- 0
+	seq:    	t2 <- v0 , t0
+	bne:    	t2 , zero : goto label37
+	goto label40
+
+label39:    	
+	iLoad:    	v0 <- 8
+	store:    	y_ <- v0
+
+label40:    	
+	load:    	v0 <- y_
+	iLoad:    	t0 <- 0
+	seq:    	t2 <- v0 , t0
+	bne:    	t2 , zero : goto label39
+
+label34:    	
+	load:    	v0 <- x_
+	iLoad:    	t0 <- 4
+	seq:    	t1 <- v0 , t0
+	bne:    	t1 , zero : goto label33
+	load:    	v0 <- x_
+	iLoad:    	t0 <- 5
+	sge:    	t1 <- v0 , t0
+	load:    	v0 <- x_
+	iLoad:    	t0 <- 4
+	slt:    	t2 <- v0 , t0
+	and:    	v0 <- t1 , t2
+	beq:    	v0 , zero : goto label44
+	goto label42
+
+label41:    	
+	iLoad:    	t0 <- 3
+	store:    	x_ <- t0
+
+label42:    	
+	load:    	t0 <- x_
+	iLoad:    	t1 <- 0
+	seq:    	t2 <- t0 , t1
+	bne:    	t2 , zero : goto label41
+	load:    	t0 <- x_
+	iLoad:    	t1 <- 0
+	sgt:    	t2 <- t0 , t1
+	beq:    	t2 , zero : goto label43
+	iLoad:    	t0 <- 8
+	store:    	x_ <- t0
+	iLoad:    	t0 <- 9
+	store:    	x_ <- t0
+
+label43:    	
+	iLoad:    	t0 <- 8
+	store:    	x_ <- t0
+
+label44:    	
+	goto label46
+
+label45:    	
+	iLoad:    	v0 <- 9
+	store:    	y_ <- v0
+
+label46:    	
+	load:    	v0 <- y_
+	iLoad:    	t0 <- 3
+	seq:    	t1 <- v0 , t0
+	bne:    	t1 , zero : goto label45
+	load:    	v0 <- x_
+	iLoad:    	t0 <- 3
+	seq:    	t1 <- v0 , t0
+	beq:    	t1 , zero : goto label47
+	iLoad:    	v0 <- 9
+	store:    	y_ <- v0
+
+label47:    	
+	goto label49
+
+label48:    	
+	goto label51
+
+label50:    	
+	iLoad:    	v0 <- 9
+	store:    	x_ <- v0
+
+label51:    	
+	load:    	v0 <- y_
+	iLoad:    	t0 <- 3
+	seq:    	t2 <- v0 , t0
+	bne:    	t2 , zero : goto label50
+
+label49:    	
+	load:    	v0 <- y_
+	iLoad:    	t0 <- 3
+	seq:    	t1 <- v0 , t0
+	bne:    	t1 , zero : goto label48
+
+label52:    	
+	iLoad:    	v0 <- 1
+	store:    	x_ <- v0
+
+label53:    	
+	load:    	v0 <- x_
+	iLoad:    	t0 <- 2
+	seq:    	t1 <- v0 , t0
+	bne:    	t1 , zero : goto label52
+	iLoad.d:    	f2 <- 2.00
+	iLoad.d:    	f4 <- 3.00
+	mul.d:    	f6 <- f2 , f4
+	store.d:    	area_ <- f6
+	iLoad.d:    	f2 <- 2.00
+	iLoad.d:    	f4 <- 22.00
+	mul.d:    	f6 <- f2 , f4
+	store.d:    	perimeter_ <- f6
+	iLoad:    	v0 <- 0
+	store:    	i_ <- v0
+	iLoad:    	v0 <- 1
+	store:    	j_ <- v0
+	iLoad:    	v0 <- 0
+	store:    	a_ <- v0
+	load:    	v0 <- i_
+	load:    	t0 <- j_
+	sgt:    	t1 <- v0 , t0
+	beq:    	t1 , zero : goto label54
+	iLoad:    	v0 <- 5
+	store:    	b_ <- v0
+	goto label55
+
+label54:    	
+	iLoad:    	v0 <- 4
+	store:    	b_ <- v0
+
+label55:    	
+	load:    	v0 <- i_
+	load:    	t0 <- j_
+	sgt:    	t1 <- v0 , t0
+	beq:    	t1 , zero : goto label56
+	iLoad:    	v0 <- 5
+	store:    	b_ <- v0
+	goto label57
+
+label56:    	
+	iLoad:    	v0 <- 4
+	store:    	b_ <- v0
+
+label57:    	
+	load:    	v0 <- i_
+	load:    	t0 <- j_
+	sgt:    	t1 <- v0 , t0
+	beq:    	t1 , zero : goto label58
+	iLoad:    	v0 <- 5
+	store:    	b_ <- v0
+	goto label59
+
+label58:    	
+	iLoad:    	v0 <- 4
+	store:    	b_ <- v0
+
+label59:    	
+	load:    	v0 <- i_
+	load:    	t0 <- j_
+	sgt:    	t1 <- v0 , t0
+	beq:    	t1 , zero : goto label60
+	iLoad:    	v0 <- 5
+	store:    	b_ <- v0
+	goto label61
+
+label60:    	
+	iLoad:    	v0 <- 4
+	store:    	b_ <- v0
+
+label61:    	
+	load:    	v0 <- i_
+	load:    	t0 <- j_
+	sgt:    	t1 <- v0 , t0
+	beq:    	t1 , zero : goto label64
+	load:    	v0 <- i_
+	load:    	t0 <- j_
+	sgt:    	t2 <- v0 , t0
+	beq:    	t2 , zero : goto label62
+	iLoad:    	v0 <- 4
+	store:    	b_ <- v0
+	goto label63
+
+label62:    	
+	iLoad:    	v0 <- 5
+	store:    	b_ <- v0
+
+label63:    	
+	goto label65
+
+label64:    	
+	iLoad:    	v0 <- 6
+	store:    	b_ <- v0
+
+label65:    	

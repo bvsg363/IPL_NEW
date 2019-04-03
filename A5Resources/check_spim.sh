@@ -11,7 +11,7 @@ pass4=0
 fail4=0
 
 
-for i in $(find TestCases -name "*.c"); 
+for i in $(find TestCases -name "test1.c");
 do 
     ./sclp_old -ast -symtab -icode $i # sclp_old
     cp $i.ast test_ast_old.txt
@@ -78,10 +78,10 @@ do
 
     echo -e "-------------------\n\n"
     
-    rm $i.ast
-    rm $i.spim
-    rm $i.sym
-    rm $i.ic
+    # rm $i.ast
+    # rm $i.spim
+    # rm $i.sym
+    # rm $i.ic
 
 done
 #rm test_ast_old.txt
