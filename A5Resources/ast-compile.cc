@@ -548,22 +548,10 @@ Code_For_Ast&Selection_Statement_Ast::compile(){
 
 	// printf("selection1\n");
 	Code_For_Ast & condcfa = cond->compile();
-	Code_For_Ast & thencfa = then_part->compile();
-	Code_For_Ast &elsecfa = *(new Code_For_Ast());
-	if (else_part != NULL)
-	{
-		elsecfa = else_part->compile();
-	}
-
 	Code_For_Ast & cfa = *(new Code_For_Ast());
 	// Register_Descriptor * r;
 
 	list<Icode_Stmt *> & condstmts = condcfa.get_icode_list();	
-	list<Icode_Stmt *> & thenstmts = thencfa.get_icode_list();
-	list<Icode_Stmt *> &elsestmts = *(new list<Icode_Stmt*>);
-	if(else_part != NULL){
-		elsestmts = elsecfa.get_icode_list();
-	}
 	
 	for(list<Icode_Stmt *>::iterator it = condstmts.begin(); it != condstmts.end(); ++it){
 		cfa.append_ics(**it);
@@ -574,6 +562,9 @@ Code_For_Ast&Selection_Statement_Ast::compile(){
 	Ics_Opd * o3 = new Register_Addr_Opd(condcfa.get_reg());
 	string lbl1 = get_new_label();
 	cfa.append_ics(*(new Control_Flow_IC_Stmt(beq, o3, lbl1)));
+
+	Code_For_Ast & thencfa = then_part->compile();
+	list<Icode_Stmt *> & thenstmts = thencfa.get_icode_list();
 
 	for(list<Icode_Stmt *>::iterator it = thenstmts.begin(); it != thenstmts.end(); ++it){
 		cfa.append_ics(**it);
@@ -588,7 +579,12 @@ Code_For_Ast&Selection_Statement_Ast::compile(){
 
 	cfa.append_ics(*(new Label_IC_Stmt(label, lbl1)));
 
-	if(else_part != NULL){
+	Code_For_Ast &elsecfa = *(new Code_For_Ast());
+	if (else_part != NULL)
+	{
+		elsecfa = else_part->compile();
+		list<Icode_Stmt *> & elsestmts = elsecfa.get_icode_list();
+
 		for(list<Icode_Stmt *>::iterator it = elsestmts.begin(); it != elsestmts.end(); ++it){
 			cfa.append_ics(**it);
 		}
