@@ -565,7 +565,13 @@ Code_For_Ast&Selection_Statement_Ast::compile(){
 		cfa.append_ics(*(new Control_Flow_IC_Stmt(beq, o3, lbl1)));
 	}
 	else{
-		cfa.append_ics(*(new Control_Flow_IC_Stmt(bc1f, o3, lbl1)));
+		Tgt_Op rel_operator = condstmts.back()->get_op().get_op(); //work
+		if (rel_operator == sle_d || rel_operator == slt_d || rel_operator == seq_d){
+			cfa.append_ics(*(new Control_Flow_IC_Stmt(bc1f, o3, lbl1)));
+		}
+		else{
+			cfa.append_ics(*(new Control_Flow_IC_Stmt(bc1t, o3, lbl1)));
+		}
 	}
 
 	list<Icode_Stmt *> & thenstmts = thencfa.get_icode_list();
@@ -640,8 +646,20 @@ Code_For_Ast&Iteration_Statement_Ast::compile(){
 	}
 
 	Ics_Opd *o3 = new Register_Addr_Opd(condcfa.get_reg());
-	cfa.append_ics(*(new Control_Flow_IC_Stmt(bne, o3, lbl1)));
 
+	if(cond->get_data_type() == int_data_type){
+		cfa.append_ics(*(new Control_Flow_IC_Stmt(bne, o3, lbl1)));
+	}
+	else{
+		Tgt_Op rel_operator = condstmts.back()->get_op().get_op(); //work
+		if (rel_operator == sle_d || rel_operator == slt_d || rel_operator == seq_d){
+			cfa.append_ics(*(new Control_Flow_IC_Stmt(bc1t, o3, lbl1)));
+		}
+		else{
+			cfa.append_ics(*(new Control_Flow_IC_Stmt(bc1f, o3, lbl1)));
+		}
+	}
+	
 	// cfa.set_reg(r);
 
 	condcfa.get_reg()->reset_use_for_expr_result();
