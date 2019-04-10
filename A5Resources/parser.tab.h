@@ -67,7 +67,8 @@ extern int yydebug;
     DO = 277,
     AND = 278,
     OR = 279,
-    NOT = 280
+    NOT = 280,
+    PRINT = 281
   };
 #endif
 
@@ -87,7 +88,7 @@ union YYSTYPE
     Basic_Block * basic_block;
     Procedure * procedure;
 
-#line 91 "parser.tab.h" /* yacc.c:1909  */
+#line 92 "parser.tab.h" /* yacc.c:1909  */
 };
 #line 18 "parser.y" /* yacc.c:1909  */
 typedef union YYSTYPE YYSTYPE;
