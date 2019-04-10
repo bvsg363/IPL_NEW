@@ -259,15 +259,29 @@ void Compute_IC_Stmt::print_icode(ostream &file_buffer){
 	file_buffer << "\n";
 }
 void Compute_IC_Stmt::print_assembly(ostream &file_buffer) {
-	file_buffer << "\t" << op_desc.get_mnemonic() << " ";
-	// printf("10\n");
-	result->print_asm_opd(file_buffer);
-	file_buffer << ", ";
-	// printf("10\n");
-	opd1->print_asm_opd(file_buffer);
-	file_buffer << ", ";
-	// printf("10\n");
-	opd2->print_asm_opd(file_buffer);
+
+	if (op_desc.get_ic_format() == i_r_o1_op_o2)
+	{
+		file_buffer << "\t" << op_desc.get_mnemonic() << " ";
+		// printf("10\n");
+		result->print_asm_opd(file_buffer);
+		file_buffer << ", ";
+		// printf("11\n");
+		opd1->print_asm_opd(file_buffer);
+		file_buffer << ", ";
+		// printf("12\n");
+		opd2->print_asm_opd(file_buffer);
+	}
+	else if (op_desc.get_ic_format() == i_o1_op_o2)
+	{
+		file_buffer << "\t" << op_desc.get_mnemonic() << " ";
+		// printf("13\n");
+		opd1->print_asm_opd(file_buffer);
+		file_buffer << ", ";
+		// printf("14\n");
+		opd2->print_asm_opd(file_buffer);
+	}
+
 	file_buffer << "\n";
 }
 
@@ -322,7 +336,14 @@ void Control_Flow_IC_Stmt::print_assembly(ostream &file_buffer) {
 	}
 	else if (op_desc.get_ic_format() == i_op_st)
 	{
-		file_buffer << "\t" << op_desc.get_mnemonic() << " " << label << "\n";
+		file_buffer << "\t" << op_desc.get_mnemonic() << " " << label;
+		if(op_desc.get_mnemonic() == "j"){
+			file_buffer << "\n";
+		}
+		else{
+			file_buffer << " \n";
+		}
+		
 	}
 }
 

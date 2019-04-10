@@ -341,6 +341,7 @@ bool Relational_Expr_Ast::check_ast()
 {
     if (lhs_condition->get_data_type() == rhs_condition->get_data_type())
     {
+        node_data_type = lhs_condition->get_data_type();
         return 1;
     }
 
@@ -407,7 +408,25 @@ void Logical_Expr_Ast::set_data_type(Data_Type dt)
     node_data_type = dt;
 }
 
-bool Logical_Expr_Ast::check_ast() {}
+bool Logical_Expr_Ast::check_ast() {
+
+    if(lhs_op != NULL){
+        if (lhs_op->get_data_type() == rhs_op->get_data_type())
+        {
+            node_data_type = lhs_op->get_data_type();
+            return 1;
+        }
+
+        cerr << "cs316: Error: Line: " << lineno << ": Logical statement data type not compatible\n";
+        exit(0);
+    }
+    else{
+        node_data_type = rhs_op->get_data_type();
+        return 1;
+    }
+
+    
+}
 
 void Logical_Expr_Ast::print(ostream &file_buffer)
 {

@@ -13,17 +13,17 @@ fail4=0
 
 for i in $(find TestCases -name "test1.c");
 do 
-    ./sclp_old -ast -symtab -icode $i # sclp_old
+    ./sclp_old -ast -symtab $i # sclp_old
     cp $i.ast test_ast_old.txt
     cp $i.spim test_spim_old.txt
     cp $i.sym test_symtab_old.txt
-    cp $i.ic test_icode_old.txt
+    # cp $i.ic test_icode_old.txt
 
-    ./sclp_new -ast -symtab -icode $i # sclp_new
+    ./sclp_new -ast -symtab $i # sclp_new
     cp $i.ast test_ast_new.txt
     cp $i.spim test_spim_new.txt
     cp $i.sym test_symtab_new.txt
-    cp $i.ic test_icode_new.txt
+    # cp $i.ic test_icode_new.txt
 
     #--------test_ast----------
     
@@ -65,23 +65,23 @@ do
 
     #----------------test_icode---------------
 
-    DIFF2=$(diff test_icode_old.txt test_icode_new.txt) 
-    if [ "$DIFF2" == "" ] 
-    then
-    pass4=$((pass4+1))
-     echo "Passed $i icode"
+    # DIFF2=$(diff test_icode_old.txt test_icode_new.txt) 
+    # if [ "$DIFF2" == "" ] 
+    # then
+    # pass4=$((pass4+1))
+    #  echo "Passed $i icode"
     
-    else
-    fail4=$((fail4+1))
-    echo "Failed $i icode"
-    fi
+    # else
+    # fail4=$((fail4+1))
+    # echo "Failed $i icode"
+    # fi
 
     echo -e "-------------------\n\n"
     
     rm $i.ast
     rm $i.spim
     rm $i.sym
-    rm $i.ic
+    # rm $i.ic
 
 done
 #rm test_ast_old.txt
@@ -96,5 +96,5 @@ echo -e "Failed Cases $fail2 spim\n"
 echo -e "Passed Cases $pass3 symtab"
 echo -e "Failed Cases $fail3 symtab\n"
 
-echo -e "Passed Cases $pass4 icode"
-echo -e "Failed Cases $fail4 icode\n"
+# echo -e "Passed Cases $pass4 icode"
+# echo -e "Failed Cases $fail4 icode\n"
