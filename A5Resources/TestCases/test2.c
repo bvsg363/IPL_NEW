@@ -10,58 +10,72 @@ void main()
 	float area, t;
 
 	// a=0;
-	area = 1.0;
+	// area = 1.0;
 	// b = 2;
 	t = 9.0;
 
-	if (1 < 2){
-		area = 3.0;
-	}
+	area = t;
+
+	// print area;
+
+	// if (1.0 < 2.0){
+	// 	print area;
+	// 	area = 3.0;
+	// 	// print area;
+	// }
 
 	print area;
 	print b;
-	print a;
-	print t;
+	// print a;
+	// print t;
 
-	
-	while(1.0 > 2.0){
-		// print area;
-		area = 5.0;
-	}
+	// if (1.0 < 2.0){
+	// 	// print area;
+	// 	area = 3.0;
+	// 	// print area;
+	// }
+
 	// print area;
 
-	if(1<2){
-		a = 1;
-	}
-	print area;
+	
+	// while(1.0 > 2.0){
+	// 	print area;
+	// 	area = 5.0;
+	// }
+	// // print area;
 
-	if(area < t){
-		// print area;
-		area = 7.0;
-	}
-	else{
-		if(2.0 > 1.0){
-			area = 1.0;
-		}
-		if(1.0 == 2.0){
-			area = 1.0;
-		}
-		if(1.0 != area){
-			area = 0.0;
-		}
-		while(1.0 == 2.0){
-			area = 1.9;
-		}
-		while(1.0 <= 0.0 ){
-			// print area;
-			area = 1.0;
-		}
-		while(1.0 >= 2.0 ){
-			area = 1.0;
-		}
-	}
+	// if(1<2){
+	// 	a = 1;
+	// }
+	// // print area;
 
-	print area;
+	// if(area < t){
+	// 	// print area;
+	// 	area = 7.0;
+	// }
+	// else{
+	// 	if(2.0 > 1.0){
+	// 		area = 1.0;
+	// 	}
+	// 	if(1.0 == 2.0){
+	// 		area = 1.0;
+	// 	}
+	// 	if(1.0 != area){
+	// 		area = 0.0;
+	// 	}
+	// 	while(1.0 == 2.0){
+	// 		area = 1.9;
+	// 	}
+	// 	while(1.0 <= 0.0 ){
+	// 		print area;
+	// 		area = 1.0;
+	// 	}
+	// 	while(1.0 >= 2.0 ){
+	// 		area = 1.0;
+	// 	}
+	// }
+
+	// print area;
 
 	// y = !5 < 6 ? 67 : 68 + !5 < 6 ? 67 : 68;
 
