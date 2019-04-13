@@ -11,7 +11,7 @@ pass4=0
 fail4=0
 
 
-for i in $(find TestCases -name "test1.c");
+for i in $(find TestCases -name "test2.c");
 do 
     ./sclp_old -ast -symtab $i # sclp_old
     cp $i.ast test_ast_old.txt
