@@ -456,6 +456,8 @@ Code_For_Ast & Relational_Expr_Ast::compile(){
 		}
 	}
 
+
+
 	cfa.set_reg(r);
 
 	lhscfa.get_reg()->reset_use_for_expr_result();
@@ -546,7 +548,7 @@ Code_For_Ast&Selection_Statement_Ast::compile(){
 
 	// printf("selection1\n");
 	Code_For_Ast & condcfa = cond->compile();
-	Code_For_Ast & thencfa = then_part->compile();
+	Code_For_Ast &thencfa = then_part->compile();
 	Code_For_Ast & cfa = *(new Code_For_Ast());
 	// Register_Descriptor * r;
 
@@ -573,6 +575,7 @@ Code_For_Ast&Selection_Statement_Ast::compile(){
 			cfa.append_ics(*(new Control_Flow_IC_Stmt(bc1t, o3, lbl1)));
 		}
 	}
+
 
 	list<Icode_Stmt *> & thenstmts = thencfa.get_icode_list();
 
@@ -691,10 +694,9 @@ Code_For_Ast&Sequence_Ast::compile(){
 
 // Print Ast
 Code_For_Ast &Print_Ast::compile(){
-	// Code_For_Ast &varcfa = var->compile();
 	Code_For_Ast &cfa = *(new Code_For_Ast());
 
-	Register_Descriptor* rd = machine_desc_object.get_new_register<int_reg>();
+	Register_Descriptor *rd = machine_desc_object.spim_register_table[v0];
 	Ics_Opd *opd1 = new Register_Addr_Opd(rd);
 
 	Register_Descriptor * rd1;
@@ -718,7 +720,7 @@ Code_For_Ast &Print_Ast::compile(){
 
 	// cfa.set_reg(rd);
 
-	rd->reset_use_for_expr_result();
+	// rd->reset_use_for_expr_result();
 	// rd1->reset_use_for_expr_result();
 	
 	return cfa;
