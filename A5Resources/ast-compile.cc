@@ -669,7 +669,7 @@ Code_For_Ast&Iteration_Statement_Ast::compile(){
 	// ToDo free the lhs register
 }
 
-// Sequence Ast
+// Sequence AstPrint_IC_StmtPrint_IC_Stmt
 Code_For_Ast&Sequence_Ast::compile(){
 	Code_For_Ast & cfa = *(new Code_For_Ast());
 	// Register_Descriptor * r;
@@ -690,6 +690,7 @@ Code_For_Ast&Sequence_Ast::compile(){
 }
 
 Code_For_Ast &Print_Ast::compile(){
+	// Code_For_Ast &varcfa = var->compile();
 	Code_For_Ast &cfa = *(new Code_For_Ast());
 
 	Register_Descriptor* rd = machine_desc_object.get_new_register<int_reg>();
@@ -714,7 +715,10 @@ Code_For_Ast &Print_Ast::compile(){
 
 	cfa.append_ics(*(new Print_IC_Stmt()));
 
+	// cfa.set_reg(rd);
+
 	rd->reset_use_for_expr_result();
-	rd1->reset_use_for_expr_result();
+	// rd1->reset_use_for_expr_result();
+	
 	return cfa;
 }

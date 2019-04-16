@@ -10,25 +10,40 @@ void main()
 	float area, t;
 
 	// a=0;
-	area = 1.0;
+	// area = 1.0;
 	// b = 2;
 	// t = 9.0;
 
-	// if (1 < 2){
+
+	area = t;
+
+	// print area;
+
+	// if (1.0 < 2.0){
+	// 	print area;
 	// 	area = 3.0;
+	// 	// print area;
 	// }
 
 	print area;
-	// print b;
+	print b;
 	// print a;
 	// print t;
 
+	// if (1.0 < 2.0){
+	// 	// print area;
+	// 	area = 3.0;
+	// 	// print area;
+	// }
+
+	// print area;
+
 	
-	while(1.0 > 2.0){
-		print area;
-		area = 5.0;
-	}
-	print area;
+	// while(1.0 > 2.0){
+	// 	print area;
+	// 	area = 5.0;
+	// }
+	// // print area;
 
 	// if(1<2){
 	// 	a = 1;
@@ -53,7 +68,7 @@ void main()
 	// 		area = 1.9;
 	// 	}
 	// 	while(1.0 <= 0.0 ){
-	// 		// print area;
+	// 		print area;
 	// 		area = 1.0;
 	// 	}
 	// 	while(1.0 >= 2.0 ){
