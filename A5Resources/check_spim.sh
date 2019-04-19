@@ -11,7 +11,7 @@ pass4=0
 fail4=0
 
 
-for i in $(find A5-Test-Cases/NonError-Testcases -name "int_conditional.c");
+for i in $(find A5-Test-Cases/NonError-Testcases -name "*.c");
 do 
     ./sclp_old -ast -symtab $i # sclp_old
     cp $i.ast test_ast_old.txt

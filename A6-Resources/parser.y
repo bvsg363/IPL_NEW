@@ -23,6 +23,8 @@ Data_Type sample_data_type;
     Symbol_Table_Entry * symbol_entry;
     Basic_Block * basic_block;
     Procedure * procedure;
+    list<Procedure*> * procedure_list;
+    Data_Type data_type;
 };
 
 %token  INTEGER_NUMBER BBNUM DOUBLE_NUMBER NAME RETURN INTEGER FLOAT ASSIGN VOID UMINUS
@@ -44,8 +46,11 @@ Data_Type sample_data_type;
 %type <procedure>    procedure_definition
 %type <string_value> NAME
 %type <ast> assignment_statement expression variable constant relational_expr logical_expr if_stmt while_stmt do_while_stmt single_stmt sequence_list print_stmt
-%type <symbol_table> variable_list variable_declaration variable_declaration_list global_variable_declaration_list
+%type <ast> return_stmt function_call
+%type <symbol_table> variable_list variable_declaration variable_declaration_list global_variable_declaration_list func_decl_args func_def_args_list
 %type <ast_list> statement_list
+%type <procedure_list> procedure_definition_list
+%type <data_type> return_type
 
 %%
 // program     :   global_variable_declaration_list
@@ -56,19 +61,6 @@ Data_Type sample_data_type;
 //                 }
 //             ;
 
-// procedure_definition    :   VOID NAME '(' ')'
-//                             '{'
-//                                 variable_declaration_list
-//                                 statement_list
-//                             '}'
-//                             {
-//                                 $6->set_table_scope(local);
-//                                 $$ = new Procedure(void_data_type, *($2), yylineno);
-//                                 $$->set_local_list(*local_symbol_table);
-//                                 $$->set_ast_list(*($7));
-//                             }
-//                         ;
-
 program     :   global_declaration_list
                 procedure_definition_list
                 {
@@ -76,14 +68,16 @@ program     :   global_declaration_list
                 }
             ;
 
-procedure_definition_list   :   procedure_definition_list procedure_definition
+procedure_definition_list   :   procedure_definition_list
+                                procedure_definition
                                 {
 
                                 }
 
                             |   procedure_definition
                                 {
-
+                                    $$ = new list<Procedure*>;
+                                    $$->push_back($1);
                                 }
                             ;
 
@@ -93,32 +87,131 @@ procedure_definition    :   return_type NAME '(' func_def_args_list ')'
                                 statement_list
                             '}'
                             {
-                                $6->set_table_scope(local);
+                                $7->set_table_scope(local);
                                 $$ = new Procedure(void_data_type, *($2), yylineno);
                                 $$->set_local_list(*local_symbol_table);
-                                $$->set_ast_list(*($7));
+                                $$->set_ast_list(*($8));
+                                $$->set_formal_param_list(*($4));
+                                $$->set_return_type($1);
                             }
                         ;
 
 global_declaration_list :   global_declaration_list
                             global_variable_declaration_list
+                            {
+
+                            }
                             
                         
                         |   global_declaration_list
                             global_func_declaration_list
+                            {
 
-                        |   global_variable_declaration_list
+                            }
 
-                        |   global_func_declaration_list
+                        |   /* empty */
+                            {
 
+                            }
                         ;
 
-// global_variable_declaration_list :  variable_declaration_list
-//                                     {
-//                                         glob_scop = 0;
-//                                         $1->set_table_scope(global);
-//                                         $$ = $1;
-//                                     }
+global_func_declaration_list    :   global_func_declaration_list
+                                    function_declaration
+                                    {
+
+                                    }
+                                
+                                |   /* empty */
+                                    {
+
+                                    }
+                                ;
+
+global_variable_declaration_list :  variable_declaration_list
+                                    {
+                                        glob_scop = 0;
+                                        $1->set_table_scope(global);
+                                        $$ = $1;
+                                    }
+
+function_declaration    :   return_type NAME '(' func_decl_args ')' ';'
+                            {
+
+                            }
+
+func_decl_args  :   /* empty */
+                    {
+
+                    }
+
+                |   type_var_list
+                    {
+
+                    }
+
+                |   type_list
+                    {
+
+                    }
+                ;
+                
+func_def_args_list   :   /* empty */
+                    {
+
+                    }
+
+                |   type_var_list
+                    {
+
+                    }
+                ;
+
+function_call   :   NAME '(' func_decl_args ')' ';'
+                    {
+                        $$ = new Call_Ast(*($1), yylineno);  // TODO:
+                        // $$->check_actual_formal_param($3);
+                    }
+                ;
+
+type_var_list   :   type_var_list ',' type variable
+                    {
+
+                    }
+
+                |   type variable
+                    {
+
+                    }
+
+                ;
+
+type_list   :   type_list ',' type
+                {
+
+                }
+
+            |   type
+                {
+
+                }
+            
+            ;
+
+return_type :   INTEGER
+                {
+                    $$ = int_data_type;
+                }
+            
+            |   FLOAT
+                {
+                    $$ = double_data_type;
+                }
+
+            |   VOID
+                {
+                    $$ = void_data_type;
+                }
+            ;
 
 variable_declaration_list   :   variable_declaration_list
                                 variable_declaration
@@ -220,9 +313,20 @@ single_stmt     :   assignment_statement
                     {
                         $$ = $1;
                     }
+
+                |   function_call
+                    {
+                        $$ = $1;
+                    }
                 ;
 
 assignment_statement    :   variable ASSIGN expression ';'
+                            {
+                                $$ = new Assignment_Ast($1, $3, yylineno);
+                                $$->check_ast();
+                            }
+
+                        |   variable ASSIGN function_call ';'
                             {
                                 $$ = new Assignment_Ast($1, $3, yylineno);
                                 $$->check_ast();
@@ -444,62 +548,9 @@ sequence_list   :   '{'
                         $$ = seq_ast_body;
                     }
 
-function_declaration    :   return_type NAME '(' func_decl_args ')' ';'
-                            {
-
-                            }
-
-func_decl_args  :   /* empty */
-
-                |   type_var_list
-                    {
-
-                    }
-
-                |   type_list
-                    {
-
-                    }
-                ;
-                
-func_def_args   :   /* empty */
-                    {
-
-                    }
-
-                |   type_var_list
-                    {
-
-                    }
-                ;
-
-type_var_list   :   type_var_list, type variable
-                    {
-
-                    }
-
-                |   type variable
-                    {
-
-                    }
-
-                ;
-
-type_list   :   type_list, type
-                {
-
-                }
-
-            |   type
-                {
-
-                }
-            
-            ;
-
 return_stmt :   RETURN expression ';'
                 {
-                    $$ = new Return_Ast($2, "", yylineno); //TODO: check 2nd argument
+                    $$ = new Return_Ast($2, "", yylineno); //TODO: check 2nd argument - procedure name
                 }
 
             ;

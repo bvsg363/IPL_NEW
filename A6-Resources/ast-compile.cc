@@ -672,7 +672,7 @@ Code_For_Ast&Iteration_Statement_Ast::compile(){
 	// ToDo free the lhs register
 }
 
-// Sequence AstPrint_IC_StmtPrint_IC_Stmt
+// Sequence Ast
 Code_For_Ast&Sequence_Ast::compile(){
 	Code_For_Ast & cfa = *(new Code_For_Ast());
 	// Register_Descriptor * r;
@@ -692,6 +692,7 @@ Code_For_Ast&Sequence_Ast::compile(){
 	// ToDo free the lhs register
 }
 
+// Print Ast
 Code_For_Ast &Print_Ast::compile(){
 	Code_For_Ast &cfa = *(new Code_For_Ast());
 
@@ -724,3 +725,9 @@ Code_For_Ast &Print_Ast::compile(){
 	
 	return cfa;
 }
+
+// Call Ast
+Code_For_Ast & Call_Ast::compile(){}
+
+// Return Ast
+Code_For_Ast & Return_Ast::compile(){}

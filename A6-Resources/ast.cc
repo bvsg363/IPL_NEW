@@ -305,16 +305,22 @@ void Conditional_Expression_Ast::print(ostream &file_buffer)
     file_buffer << ")";
 }
 
-// Return Ast
+// Print_Ast
 
-Return_Ast::Return_Ast(int line)
-{
+Print_Ast::Print_Ast(Ast *v, int line){
+    var = v;
     lineno = line;
-    ast_num_child = zero_arity;
 }
-Return_Ast::~Return_Ast() {}
+Print_Ast::~Print_Ast(){}
 
-void Return_Ast::print(ostream &file_buffer) {}
+void Print_Ast::print(ostream &file_buffer)
+{
+    file_buffer << "\n"
+                << AST_SPACE << "Print :\n"
+                << AST_SUB_NODE_SPACE << "(";
+    var->print(file_buffer);
+    file_buffer << ")";
+}
 
 // Relational Expr Ast
 
@@ -575,18 +581,78 @@ void Sequence_Ast::print(ostream &file_buffer)
     }
 }
 
-// Print_Ast
-Print_Ast::Print_Ast(Ast *v, int line){
-    var = v;
-    lineno = line;
-}
-Print_Ast::~Print_Ast(){}
+// Call Ast
 
-void Print_Ast::print(ostream &file_buffer)
+Call_Ast::Call_Ast(string name, int line)
+{
+    procedure_name = name;
+    lineno = line;
+    // ast_num_child = unary_arity;
+}
+
+Data_Type Call_Ast::get_data_type()
+{
+    Procedure * p = get_procedure_prototype(procedure_name);
+    return p.get_return_type();
+}
+
+void Call_Ast::set_register(Register_Descriptor * reg)
+{
+    return_value_reg = reg;
+}
+
+void Call_Ast::check_actual_formal_param(Symbol_Table & formal_param_list)
+{
+    list<Symbol_Table_Entry *> & symbol_table_list = formal_param_list.get_table();
+    if(actual_param_list.size() != symbol_table_list.size()){
+        cerr << "cs316: Error: Line: " << lineno << ": Actual and formal parameter count do not match\n";
+        exit(0);
+    }
+    list<Ast *>::iterator itr_ast = actual_param_list.begin();
+    for(list<Symbol_Table_Entry *>::iterator it = symbol_table_list.begin(); it != symbol_table_list.end(); it++)
+    {
+        if((*itr_ast).get_data_type() != (*it).get_data_type()){
+            cerr << "cs316: Error: Line: " << lineno << ": Actual and formal parameters data types are not matching\n";
+            exit(0);
+        }
+        itr_ast++;
+    }
+}
+
+void Call_Ast::set_actual_param_list(list<Ast *> & param_list)
+{
+    actual_param_list = param_list; 
+}
+
+void Call_Ast::print(ostream & file_buffer)
 {
     file_buffer << "\n"
-                << AST_SPACE << "Print :\n"
-                << AST_SUB_NODE_SPACE << "(";
-    var->print(file_buffer);
+                << AST_SPACE << "FN CALL: " << procedure_name << "(";
+
+    for(list<Symbol_Table_Entry *>::iterator it = symbol_table_list.begin(); it != symbol_table_list.end(); it++)
+    {
+        file_buffer << "\n" << AST_NODE_SPACE << "Name : " << (*it).get_variable_name();
+    }
     file_buffer << ")";
+}
+
+// Return Ast
+
+Return_Ast::Return_Ast(int line)
+{
+    lineno = line;
+    ast_num_child = unary_arity;
+}
+Return_Ast::~Return_Ast(){}
+
+Data_Type get_data_type()
+{
+    return return_value.get_data_type();
+}
+
+void Return_Ast::print(ostream &file_buffer)
+{
+    file_buffer << "\n"
+                << AST_SPACE << "RETURN ";
+    return_value->print(file_buffer);
 }

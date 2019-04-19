@@ -1,12 +1,12 @@
 int i1,i2;
-void func1();
+// void func1();
 float f1,f2;
-int func2(int,float,int);
+// int func2(int,float,int);
 int func2(float, float, int);
 float func3(float q,float r);
 int s;
-int func5(int a);
-// float func5(int a);
+// int func5(int a);
+float func5(int a);
 
 // check re definning a function
 int func4(){
@@ -37,7 +37,11 @@ float func3(float a,float b,float c){
 }
 
 void main(){
-	func1();
+	// i2 = func2(i1,f2,i2);
+	int a;
+	// int f4();
+
+	// func1(1, 2, 3);
 	// print i2; print f2;
 	i2 = func4();
 	// print i1; print i2;
@@ -46,7 +50,11 @@ void main(){
 	f2 = func3(1.0,f1,f2);
 	print f1; print f2;
 
-	i1 = func5(1);
+	// i1 = func5(1);
+
+	if(1 == 2){
+		a = 3;
+	}
 
 }
 
