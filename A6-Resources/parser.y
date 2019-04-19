@@ -7,8 +7,6 @@ extern int yylineno;
 Symbol_Table *local_symbol_table = new Symbol_Table();
 Symbol_Table *global_symbol_table = new Symbol_Table();
 
-// list<Ast*> *common_ast_list = new list<Ast*>;
-
 int glob_scop = 1;
 
 Data_Type sample_data_type;
@@ -50,15 +48,46 @@ Data_Type sample_data_type;
 %type <ast_list> statement_list
 
 %%
-program     :   global_variable_declaration_list
-                procedure_definition
+// program     :   global_variable_declaration_list
+//                 procedure_definition
+//                 {
+//                     program_object.set_procedure($2, yylineno);
+//                     program_object.set_global_table(*global_symbol_table);
+//                 }
+//             ;
+
+// procedure_definition    :   VOID NAME '(' ')'
+//                             '{'
+//                                 variable_declaration_list
+//                                 statement_list
+//                             '}'
+//                             {
+//                                 $6->set_table_scope(local);
+//                                 $$ = new Procedure(void_data_type, *($2), yylineno);
+//                                 $$->set_local_list(*local_symbol_table);
+//                                 $$->set_ast_list(*($7));
+//                             }
+//                         ;
+
+program     :   global_declaration_list
+                procedure_definition_list
                 {
-                    program_object.set_procedure($2, yylineno);
-                    program_object.set_global_table(*global_symbol_table);
+
                 }
             ;
 
-procedure_definition    :   VOID NAME '(' ')'
+procedure_definition_list   :   procedure_definition_list procedure_definition
+                                {
+
+                                }
+
+                            |   procedure_definition
+                                {
+
+                                }
+                            ;
+
+procedure_definition    :   return_type NAME '(' func_def_args_list ')'
                             '{'
                                 variable_declaration_list
                                 statement_list
@@ -71,12 +100,25 @@ procedure_definition    :   VOID NAME '(' ')'
                             }
                         ;
 
-global_variable_declaration_list :  variable_declaration_list
-                                    {
-                                        glob_scop = 0;
-                                        $1->set_table_scope(global);
-                                        $$ = $1;
-                                    }
+global_declaration_list :   global_declaration_list
+                            global_variable_declaration_list
+                            
+                        
+                        |   global_declaration_list
+                            global_func_declaration_list
+
+                        |   global_variable_declaration_list
+
+                        |   global_func_declaration_list
+
+                        ;
+
+// global_variable_declaration_list :  variable_declaration_list
+//                                     {
+//                                         glob_scop = 0;
+//                                         $1->set_table_scope(global);
+//                                         $$ = $1;
+//                                     }
 
 variable_declaration_list   :   variable_declaration_list
                                 variable_declaration
@@ -233,17 +275,6 @@ expression :   expression '*' expression
                     $$->set_data_type($2->get_data_type());
                 }
 
-            // |   '-' variable
-            //     {
-            //         $$ = new UMinus_Ast($2, NULL, yylineno);
-            //         $$->set_data_type($2->get_data_type());
-            //     }
-
-            // |   '-' constant
-            //     {
-            //         $$ = new UMinus_Ast($2, NULL, yylineno);
-            //         $$->set_data_type($2->get_data_type());
-            //     }
 
             |   '-' expression %prec '*'
                 {
@@ -386,7 +417,7 @@ relational_expr     :   expression LESS_THAN expression
                     |   expression NOT_EQUAL expression
                         {
                             $$ = new Relational_Expr_Ast($1, not_equalto, $3, yylineno);
-                            $$->check_ast();                            
+                            $$->check_ast();
                         }
 
                     |   '(' relational_expr ')'
@@ -412,3 +443,63 @@ sequence_list   :   '{'
 
                         $$ = seq_ast_body;
                     }
+
+function_declaration    :   return_type NAME '(' func_decl_args ')' ';'
+                            {
+
+                            }
+
+func_decl_args  :   /* empty */
+
+                |   type_var_list
+                    {
+
+                    }
+
+                |   type_list
+                    {
+
+                    }
+                ;
+                
+func_def_args   :   /* empty */
+                    {
+
+                    }
+
+                |   type_var_list
+                    {
+
+                    }
+                ;
+
+type_var_list   :   type_var_list, type variable
+                    {
+
+                    }
+
+                |   type variable
+                    {
+
+                    }
+
+                ;
+
+type_list   :   type_list, type
+                {
+
+                }
+
+            |   type
+                {
+
+                }
+            
+            ;
+
+return_stmt :   RETURN expression ';'
+                {
+                    $$ = new Return_Ast($2, "", yylineno); //TODO: check 2nd argument
+                }
+
+            ;
