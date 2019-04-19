@@ -286,14 +286,18 @@ void Compute_IC_Stmt::print_assembly(ostream &file_buffer) {
 }
 
 ///// Control_Flow_IC_Stmt //////////
-Control_Flow_IC_Stmt::Control_Flow_IC_Stmt(Tgt_Op inst, Ics_Opd *opd_1, string label_given){
+Control_Flow_IC_Stmt::Control_Flow_IC_Stmt(Tgt_Op inst, Ics_Opd *opd_1, Ics_Opd *opd_2, string label_given, int size)
+{
 	op_desc = *machine_desc_object.spim_instruction_table[inst];
 	opd1 = opd_1;
-	label = label_given;
+	opd2 = opd_2;
+	offset = label_given;
+	actual_param_size = size;
 }
 Control_Flow_IC_Stmt &Control_Flow_IC_Stmt::operator=(const Control_Flow_IC_Stmt &rhs){
 	opd1 = rhs.opd1;
-	label = rhs.label;
+	offset = rhs.offset;
+	actual_param_size = rhs.actual_param_size;
 }
 
 Instruction_Descriptor &Control_Flow_IC_Stmt::get_inst_op_of_ics(){
@@ -307,11 +311,18 @@ void Control_Flow_IC_Stmt::set_opd1(Ics_Opd *io){
 	opd1 = io;
 }
 
-string Control_Flow_IC_Stmt::get_label(){
-	return label;
+Ics_Opd *Control_Flow_IC_Stmt::get_opd2(){
+	return opd2;
 }
-void Control_Flow_IC_Stmt::set_label(string label_given){
-	label = label_given;
+void Control_Flow_IC_Stmt::set_opd2(Ics_Opd *io){
+	opd2 = io;
+}
+
+string Control_Flow_IC_Stmt::get_Offset(){
+	return offset;
+}
+void Control_Flow_IC_Stmt::set_Offset(string label_given){
+	offset = label_given;
 }
 
 void Control_Flow_IC_Stmt::print_icode(ostream &file_buffer){
@@ -320,11 +331,11 @@ void Control_Flow_IC_Stmt::print_icode(ostream &file_buffer){
 		op_desc.print_instruction_descriptor(file_buffer);
 		file_buffer << ":    \t";
 		opd1->print_ics_opd(file_buffer);
-		file_buffer << " , zero : goto " << label << "\n";
+		file_buffer << " , zero : goto " << offset << "\n";
 	}
 	else if (op_desc.get_ic_format() == i_op_st)
 	{
-		file_buffer << "\tgoto " << label << "\n";
+		file_buffer << "\tgoto " << offset << "\n";
 	}
 }
 void Control_Flow_IC_Stmt::print_assembly(ostream &file_buffer) {
@@ -332,17 +343,18 @@ void Control_Flow_IC_Stmt::print_assembly(ostream &file_buffer) {
 	{
 		file_buffer << "\t" << op_desc.get_mnemonic() << " ";
 		opd1->print_asm_opd(file_buffer);
-		file_buffer << ", $zero, " << label << " \n";
+		file_buffer << ", $zero, " << offset << " \n";
 	}
 	else if (op_desc.get_ic_format() == i_op_st)
 	{
-		file_buffer << "\t" << op_desc.get_mnemonic() << " " << label;
-		if(op_desc.get_mnemonic() == "j"){
-			file_buffer << "\n";
-		}
-		else{
-			file_buffer << " \n";
-		}
+		file_buffer << "\t" << op_desc.get_mnemonic() << " " << offset;
+		file_buffer << "\n";
+		// if(op_desc.get_mnemonic() == "j"){
+		// 	file_buffer << "\n";
+		// }
+		// else{
+		// 	file_buffer << " \n";
+		// }
 		
 	}
 }

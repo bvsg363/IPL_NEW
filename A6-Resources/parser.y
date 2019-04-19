@@ -8,6 +8,7 @@ Symbol_Table *local_symbol_table = new Symbol_Table();
 Symbol_Table *global_symbol_table = new Symbol_Table();
 
 int glob_scop = 1;
+string procedure_name;
 
 Data_Type sample_data_type;
 
@@ -40,29 +41,41 @@ Data_Type sample_data_type;
 %left   '*' '/'
 %right  NOT
 
+%right "then" ELSE
 
-%type <integer_value>   INTEGER_NUMBER type
+
+%type <integer_value>   INTEGER_NUMBER
 %type <double_value>     DOUBLE_NUMBER
 %type <procedure>    procedure_definition
 %type <string_value> NAME
 %type <ast> assignment_statement expression variable constant relational_expr logical_expr if_stmt while_stmt do_while_stmt single_stmt sequence_list print_stmt
 %type <ast> return_stmt function_call
-%type <symbol_table> variable_list variable_declaration variable_declaration_list global_variable_declaration_list func_decl_args func_def_args_list
+%type <symbol_table> variable_list variable_declaration variable_declaration_list func_args_list
 %type <ast_list> statement_list
 %type <procedure_list> procedure_definition_list
 %type <data_type> return_type
 
 %%
-// program     :   global_variable_declaration_list
-//                 procedure_definition
-//                 {
-//                     program_object.set_procedure($2, yylineno);
-//                     program_object.set_global_table(*global_symbol_table);
-//                 }
-//             ;
 
-program     :   global_declaration_list
-                procedure_definition_list
+program     :   total_code
+                {
+                    program_object.set_global_table(*global_symbol_table);
+                    if(!program_object.is_procedure_exists("main")){
+                        yyerror("cs316: Error : Main should be defined and it's type should be void");                                                
+                    }
+                }
+
+total_code  :   variable_declaration total_code 
+                {
+
+                }
+
+            |   function_declaration total_code
+                {
+
+                }
+
+            |   procedure_definition_list
                 {
 
                 }
@@ -71,126 +84,85 @@ program     :   global_declaration_list
 procedure_definition_list   :   procedure_definition_list
                                 procedure_definition
                                 {
-
+                                    // $1->push_back($2);
+                                    // $$ = $1;                                    
                                 }
 
                             |   procedure_definition
                                 {
-                                    $$ = new list<Procedure*>;
-                                    $$->push_back($1);
+                                    // $1->set_return_type(sample_data_type);
+                                    // $$ = new list<Procedure*>;
+                                    // $$->push_back($1);
+                                    // program_object.set_proc_to_map($1->get_proc_name(), $1);
                                 }
                             ;
 
-procedure_definition    :   return_type NAME '(' func_def_args_list ')'
+procedure_definition    :   return_type NAME '(' func_args_list ')'
                             '{'
+                            {
+                                glob_scop = 0;
+                            }
                                 variable_declaration_list
                                 statement_list
                             '}'
                             {
-                                $7->set_table_scope(local);
-                                $$ = new Procedure(void_data_type, *($2), yylineno);
-                                $$->set_local_list(*local_symbol_table);
-                                $$->set_ast_list(*($8));
-                                $$->set_formal_param_list(*($4));
-                                $$->set_return_type($1);
+                                $8->set_table_scope(local);
+                                Procedure* proc = new Procedure(void_data_type, *($2), yylineno);
+                                proc->set_local_list(*local_symbol_table);
+                                proc->set_ast_list(*($9));
+                                // cout << "13\n";
+                                // proc->set_formal_param_list(*($4));
+                                // cout << "14\n";
+                                // $$->set_return_type($1);
+                                program_object.set_proc_to_map(*($2), proc);
+                                $$ = proc;
+                                // cout << "15\n";
                             }
                         ;
 
-global_declaration_list :   global_declaration_list
-                            global_variable_declaration_list
-                            {
 
-                            }
-                            
-                        
-                        |   global_declaration_list
-                            global_func_declaration_list
-                            {
+function_declaration    :   return_type NAME '(' func_args_list ')' ';' /* No Actions */
 
-                            }
-
-                        |   /* empty */
-                            {
-
-                            }
+                        |   return_type NAME '(' type_list ')' ';'  /* No Actions */
                         ;
 
-global_func_declaration_list    :   global_func_declaration_list
-                                    function_declaration
-                                    {
-
-                                    }
-                                
-                                |   /* empty */
-                                    {
-
-                                    }
-                                ;
-
-global_variable_declaration_list :  variable_declaration_list
-                                    {
-                                        glob_scop = 0;
-                                        $1->set_table_scope(global);
-                                        $$ = $1;
-                                    }
-
-function_declaration    :   return_type NAME '(' func_decl_args ')' ';'
-                            {
-
-                            }
-
-func_decl_args  :   /* empty */
+func_args_list  :   /* empty */
                     {
 
                     }
 
                 |   type_var_list
-                    {
-
-                    }
-
-                |   type_list
                     {
 
                     }
                 ;
                 
-func_def_args_list   :   /* empty */
-                    {
 
-                    }
-
-                |   type_var_list
-                    {
-
-                    }
-                ;
-
-function_call   :   NAME '(' func_decl_args ')' ';'
+function_call   :   NAME '(' func_args_list ')' ';'
                     {
                         $$ = new Call_Ast(*($1), yylineno);  // TODO:
                         // $$->check_actual_formal_param($3);
                     }
                 ;
 
-type_var_list   :   type_var_list ',' type variable
+type_var_list   :   type_var_list ',' return_type variable
                     {
 
                     }
 
-                |   type variable
+                |   return_type variable
                     {
 
                     }
 
                 ;
 
-type_list   :   type_list ',' type
+type_list   :   type_list ',' return_type
                 {
 
                 }
 
-            |   type
+            |   return_type
                 {
 
                 }
@@ -200,16 +172,19 @@ type_list   :   type_list ',' type
 return_type :   INTEGER
                 {
                     $$ = int_data_type;
+                    sample_data_type = int_data_type;
                 }
             
             |   FLOAT
                 {
                     $$ = double_data_type;
+                    sample_data_type = double_data_type;
                 }
 
             |   VOID
                 {
                     $$ = void_data_type;
+                    sample_data_type = void_data_type;
                 }
             ;
 
@@ -226,22 +201,11 @@ variable_declaration_list   :   variable_declaration_list
                                 }
                             ;
 
-variable_declaration    :   type variable_list ';'
+variable_declaration    :   return_type variable_list ';'
                             {
                                 $$ = $2;
                             }
                         ;
-
-type    :   INTEGER
-            {
-                sample_data_type = int_data_type;
-            }
-
-        |   FLOAT
-            {
-                sample_data_type = double_data_type;
-            }
-        ;
 
 variable_list   :   NAME
                     {
@@ -315,6 +279,11 @@ single_stmt     :   assignment_statement
                     }
 
                 |   function_call
+                    {
+                        $$ = $1;
+                    }
+
+                |   return_stmt
                     {
                         $$ = $1;
                     }
@@ -423,7 +392,7 @@ constant    :   INTEGER_NUMBER
             ;
 
 if_stmt     :   IF '(' logical_expr ')'
-                    single_stmt
+                    single_stmt %prec "then"
                 {
                     $$ = new Selection_Statement_Ast($3, $5, NULL, yylineno);
                 }
@@ -522,11 +491,6 @@ relational_expr     :   expression LESS_THAN expression
                         {
                             $$ = new Relational_Expr_Ast($1, not_equalto, $3, yylineno);
                             $$->check_ast();
-                        }
-
-                    |   '(' relational_expr ')'
-                        {
-                            $$ = $2;
                         }
                     ;
 

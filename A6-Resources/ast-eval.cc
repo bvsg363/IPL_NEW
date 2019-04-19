@@ -530,6 +530,3 @@ Eval_Result & Call_Ast::evaluate(Local_Environment & eval_env, ostream & file_bu
 
 
 // Return Ast
-
-Eval_Result & Return_Ast::evaluate(Local_Environment & eval_env, ostream & file_buffer)
-{}

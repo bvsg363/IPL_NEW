@@ -1,0 +1,2025 @@
+Terminals unused in grammar
+
+   BBNUM
+   UMINUS
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: total_code
+
+    2 total_code: variable_declaration total_code
+    3           | function_declaration total_code
+    4           | procedure_definition_list
+
+    5 procedure_definition_list: procedure_definition_list procedure_definition
+    6                          | procedure_definition
+
+    7 $@1: %empty
+
+    8 procedure_definition: return_type NAME '(' func_args_list ')' '{' $@1 variable_declaration_list statement_list '}'
+
+    9 function_declaration: return_type NAME '(' func_args_list ')' ';'
+   10                     | return_type NAME '(' type_list ')' ';'
+
+   11 func_args_list: %empty
+   12               | type_var_list
+
+   13 function_call: NAME '(' func_args_list ')' ';'
+
+   14 type_var_list: type_var_list ',' return_type variable
+   15              | return_type variable
+
+   16 type_list: type_list ',' return_type
+   17          | return_type
+
+   18 return_type: INTEGER
+   19            | FLOAT
+   20            | VOID
+
+   21 variable_declaration_list: variable_declaration_list variable_declaration
+   22                          | %empty
+
+   23 variable_declaration: return_type variable_list ';'
+
+   24 variable_list: NAME
+   25              | variable_list ',' NAME
+
+   26 statement_list: %empty
+   27               | statement_list single_stmt
+
+   28 single_stmt: assignment_statement
+   29            | if_stmt
+   30            | while_stmt
+   31            | do_while_stmt
+   32            | sequence_list
+   33            | print_stmt
+   34            | function_call
+   35            | return_stmt
+
+   36 assignment_statement: variable ASSIGN expression ';'
+   37                     | variable ASSIGN function_call ';'
+
+   38 expression: expression '*' expression
+   39           | expression '/' expression
+   40           | expression '+' expression
+   41           | expression '-' expression
+   42           | variable
+   43           | constant
+   44           | '(' expression ')'
+   45           | '-' expression
+   46           | logical_expr '?' expression ':' expression
+
+   47 variable: NAME
+
+   48 constant: INTEGER_NUMBER
+   49         | DOUBLE_NUMBER
+
+   50 if_stmt: IF '(' logical_expr ')' single_stmt
+   51        | IF '(' logical_expr ')' single_stmt ELSE single_stmt
+
+   52 while_stmt: WHILE '(' logical_expr ')' single_stmt
+
+   53 do_while_stmt: DO single_stmt WHILE '(' logical_expr ')' ';'
+
+   54 print_stmt: PRINT variable ';'
+
+   55 logical_expr: logical_expr AND logical_expr
+   56             | logical_expr OR logical_expr
+   57             | NOT logical_expr
+   58             | '(' logical_expr ')'
+   59             | relational_expr
+
+   60 relational_expr: expression LESS_THAN expression
+   61                | expression LESS_THAN_EQUAL expression
+   62                | expression GREATER_THAN expression
+   63                | expression GREATER_THAN_EQUAL expression
+   64                | expression EQUAL expression
+   65                | expression NOT_EQUAL expression
+
+   66 sequence_list: '{' statement_list '}'
+
+   67 return_stmt: RETURN expression ';'
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 8 9 10 13 44 50 51 52 53 58
+')' (41) 8 9 10 13 44 50 51 52 53 58
+'*' (42) 38
+'+' (43) 40
+',' (44) 14 16 25
+'-' (45) 41 45
+'/' (47) 39
+':' (58) 46
+';' (59) 9 10 13 23 36 37 53 54 67
+'?' (63) 46
+'{' (123) 8 66
+'}' (125) 8 66
+error (256)
+INTEGER_NUMBER (258) 48
+BBNUM (259)
+DOUBLE_NUMBER (260) 49
+NAME (261) 8 9 10 13 24 25 47
+RETURN (262) 67
+INTEGER (263) 18
+FLOAT (264) 19
+ASSIGN (265) 36 37
+VOID (266) 20
+UMINUS (267)
+WHILE (268) 52 53
+GREATER_THAN (269) 62
+NOT_EQUAL (270) 65
+LESS_THAN (271) 60
+LESS_THAN_EQUAL (272) 61
+EQUAL (273) 64
+GREATER_THAN_EQUAL (274) 63
+IF (275) 50 51
+ELSE (276) 51
+DO (277) 53
+AND (278) 55
+OR (279) 56
+NOT (280) 57
+PRINT (281) 54
+"then" (282)
+
+
+Nonterminals, with rules where they appear
+
+$accept (40)
+    on left: 0
+program (41)
+    on left: 1, on right: 0
+total_code (42)
+    on left: 2 3 4, on right: 1 2 3
+procedure_definition_list (43)
+    on left: 5 6, on right: 4 5
+procedure_definition (44)
+    on left: 8, on right: 5 6
+$@1 (45)
+    on left: 7, on right: 8
+function_declaration (46)
+    on left: 9 10, on right: 3
+func_args_list (47)
+    on left: 11 12, on right: 8 9 13
+function_call (48)
+    on left: 13, on right: 34 37
+type_var_list (49)
+    on left: 14 15, on right: 12 14
+type_list (50)
+    on left: 16 17, on right: 10 16
+return_type (51)
+    on left: 18 19 20, on right: 8 9 10 14 15 16 17 23
+variable_declaration_list (52)
+    on left: 21 22, on right: 8 21
+variable_declaration (53)
+    on left: 23, on right: 2 21
+variable_list (54)
+    on left: 24 25, on right: 23 25
+statement_list (55)
+    on left: 26 27, on right: 8 27 66
+single_stmt (56)
+    on left: 28 29 30 31 32 33 34 35, on right: 27 50 51 52 53
+assignment_statement (57)
+    on left: 36 37, on right: 28
+expression (58)
+    on left: 38 39 40 41 42 43 44 45 46, on right: 36 38 39 40 41 44
+    45 46 60 61 62 63 64 65 67
+variable (59)
+    on left: 47, on right: 14 15 36 37 42 54
+constant (60)
+    on left: 48 49, on right: 43
+if_stmt (61)
+    on left: 50 51, on right: 29
+while_stmt (62)
+    on left: 52, on right: 30
+do_while_stmt (63)
+    on left: 53, on right: 31
+print_stmt (64)
+    on left: 54, on right: 33
+logical_expr (65)
+    on left: 55 56 57 58 59, on right: 46 50 51 52 53 55 56 57 58
+relational_expr (66)
+    on left: 60 61 62 63 64 65, on right: 59
+sequence_list (67)
+    on left: 66, on right: 32
+return_stmt (68)
+    on left: 67, on right: 35
+
+
+State 0
+
+    0 $accept: . program $end
+
+    INTEGER  shift, and go to state 1
+    FLOAT    shift, and go to state 2
+    VOID     shift, and go to state 3
+
+    program                    go to state 4
+    total_code                 go to state 5
+    procedure_definition_list  go to state 6
+    procedure_definition       go to state 7
+    function_declaration       go to state 8
+    return_type                go to state 9
+    variable_declaration       go to state 10
+
+
+State 1
+
+   18 return_type: INTEGER .
+
+    $default  reduce using rule 18 (return_type)
+
+
+State 2
+
+   19 return_type: FLOAT .
+
+    $default  reduce using rule 19 (return_type)
+
+
+State 3
+
+   20 return_type: VOID .
+
+    $default  reduce using rule 20 (return_type)
+
+
+State 4
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 11
+
+
+State 5
+
+    1 program: total_code .
+
+    $default  reduce using rule 1 (program)
+
+
+State 6
+
+    4 total_code: procedure_definition_list .
+    5 procedure_definition_list: procedure_definition_list . procedure_definition
+
+    INTEGER  shift, and go to state 1
+    FLOAT    shift, and go to state 2
+    VOID     shift, and go to state 3
+
+    $default  reduce using rule 4 (total_code)
+
+    procedure_definition  go to state 12
+    return_type           go to state 13
+
+
+State 7
+
+    6 procedure_definition_list: procedure_definition .
+
+    $default  reduce using rule 6 (procedure_definition_list)
+
+
+State 8
+
+    3 total_code: function_declaration . total_code
+
+    INTEGER  shift, and go to state 1
+    FLOAT    shift, and go to state 2
+    VOID     shift, and go to state 3
+
+    total_code                 go to state 14
+    procedure_definition_list  go to state 6
+    procedure_definition       go to state 7
+    function_declaration       go to state 8
+    return_type                go to state 9
+    variable_declaration       go to state 10
+
+
+State 9
+
+    8 procedure_definition: return_type . NAME '(' func_args_list ')' '{' $@1 variable_declaration_list statement_list '}'
+    9 function_declaration: return_type . NAME '(' func_args_list ')' ';'
+   10                     | return_type . NAME '(' type_list ')' ';'
+   23 variable_declaration: return_type . variable_list ';'
+
+    NAME  shift, and go to state 15
+
+    variable_list  go to state 16
+
+
+State 10
+
+    2 total_code: variable_declaration . total_code
+
+    INTEGER  shift, and go to state 1
+    FLOAT    shift, and go to state 2
+    VOID     shift, and go to state 3
+
+    total_code                 go to state 17
+    procedure_definition_list  go to state 6
+    procedure_definition       go to state 7
+    function_declaration       go to state 8
+    return_type                go to state 9
+    variable_declaration       go to state 10
+
+
+State 11
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 12
+
+    5 procedure_definition_list: procedure_definition_list procedure_definition .
+
+    $default  reduce using rule 5 (procedure_definition_list)
+
+
+State 13
+
+    8 procedure_definition: return_type . NAME '(' func_args_list ')' '{' $@1 variable_declaration_list statement_list '}'
+
+    NAME  shift, and go to state 18
+
+
+State 14
+
+    3 total_code: function_declaration total_code .
+
+    $default  reduce using rule 3 (total_code)
+
+
+State 15
+
+    8 procedure_definition: return_type NAME . '(' func_args_list ')' '{' $@1 variable_declaration_list statement_list '}'
+    9 function_declaration: return_type NAME . '(' func_args_list ')' ';'
+   10                     | return_type NAME . '(' type_list ')' ';'
+   24 variable_list: NAME .
+
+    '('  shift, and go to state 19
+
+    $default  reduce using rule 24 (variable_list)
+
+
+State 16
+
+   23 variable_declaration: return_type variable_list . ';'
+   25 variable_list: variable_list . ',' NAME
+
+    ';'  shift, and go to state 20
+    ','  shift, and go to state 21
+
+
+State 17
+
+    2 total_code: variable_declaration total_code .
+
+    $default  reduce using rule 2 (total_code)
+
+
+State 18
+
+    8 procedure_definition: return_type NAME . '(' func_args_list ')' '{' $@1 variable_declaration_list statement_list '}'
+
+    '('  shift, and go to state 22
+
+
+State 19
+
+    8 procedure_definition: return_type NAME '(' . func_args_list ')' '{' $@1 variable_declaration_list statement_list '}'
+    9 function_declaration: return_type NAME '(' . func_args_list ')' ';'
+   10                     | return_type NAME '(' . type_list ')' ';'
+
+    INTEGER  shift, and go to state 1
+    FLOAT    shift, and go to state 2
+    VOID     shift, and go to state 3
+
+    $default  reduce using rule 11 (func_args_list)
+
+    func_args_list  go to state 23
+    type_var_list   go to state 24
+    type_list       go to state 25
+    return_type     go to state 26
+
+
+State 20
+
+   23 variable_declaration: return_type variable_list ';' .
+
+    $default  reduce using rule 23 (variable_declaration)
+
+
+State 21
+
+   25 variable_list: variable_list ',' . NAME
+
+    NAME  shift, and go to state 27
+
+
+State 22
+
+    8 procedure_definition: return_type NAME '(' . func_args_list ')' '{' $@1 variable_declaration_list statement_list '}'
+
+    INTEGER  shift, and go to state 1
+    FLOAT    shift, and go to state 2
+    VOID     shift, and go to state 3
+
+    $default  reduce using rule 11 (func_args_list)
+
+    func_args_list  go to state 28
+    type_var_list   go to state 24
+    return_type     go to state 29
+
+
+State 23
+
+    8 procedure_definition: return_type NAME '(' func_args_list . ')' '{' $@1 variable_declaration_list statement_list '}'
+    9 function_declaration: return_type NAME '(' func_args_list . ')' ';'
+
+    ')'  shift, and go to state 30
+
+
+State 24
+
+   12 func_args_list: type_var_list .
+   14 type_var_list: type_var_list . ',' return_type variable
+
+    ','  shift, and go to state 31
+
+    $default  reduce using rule 12 (func_args_list)
+
+
+State 25
+
+   10 function_declaration: return_type NAME '(' type_list . ')' ';'
+   16 type_list: type_list . ',' return_type
+
+    ')'  shift, and go to state 32
+    ','  shift, and go to state 33
+
+
+State 26
+
+   15 type_var_list: return_type . variable
+   17 type_list: return_type .
+
+    NAME  shift, and go to state 34
+
+    $default  reduce using rule 17 (type_list)
+
+    variable  go to state 35
+
+
+State 27
+
+   25 variable_list: variable_list ',' NAME .
+
+    $default  reduce using rule 25 (variable_list)
+
+
+State 28
+
+    8 procedure_definition: return_type NAME '(' func_args_list . ')' '{' $@1 variable_declaration_list statement_list '}'
+
+    ')'  shift, and go to state 36
+
+
+State 29
+
+   15 type_var_list: return_type . variable
+
+    NAME  shift, and go to state 34
+
+    variable  go to state 35
+
+
+State 30
+
+    8 procedure_definition: return_type NAME '(' func_args_list ')' . '{' $@1 variable_declaration_list statement_list '}'
+    9 function_declaration: return_type NAME '(' func_args_list ')' . ';'
+
+    '{'  shift, and go to state 37
+    ';'  shift, and go to state 38
+
+
+State 31
+
+   14 type_var_list: type_var_list ',' . return_type variable
+
+    INTEGER  shift, and go to state 1
+    FLOAT    shift, and go to state 2
+    VOID     shift, and go to state 3
+
+    return_type  go to state 39
+
+
+State 32
+
+   10 function_declaration: return_type NAME '(' type_list ')' . ';'
+
+    ';'  shift, and go to state 40
+
+
+State 33
+
+   16 type_list: type_list ',' . return_type
+
+    INTEGER  shift, and go to state 1
+    FLOAT    shift, and go to state 2
+    VOID     shift, and go to state 3
+
+    return_type  go to state 41
+
+
+State 34
+
+   47 variable: NAME .
+
+    $default  reduce using rule 47 (variable)
+
+
+State 35
+
+   15 type_var_list: return_type variable .
+
+    $default  reduce using rule 15 (type_var_list)
+
+
+State 36
+
+    8 procedure_definition: return_type NAME '(' func_args_list ')' . '{' $@1 variable_declaration_list statement_list '}'
+
+    '{'  shift, and go to state 37
+
+
+State 37
+
+    8 procedure_definition: return_type NAME '(' func_args_list ')' '{' . $@1 variable_declaration_list statement_list '}'
+
+    $default  reduce using rule 7 ($@1)
+
+    $@1  go to state 42
+
+
+State 38
+
+    9 function_declaration: return_type NAME '(' func_args_list ')' ';' .
+
+    $default  reduce using rule 9 (function_declaration)
+
+
+State 39
+
+   14 type_var_list: type_var_list ',' return_type . variable
+
+    NAME  shift, and go to state 34
+
+    variable  go to state 43
+
+
+State 40
+
+   10 function_declaration: return_type NAME '(' type_list ')' ';' .
+
+    $default  reduce using rule 10 (function_declaration)
+
+
+State 41
+
+   16 type_list: type_list ',' return_type .
+
+    $default  reduce using rule 16 (type_list)
+
+
+State 42
+
+    8 procedure_definition: return_type NAME '(' func_args_list ')' '{' $@1 . variable_declaration_list statement_list '}'
+
+    $default  reduce using rule 22 (variable_declaration_list)
+
+    variable_declaration_list  go to state 44
+
+
+State 43
+
+   14 type_var_list: type_var_list ',' return_type variable .
+
+    $default  reduce using rule 14 (type_var_list)
+
+
+State 44
+
+    8 procedure_definition: return_type NAME '(' func_args_list ')' '{' $@1 variable_declaration_list . statement_list '}'
+   21 variable_declaration_list: variable_declaration_list . variable_declaration
+
+    INTEGER  shift, and go to state 1
+    FLOAT    shift, and go to state 2
+    VOID     shift, and go to state 3
+
+    $default  reduce using rule 26 (statement_list)
+
+    return_type           go to state 45
+    variable_declaration  go to state 46
+    statement_list        go to state 47
+
+
+State 45
+
+   23 variable_declaration: return_type . variable_list ';'
+
+    NAME  shift, and go to state 48
+
+    variable_list  go to state 16
+
+
+State 46
+
+   21 variable_declaration_list: variable_declaration_list variable_declaration .
+
+    $default  reduce using rule 21 (variable_declaration_list)
+
+
+State 47
+
+    8 procedure_definition: return_type NAME '(' func_args_list ')' '{' $@1 variable_declaration_list statement_list . '}'
+   27 statement_list: statement_list . single_stmt
+
+    NAME    shift, and go to state 49
+    RETURN  shift, and go to state 50
+    WHILE   shift, and go to state 51
+    IF      shift, and go to state 52
+    DO      shift, and go to state 53
+    PRINT   shift, and go to state 54
+    '{'     shift, and go to state 55
+    '}'     shift, and go to state 56
+
+    function_call         go to state 57
+    single_stmt           go to state 58
+    assignment_statement  go to state 59
+    variable              go to state 60
+    if_stmt               go to state 61
+    while_stmt            go to state 62
+    do_while_stmt         go to state 63
+    print_stmt            go to state 64
+    sequence_list         go to state 65
+    return_stmt           go to state 66
+
+
+State 48
+
+   24 variable_list: NAME .
+
+    $default  reduce using rule 24 (variable_list)
+
+
+State 49
+
+   13 function_call: NAME . '(' func_args_list ')' ';'
+   47 variable: NAME .
+
+    '('  shift, and go to state 67
+
+    $default  reduce using rule 47 (variable)
+
+
+State 50
+
+   67 return_stmt: RETURN . expression ';'
+
+    INTEGER_NUMBER  shift, and go to state 68
+    DOUBLE_NUMBER   shift, and go to state 69
+    NAME            shift, and go to state 34
+    NOT             shift, and go to state 70
+    '-'             shift, and go to state 71
+    '('             shift, and go to state 72
+
+    expression       go to state 73
+    variable         go to state 74
+    constant         go to state 75
+    logical_expr     go to state 76
+    relational_expr  go to state 77
+
+
+State 51
+
+   52 while_stmt: WHILE . '(' logical_expr ')' single_stmt
+
+    '('  shift, and go to state 78
+
+
+State 52
+
+   50 if_stmt: IF . '(' logical_expr ')' single_stmt
+   51        | IF . '(' logical_expr ')' single_stmt ELSE single_stmt
+
+    '('  shift, and go to state 79
+
+
+State 53
+
+   53 do_while_stmt: DO . single_stmt WHILE '(' logical_expr ')' ';'
+
+    NAME    shift, and go to state 49
+    RETURN  shift, and go to state 50
+    WHILE   shift, and go to state 51
+    IF      shift, and go to state 52
+    DO      shift, and go to state 53
+    PRINT   shift, and go to state 54
+    '{'     shift, and go to state 55
+
+    function_call         go to state 57
+    single_stmt           go to state 80
+    assignment_statement  go to state 59
+    variable              go to state 60
+    if_stmt               go to state 61
+    while_stmt            go to state 62
+    do_while_stmt         go to state 63
+    print_stmt            go to state 64
+    sequence_list         go to state 65
+    return_stmt           go to state 66
+
+
+State 54
+
+   54 print_stmt: PRINT . variable ';'
+
+    NAME  shift, and go to state 34
+
+    variable  go to state 81
+
+
+State 55
+
+   66 sequence_list: '{' . statement_list '}'
+
+    $default  reduce using rule 26 (statement_list)
+
+    statement_list  go to state 82
+
+
+State 56
+
+    8 procedure_definition: return_type NAME '(' func_args_list ')' '{' $@1 variable_declaration_list statement_list '}' .
+
+    $default  reduce using rule 8 (procedure_definition)
+
+
+State 57
+
+   34 single_stmt: function_call .
+
+    $default  reduce using rule 34 (single_stmt)
+
+
+State 58
+
+   27 statement_list: statement_list single_stmt .
+
+    $default  reduce using rule 27 (statement_list)
+
+
+State 59
+
+   28 single_stmt: assignment_statement .
+
+    $default  reduce using rule 28 (single_stmt)
+
+
+State 60
+
+   36 assignment_statement: variable . ASSIGN expression ';'
+   37                     | variable . ASSIGN function_call ';'
+
+    ASSIGN  shift, and go to state 83
+
+
+State 61
+
+   29 single_stmt: if_stmt .
+
+    $default  reduce using rule 29 (single_stmt)
+
+
+State 62
+
+   30 single_stmt: while_stmt .
+
+    $default  reduce using rule 30 (single_stmt)
+
+
+State 63
+
+   31 single_stmt: do_while_stmt .
+
+    $default  reduce using rule 31 (single_stmt)
+
+
+State 64
+
+   33 single_stmt: print_stmt .
+
+    $default  reduce using rule 33 (single_stmt)
+
+
+State 65
+
+   32 single_stmt: sequence_list .
+
+    $default  reduce using rule 32 (single_stmt)
+
+
+State 66
+
+   35 single_stmt: return_stmt .
+
+    $default  reduce using rule 35 (single_stmt)
+
+
+State 67
+
+   13 function_call: NAME '(' . func_args_list ')' ';'
+
+    INTEGER  shift, and go to state 1
+    FLOAT    shift, and go to state 2
+    VOID     shift, and go to state 3
+
+    $default  reduce using rule 11 (func_args_list)
+
+    func_args_list  go to state 84
+    type_var_list   go to state 24
+    return_type     go to state 29
+
+
+State 68
+
+   48 constant: INTEGER_NUMBER .
+
+    $default  reduce using rule 48 (constant)
+
+
+State 69
+
+   49 constant: DOUBLE_NUMBER .
+
+    $default  reduce using rule 49 (constant)
+
+
+State 70
+
+   57 logical_expr: NOT . logical_expr
+
+    INTEGER_NUMBER  shift, and go to state 68
+    DOUBLE_NUMBER   shift, and go to state 69
+    NAME            shift, and go to state 34
+    NOT             shift, and go to state 70
+    '-'             shift, and go to state 71
+    '('             shift, and go to state 72
+
+    expression       go to state 85
+    variable         go to state 74
+    constant         go to state 75
+    logical_expr     go to state 86
+    relational_expr  go to state 77
+
+
+State 71
+
+   45 expression: '-' . expression
+
+    INTEGER_NUMBER  shift, and go to state 68
+    DOUBLE_NUMBER   shift, and go to state 69
+    NAME            shift, and go to state 34
+    NOT             shift, and go to state 70
+    '-'             shift, and go to state 71
+    '('             shift, and go to state 72
+
+    expression       go to state 87
+    variable         go to state 74
+    constant         go to state 75
+    logical_expr     go to state 76
+    relational_expr  go to state 77
+
+
+State 72
+
+   44 expression: '(' . expression ')'
+   58 logical_expr: '(' . logical_expr ')'
+
+    INTEGER_NUMBER  shift, and go to state 68
+    DOUBLE_NUMBER   shift, and go to state 69
+    NAME            shift, and go to state 34
+    NOT             shift, and go to state 70
+    '-'             shift, and go to state 71
+    '('             shift, and go to state 72
+
+    expression       go to state 88
+    variable         go to state 74
+    constant         go to state 75
+    logical_expr     go to state 89
+    relational_expr  go to state 77
+
+
+State 73
+
+   38 expression: expression . '*' expression
+   39           | expression . '/' expression
+   40           | expression . '+' expression
+   41           | expression . '-' expression
+   60 relational_expr: expression . LESS_THAN expression
+   61                | expression . LESS_THAN_EQUAL expression
+   62                | expression . GREATER_THAN expression
+   63                | expression . GREATER_THAN_EQUAL expression
+   64                | expression . EQUAL expression
+   65                | expression . NOT_EQUAL expression
+   67 return_stmt: RETURN expression . ';'
+
+    GREATER_THAN        shift, and go to state 90
+    NOT_EQUAL           shift, and go to state 91
+    LESS_THAN           shift, and go to state 92
+    LESS_THAN_EQUAL     shift, and go to state 93
+    EQUAL               shift, and go to state 94
+    GREATER_THAN_EQUAL  shift, and go to state 95
+    '+'                 shift, and go to state 96
+    '-'                 shift, and go to state 97
+    '*'                 shift, and go to state 98
+    '/'                 shift, and go to state 99
+    ';'                 shift, and go to state 100
+
+
+State 74
+
+   42 expression: variable .
+
+    $default  reduce using rule 42 (expression)
+
+
+State 75
+
+   43 expression: constant .
+
+    $default  reduce using rule 43 (expression)
+
+
+State 76
+
+   46 expression: logical_expr . '?' expression ':' expression
+   55 logical_expr: logical_expr . AND logical_expr
+   56             | logical_expr . OR logical_expr
+
+    AND  shift, and go to state 101
+    OR   shift, and go to state 102
+    '?'  shift, and go to state 103
+
+
+State 77
+
+   59 logical_expr: relational_expr .
+
+    $default  reduce using rule 59 (logical_expr)
+
+
+State 78
+
+   52 while_stmt: WHILE '(' . logical_expr ')' single_stmt
+
+    INTEGER_NUMBER  shift, and go to state 68
+    DOUBLE_NUMBER   shift, and go to state 69
+    NAME            shift, and go to state 34
+    NOT             shift, and go to state 70
+    '-'             shift, and go to state 71
+    '('             shift, and go to state 72
+
+    expression       go to state 85
+    variable         go to state 74
+    constant         go to state 75
+    logical_expr     go to state 104
+    relational_expr  go to state 77
+
+
+State 79
+
+   50 if_stmt: IF '(' . logical_expr ')' single_stmt
+   51        | IF '(' . logical_expr ')' single_stmt ELSE single_stmt
+
+    INTEGER_NUMBER  shift, and go to state 68
+    DOUBLE_NUMBER   shift, and go to state 69
+    NAME            shift, and go to state 34
+    NOT             shift, and go to state 70
+    '-'             shift, and go to state 71
+    '('             shift, and go to state 72
+
+    expression       go to state 85
+    variable         go to state 74
+    constant         go to state 75
+    logical_expr     go to state 105
+    relational_expr  go to state 77
+
+
+State 80
+
+   53 do_while_stmt: DO single_stmt . WHILE '(' logical_expr ')' ';'
+
+    WHILE  shift, and go to state 106
+
+
+State 81
+
+   54 print_stmt: PRINT variable . ';'
+
+    ';'  shift, and go to state 107
+
+
+State 82
+
+   27 statement_list: statement_list . single_stmt
+   66 sequence_list: '{' statement_list . '}'
+
+    NAME    shift, and go to state 49
+    RETURN  shift, and go to state 50
+    WHILE   shift, and go to state 51
+    IF      shift, and go to state 52
+    DO      shift, and go to state 53
+    PRINT   shift, and go to state 54
+    '{'     shift, and go to state 55
+    '}'     shift, and go to state 108
+
+    function_call         go to state 57
+    single_stmt           go to state 58
+    assignment_statement  go to state 59
+    variable              go to state 60
+    if_stmt               go to state 61
+    while_stmt            go to state 62
+    do_while_stmt         go to state 63
+    print_stmt            go to state 64
+    sequence_list         go to state 65
+    return_stmt           go to state 66
+
+
+State 83
+
+   36 assignment_statement: variable ASSIGN . expression ';'
+   37                     | variable ASSIGN . function_call ';'
+
+    INTEGER_NUMBER  shift, and go to state 68
+    DOUBLE_NUMBER   shift, and go to state 69
+    NAME            shift, and go to state 49
+    NOT             shift, and go to state 70
+    '-'             shift, and go to state 71
+    '('             shift, and go to state 72
+
+    function_call    go to state 109
+    expression       go to state 110
+    variable         go to state 74
+    constant         go to state 75
+    logical_expr     go to state 76
+    relational_expr  go to state 77
+
+
+State 84
+
+   13 function_call: NAME '(' func_args_list . ')' ';'
+
+    ')'  shift, and go to state 111
+
+
+State 85
+
+   38 expression: expression . '*' expression
+   39           | expression . '/' expression
+   40           | expression . '+' expression
+   41           | expression . '-' expression
+   60 relational_expr: expression . LESS_THAN expression
+   61                | expression . LESS_THAN_EQUAL expression
+   62                | expression . GREATER_THAN expression
+   63                | expression . GREATER_THAN_EQUAL expression
+   64                | expression . EQUAL expression
+   65                | expression . NOT_EQUAL expression
+
+    GREATER_THAN        shift, and go to state 90
+    NOT_EQUAL           shift, and go to state 91
+    LESS_THAN           shift, and go to state 92
+    LESS_THAN_EQUAL     shift, and go to state 93
+    EQUAL               shift, and go to state 94
+    GREATER_THAN_EQUAL  shift, and go to state 95
+    '+'                 shift, and go to state 96
+    '-'                 shift, and go to state 97
+    '*'                 shift, and go to state 98
+    '/'                 shift, and go to state 99
+
+
+State 86
+
+   46 expression: logical_expr . '?' expression ':' expression
+   55 logical_expr: logical_expr . AND logical_expr
+   56             | logical_expr . OR logical_expr
+   57             | NOT logical_expr .
+
+    $default  reduce using rule 57 (logical_expr)
+
+
+State 87
+
+   38 expression: expression . '*' expression
+   39           | expression . '/' expression
+   40           | expression . '+' expression
+   41           | expression . '-' expression
+   45           | '-' expression .
+   60 relational_expr: expression . LESS_THAN expression
+   61                | expression . LESS_THAN_EQUAL expression
+   62                | expression . GREATER_THAN expression
+   63                | expression . GREATER_THAN_EQUAL expression
+   64                | expression . EQUAL expression
+   65                | expression . NOT_EQUAL expression
+
+    $default  reduce using rule 45 (expression)
+
+
+State 88
+
+   38 expression: expression . '*' expression
+   39           | expression . '/' expression
+   40           | expression . '+' expression
+   41           | expression . '-' expression
+   44           | '(' expression . ')'
+   60 relational_expr: expression . LESS_THAN expression
+   61                | expression . LESS_THAN_EQUAL expression
+   62                | expression . GREATER_THAN expression
+   63                | expression . GREATER_THAN_EQUAL expression
+   64                | expression . EQUAL expression
+   65                | expression . NOT_EQUAL expression
+
+    GREATER_THAN        shift, and go to state 90
+    NOT_EQUAL           shift, and go to state 91
+    LESS_THAN           shift, and go to state 92
+    LESS_THAN_EQUAL     shift, and go to state 93
+    EQUAL               shift, and go to state 94
+    GREATER_THAN_EQUAL  shift, and go to state 95
+    '+'                 shift, and go to state 96
+    '-'                 shift, and go to state 97
+    '*'                 shift, and go to state 98
+    '/'                 shift, and go to state 99
+    ')'                 shift, and go to state 112
+
+
+State 89
+
+   46 expression: logical_expr . '?' expression ':' expression
+   55 logical_expr: logical_expr . AND logical_expr
+   56             | logical_expr . OR logical_expr
+   58             | '(' logical_expr . ')'
+
+    AND  shift, and go to state 101
+    OR   shift, and go to state 102
+    '?'  shift, and go to state 103
+    ')'  shift, and go to state 113
+
+
+State 90
+
+   62 relational_expr: expression GREATER_THAN . expression
+
+    INTEGER_NUMBER  shift, and go to state 68
+    DOUBLE_NUMBER   shift, and go to state 69
+    NAME            shift, and go to state 34
+    NOT             shift, and go to state 70
+    '-'             shift, and go to state 71
+    '('             shift, and go to state 72
+
+    expression       go to state 114
+    variable         go to state 74
+    constant         go to state 75
+    logical_expr     go to state 76
+    relational_expr  go to state 77
+
+
+State 91
+
+   65 relational_expr: expression NOT_EQUAL . expression
+
+    INTEGER_NUMBER  shift, and go to state 68
+    DOUBLE_NUMBER   shift, and go to state 69
+    NAME            shift, and go to state 34
+    NOT             shift, and go to state 70
+    '-'             shift, and go to state 71
+    '('             shift, and go to state 72
+
+    expression       go to state 115
+    variable         go to state 74
+    constant         go to state 75
+    logical_expr     go to state 76
+    relational_expr  go to state 77
+
+
+State 92
+
+   60 relational_expr: expression LESS_THAN . expression
+
+    INTEGER_NUMBER  shift, and go to state 68
+    DOUBLE_NUMBER   shift, and go to state 69
+    NAME            shift, and go to state 34
+    NOT             shift, and go to state 70
+    '-'             shift, and go to state 71
+    '('             shift, and go to state 72
+
+    expression       go to state 116
+    variable         go to state 74
+    constant         go to state 75
+    logical_expr     go to state 76
+    relational_expr  go to state 77
+
+
+State 93
+
+   61 relational_expr: expression LESS_THAN_EQUAL . expression
+
+    INTEGER_NUMBER  shift, and go to state 68
+    DOUBLE_NUMBER   shift, and go to state 69
+    NAME            shift, and go to state 34
+    NOT             shift, and go to state 70
+    '-'             shift, and go to state 71
+    '('             shift, and go to state 72
+
+    expression       go to state 117
+    variable         go to state 74
+    constant         go to state 75
+    logical_expr     go to state 76
+    relational_expr  go to state 77
+
+
+State 94
+
+   64 relational_expr: expression EQUAL . expression
+
+    INTEGER_NUMBER  shift, and go to state 68
+    DOUBLE_NUMBER   shift, and go to state 69
+    NAME            shift, and go to state 34
+    NOT             shift, and go to state 70
+    '-'             shift, and go to state 71
+    '('             shift, and go to state 72
+
+    expression       go to state 118
+    variable         go to state 74
+    constant         go to state 75
+    logical_expr     go to state 76
+    relational_expr  go to state 77
+
+
+State 95
+
+   63 relational_expr: expression GREATER_THAN_EQUAL . expression
+
+    INTEGER_NUMBER  shift, and go to state 68
+    DOUBLE_NUMBER   shift, and go to state 69
+    NAME            shift, and go to state 34
+    NOT             shift, and go to state 70
+    '-'             shift, and go to state 71
+    '('             shift, and go to state 72
+
+    expression       go to state 119
+    variable         go to state 74
+    constant         go to state 75
+    logical_expr     go to state 76
+    relational_expr  go to state 77
+
+
+State 96
+
+   40 expression: expression '+' . expression
+
+    INTEGER_NUMBER  shift, and go to state 68
+    DOUBLE_NUMBER   shift, and go to state 69
+    NAME            shift, and go to state 34
+    NOT             shift, and go to state 70
+    '-'             shift, and go to state 71
+    '('             shift, and go to state 72
+
+    expression       go to state 120
+    variable         go to state 74
+    constant         go to state 75
+    logical_expr     go to state 76
+    relational_expr  go to state 77
+
+
+State 97
+
+   41 expression: expression '-' . expression
+
+    INTEGER_NUMBER  shift, and go to state 68
+    DOUBLE_NUMBER   shift, and go to state 69
+    NAME            shift, and go to state 34
+    NOT             shift, and go to state 70
+    '-'             shift, and go to state 71
+    '('             shift, and go to state 72
+
+    expression       go to state 121
+    variable         go to state 74
+    constant         go to state 75
+    logical_expr     go to state 76
+    relational_expr  go to state 77
+
+
+State 98
+
+   38 expression: expression '*' . expression
+
+    INTEGER_NUMBER  shift, and go to state 68
+    DOUBLE_NUMBER   shift, and go to state 69
+    NAME            shift, and go to state 34
+    NOT             shift, and go to state 70
+    '-'             shift, and go to state 71
+    '('             shift, and go to state 72
+
+    expression       go to state 122
+    variable         go to state 74
+    constant         go to state 75
+    logical_expr     go to state 76
+    relational_expr  go to state 77
+
+
+State 99
+
+   39 expression: expression '/' . expression
+
+    INTEGER_NUMBER  shift, and go to state 68
+    DOUBLE_NUMBER   shift, and go to state 69
+    NAME            shift, and go to state 34
+    NOT             shift, and go to state 70
+    '-'             shift, and go to state 71
+    '('             shift, and go to state 72
+
+    expression       go to state 123
+    variable         go to state 74
+    constant         go to state 75
+    logical_expr     go to state 76
+    relational_expr  go to state 77
+
+
+State 100
+
+   67 return_stmt: RETURN expression ';' .
+
+    $default  reduce using rule 67 (return_stmt)
+
+
+State 101
+
+   55 logical_expr: logical_expr AND . logical_expr
+
+    INTEGER_NUMBER  shift, and go to state 68
+    DOUBLE_NUMBER   shift, and go to state 69
+    NAME            shift, and go to state 34
+    NOT             shift, and go to state 70
+    '-'             shift, and go to state 71
+    '('             shift, and go to state 72
+
+    expression       go to state 85
+    variable         go to state 74
+    constant         go to state 75
+    logical_expr     go to state 124
+    relational_expr  go to state 77
+
+
+State 102
+
+   56 logical_expr: logical_expr OR . logical_expr
+
+    INTEGER_NUMBER  shift, and go to state 68
+    DOUBLE_NUMBER   shift, and go to state 69
+    NAME            shift, and go to state 34
+    NOT             shift, and go to state 70
+    '-'             shift, and go to state 71
+    '('             shift, and go to state 72
+
+    expression       go to state 85
+    variable         go to state 74
+    constant         go to state 75
+    logical_expr     go to state 125
+    relational_expr  go to state 77
+
+
+State 103
+
+   46 expression: logical_expr '?' . expression ':' expression
+
+    INTEGER_NUMBER  shift, and go to state 68
+    DOUBLE_NUMBER   shift, and go to state 69
+    NAME            shift, and go to state 34
+    NOT             shift, and go to state 70
+    '-'             shift, and go to state 71
+    '('             shift, and go to state 72
+
+    expression       go to state 126
+    variable         go to state 74
+    constant         go to state 75
+    logical_expr     go to state 76
+    relational_expr  go to state 77
+
+
+State 104
+
+   46 expression: logical_expr . '?' expression ':' expression
+   52 while_stmt: WHILE '(' logical_expr . ')' single_stmt
+   55 logical_expr: logical_expr . AND logical_expr
+   56             | logical_expr . OR logical_expr
+
+    AND  shift, and go to state 101
+    OR   shift, and go to state 102
+    '?'  shift, and go to state 103
+    ')'  shift, and go to state 127
+
+
+State 105
+
+   46 expression: logical_expr . '?' expression ':' expression
+   50 if_stmt: IF '(' logical_expr . ')' single_stmt
+   51        | IF '(' logical_expr . ')' single_stmt ELSE single_stmt
+   55 logical_expr: logical_expr . AND logical_expr
+   56             | logical_expr . OR logical_expr
+
+    AND  shift, and go to state 101
+    OR   shift, and go to state 102
+    '?'  shift, and go to state 103
+    ')'  shift, and go to state 128
+
+
+State 106
+
+   53 do_while_stmt: DO single_stmt WHILE . '(' logical_expr ')' ';'
+
+    '('  shift, and go to state 129
+
+
+State 107
+
+   54 print_stmt: PRINT variable ';' .
+
+    $default  reduce using rule 54 (print_stmt)
+
+
+State 108
+
+   66 sequence_list: '{' statement_list '}' .
+
+    $default  reduce using rule 66 (sequence_list)
+
+
+State 109
+
+   37 assignment_statement: variable ASSIGN function_call . ';'
+
+    ';'  shift, and go to state 130
+
+
+State 110
+
+   36 assignment_statement: variable ASSIGN expression . ';'
+   38 expression: expression . '*' expression
+   39           | expression . '/' expression
+   40           | expression . '+' expression
+   41           | expression . '-' expression
+   60 relational_expr: expression . LESS_THAN expression
+   61                | expression . LESS_THAN_EQUAL expression
+   62                | expression . GREATER_THAN expression
+   63                | expression . GREATER_THAN_EQUAL expression
+   64                | expression . EQUAL expression
+   65                | expression . NOT_EQUAL expression
+
+    GREATER_THAN        shift, and go to state 90
+    NOT_EQUAL           shift, and go to state 91
+    LESS_THAN           shift, and go to state 92
+    LESS_THAN_EQUAL     shift, and go to state 93
+    EQUAL               shift, and go to state 94
+    GREATER_THAN_EQUAL  shift, and go to state 95
+    '+'                 shift, and go to state 96
+    '-'                 shift, and go to state 97
+    '*'                 shift, and go to state 98
+    '/'                 shift, and go to state 99
+    ';'                 shift, and go to state 131
+
+
+State 111
+
+   13 function_call: NAME '(' func_args_list ')' . ';'
+
+    ';'  shift, and go to state 132
+
+
+State 112
+
+   44 expression: '(' expression ')' .
+
+    $default  reduce using rule 44 (expression)
+
+
+State 113
+
+   58 logical_expr: '(' logical_expr ')' .
+
+    $default  reduce using rule 58 (logical_expr)
+
+
+State 114
+
+   38 expression: expression . '*' expression
+   39           | expression . '/' expression
+   40           | expression . '+' expression
+   41           | expression . '-' expression
+   60 relational_expr: expression . LESS_THAN expression
+   61                | expression . LESS_THAN_EQUAL expression
+   62                | expression . GREATER_THAN expression
+   62                | expression GREATER_THAN expression .
+   63                | expression . GREATER_THAN_EQUAL expression
+   64                | expression . EQUAL expression
+   65                | expression . NOT_EQUAL expression
+
+    GREATER_THAN        shift, and go to state 90
+    NOT_EQUAL           shift, and go to state 91
+    LESS_THAN           shift, and go to state 92
+    LESS_THAN_EQUAL     shift, and go to state 93
+    EQUAL               shift, and go to state 94
+    GREATER_THAN_EQUAL  shift, and go to state 95
+    '+'                 shift, and go to state 96
+    '-'                 shift, and go to state 97
+    '*'                 shift, and go to state 98
+    '/'                 shift, and go to state 99
+
+    $default  reduce using rule 62 (relational_expr)
+
+
+State 115
+
+   38 expression: expression . '*' expression
+   39           | expression . '/' expression
+   40           | expression . '+' expression
+   41           | expression . '-' expression
+   60 relational_expr: expression . LESS_THAN expression
+   61                | expression . LESS_THAN_EQUAL expression
+   62                | expression . GREATER_THAN expression
+   63                | expression . GREATER_THAN_EQUAL expression
+   64                | expression . EQUAL expression
+   65                | expression . NOT_EQUAL expression
+   65                | expression NOT_EQUAL expression .
+
+    GREATER_THAN        shift, and go to state 90
+    NOT_EQUAL           shift, and go to state 91
+    LESS_THAN           shift, and go to state 92
+    LESS_THAN_EQUAL     shift, and go to state 93
+    EQUAL               shift, and go to state 94
+    GREATER_THAN_EQUAL  shift, and go to state 95
+    '+'                 shift, and go to state 96
+    '-'                 shift, and go to state 97
+    '*'                 shift, and go to state 98
+    '/'                 shift, and go to state 99
+
+    $default  reduce using rule 65 (relational_expr)
+
+
+State 116
+
+   38 expression: expression . '*' expression
+   39           | expression . '/' expression
+   40           | expression . '+' expression
+   41           | expression . '-' expression
+   60 relational_expr: expression . LESS_THAN expression
+   60                | expression LESS_THAN expression .
+   61                | expression . LESS_THAN_EQUAL expression
+   62                | expression . GREATER_THAN expression
+   63                | expression . GREATER_THAN_EQUAL expression
+   64                | expression . EQUAL expression
+   65                | expression . NOT_EQUAL expression
+
+    GREATER_THAN        shift, and go to state 90
+    NOT_EQUAL           shift, and go to state 91
+    LESS_THAN           shift, and go to state 92
+    LESS_THAN_EQUAL     shift, and go to state 93
+    EQUAL               shift, and go to state 94
+    GREATER_THAN_EQUAL  shift, and go to state 95
+    '+'                 shift, and go to state 96
+    '-'                 shift, and go to state 97
+    '*'                 shift, and go to state 98
+    '/'                 shift, and go to state 99
+
+    $default  reduce using rule 60 (relational_expr)
+
+
+State 117
+
+   38 expression: expression . '*' expression
+   39           | expression . '/' expression
+   40           | expression . '+' expression
+   41           | expression . '-' expression
+   60 relational_expr: expression . LESS_THAN expression
+   61                | expression . LESS_THAN_EQUAL expression
+   61                | expression LESS_THAN_EQUAL expression .
+   62                | expression . GREATER_THAN expression
+   63                | expression . GREATER_THAN_EQUAL expression
+   64                | expression . EQUAL expression
+   65                | expression . NOT_EQUAL expression
+
+    GREATER_THAN        shift, and go to state 90
+    NOT_EQUAL           shift, and go to state 91
+    LESS_THAN           shift, and go to state 92
+    LESS_THAN_EQUAL     shift, and go to state 93
+    EQUAL               shift, and go to state 94
+    GREATER_THAN_EQUAL  shift, and go to state 95
+    '+'                 shift, and go to state 96
+    '-'                 shift, and go to state 97
+    '*'                 shift, and go to state 98
+    '/'                 shift, and go to state 99
+
+    $default  reduce using rule 61 (relational_expr)
+
+
+State 118
+
+   38 expression: expression . '*' expression
+   39           | expression . '/' expression
+   40           | expression . '+' expression
+   41           | expression . '-' expression
+   60 relational_expr: expression . LESS_THAN expression
+   61                | expression . LESS_THAN_EQUAL expression
+   62                | expression . GREATER_THAN expression
+   63                | expression . GREATER_THAN_EQUAL expression
+   64                | expression . EQUAL expression
+   64                | expression EQUAL expression .
+   65                | expression . NOT_EQUAL expression
+
+    GREATER_THAN        shift, and go to state 90
+    NOT_EQUAL           shift, and go to state 91
+    LESS_THAN           shift, and go to state 92
+    LESS_THAN_EQUAL     shift, and go to state 93
+    EQUAL               shift, and go to state 94
+    GREATER_THAN_EQUAL  shift, and go to state 95
+    '+'                 shift, and go to state 96
+    '-'                 shift, and go to state 97
+    '*'                 shift, and go to state 98
+    '/'                 shift, and go to state 99
+
+    $default  reduce using rule 64 (relational_expr)
+
+
+State 119
+
+   38 expression: expression . '*' expression
+   39           | expression . '/' expression
+   40           | expression . '+' expression
+   41           | expression . '-' expression
+   60 relational_expr: expression . LESS_THAN expression
+   61                | expression . LESS_THAN_EQUAL expression
+   62                | expression . GREATER_THAN expression
+   63                | expression . GREATER_THAN_EQUAL expression
+   63                | expression GREATER_THAN_EQUAL expression .
+   64                | expression . EQUAL expression
+   65                | expression . NOT_EQUAL expression
+
+    GREATER_THAN        shift, and go to state 90
+    NOT_EQUAL           shift, and go to state 91
+    LESS_THAN           shift, and go to state 92
+    LESS_THAN_EQUAL     shift, and go to state 93
+    EQUAL               shift, and go to state 94
+    GREATER_THAN_EQUAL  shift, and go to state 95
+    '+'                 shift, and go to state 96
+    '-'                 shift, and go to state 97
+    '*'                 shift, and go to state 98
+    '/'                 shift, and go to state 99
+
+    $default  reduce using rule 63 (relational_expr)
+
+
+State 120
+
+   38 expression: expression . '*' expression
+   39           | expression . '/' expression
+   40           | expression . '+' expression
+   40           | expression '+' expression .
+   41           | expression . '-' expression
+   60 relational_expr: expression . LESS_THAN expression
+   61                | expression . LESS_THAN_EQUAL expression
+   62                | expression . GREATER_THAN expression
+   63                | expression . GREATER_THAN_EQUAL expression
+   64                | expression . EQUAL expression
+   65                | expression . NOT_EQUAL expression
+
+    '*'  shift, and go to state 98
+    '/'  shift, and go to state 99
+
+    $default  reduce using rule 40 (expression)
+
+
+State 121
+
+   38 expression: expression . '*' expression
+   39           | expression . '/' expression
+   40           | expression . '+' expression
+   41           | expression . '-' expression
+   41           | expression '-' expression .
+   60 relational_expr: expression . LESS_THAN expression
+   61                | expression . LESS_THAN_EQUAL expression
+   62                | expression . GREATER_THAN expression
+   63                | expression . GREATER_THAN_EQUAL expression
+   64                | expression . EQUAL expression
+   65                | expression . NOT_EQUAL expression
+
+    '*'  shift, and go to state 98
+    '/'  shift, and go to state 99
+
+    $default  reduce using rule 41 (expression)
+
+
+State 122
+
+   38 expression: expression . '*' expression
+   38           | expression '*' expression .
+   39           | expression . '/' expression
+   40           | expression . '+' expression
+   41           | expression . '-' expression
+   60 relational_expr: expression . LESS_THAN expression
+   61                | expression . LESS_THAN_EQUAL expression
+   62                | expression . GREATER_THAN expression
+   63                | expression . GREATER_THAN_EQUAL expression
+   64                | expression . EQUAL expression
+   65                | expression . NOT_EQUAL expression
+
+    $default  reduce using rule 38 (expression)
+
+
+State 123
+
+   38 expression: expression . '*' expression
+   39           | expression . '/' expression
+   39           | expression '/' expression .
+   40           | expression . '+' expression
+   41           | expression . '-' expression
+   60 relational_expr: expression . LESS_THAN expression
+   61                | expression . LESS_THAN_EQUAL expression
+   62                | expression . GREATER_THAN expression
+   63                | expression . GREATER_THAN_EQUAL expression
+   64                | expression . EQUAL expression
+   65                | expression . NOT_EQUAL expression
+
+    $default  reduce using rule 39 (expression)
+
+
+State 124
+
+   46 expression: logical_expr . '?' expression ':' expression
+   55 logical_expr: logical_expr . AND logical_expr
+   55             | logical_expr AND logical_expr .
+   56             | logical_expr . OR logical_expr
+
+    $default  reduce using rule 55 (logical_expr)
+
+
+State 125
+
+   46 expression: logical_expr . '?' expression ':' expression
+   55 logical_expr: logical_expr . AND logical_expr
+   56             | logical_expr . OR logical_expr
+   56             | logical_expr OR logical_expr .
+
+    AND  shift, and go to state 101
+
+    $default  reduce using rule 56 (logical_expr)
+
+
+State 126
+
+   38 expression: expression . '*' expression
+   39           | expression . '/' expression
+   40           | expression . '+' expression
+   41           | expression . '-' expression
+   46           | logical_expr '?' expression . ':' expression
+   60 relational_expr: expression . LESS_THAN expression
+   61                | expression . LESS_THAN_EQUAL expression
+   62                | expression . GREATER_THAN expression
+   63                | expression . GREATER_THAN_EQUAL expression
+   64                | expression . EQUAL expression
+   65                | expression . NOT_EQUAL expression
+
+    GREATER_THAN        shift, and go to state 90
+    NOT_EQUAL           shift, and go to state 91
+    LESS_THAN           shift, and go to state 92
+    LESS_THAN_EQUAL     shift, and go to state 93
+    EQUAL               shift, and go to state 94
+    GREATER_THAN_EQUAL  shift, and go to state 95
+    ':'                 shift, and go to state 133
+    '+'                 shift, and go to state 96
+    '-'                 shift, and go to state 97
+    '*'                 shift, and go to state 98
+    '/'                 shift, and go to state 99
+
+
+State 127
+
+   52 while_stmt: WHILE '(' logical_expr ')' . single_stmt
+
+    NAME    shift, and go to state 49
+    RETURN  shift, and go to state 50
+    WHILE   shift, and go to state 51
+    IF      shift, and go to state 52
+    DO      shift, and go to state 53
+    PRINT   shift, and go to state 54
+    '{'     shift, and go to state 55
+
+    function_call         go to state 57
+    single_stmt           go to state 134
+    assignment_statement  go to state 59
+    variable              go to state 60
+    if_stmt               go to state 61
+    while_stmt            go to state 62
+    do_while_stmt         go to state 63
+    print_stmt            go to state 64
+    sequence_list         go to state 65
+    return_stmt           go to state 66
+
+
+State 128
+
+   50 if_stmt: IF '(' logical_expr ')' . single_stmt
+   51        | IF '(' logical_expr ')' . single_stmt ELSE single_stmt
+
+    NAME    shift, and go to state 49
+    RETURN  shift, and go to state 50
+    WHILE   shift, and go to state 51
+    IF      shift, and go to state 52
+    DO      shift, and go to state 53
+    PRINT   shift, and go to state 54
+    '{'     shift, and go to state 55
+
+    function_call         go to state 57
+    single_stmt           go to state 135
+    assignment_statement  go to state 59
+    variable              go to state 60
+    if_stmt               go to state 61
+    while_stmt            go to state 62
+    do_while_stmt         go to state 63
+    print_stmt            go to state 64
+    sequence_list         go to state 65
+    return_stmt           go to state 66
+
+
+State 129
+
+   53 do_while_stmt: DO single_stmt WHILE '(' . logical_expr ')' ';'
+
+    INTEGER_NUMBER  shift, and go to state 68
+    DOUBLE_NUMBER   shift, and go to state 69
+    NAME            shift, and go to state 34
+    NOT             shift, and go to state 70
+    '-'             shift, and go to state 71
+    '('             shift, and go to state 72
+
+    expression       go to state 85
+    variable         go to state 74
+    constant         go to state 75
+    logical_expr     go to state 136
+    relational_expr  go to state 77
+
+
+State 130
+
+   37 assignment_statement: variable ASSIGN function_call ';' .
+
+    $default  reduce using rule 37 (assignment_statement)
+
+
+State 131
+
+   36 assignment_statement: variable ASSIGN expression ';' .
+
+    $default  reduce using rule 36 (assignment_statement)
+
+
+State 132
+
+   13 function_call: NAME '(' func_args_list ')' ';' .
+
+    $default  reduce using rule 13 (function_call)
+
+
+State 133
+
+   46 expression: logical_expr '?' expression ':' . expression
+
+    INTEGER_NUMBER  shift, and go to state 68
+    DOUBLE_NUMBER   shift, and go to state 69
+    NAME            shift, and go to state 34
+    NOT             shift, and go to state 70
+    '-'             shift, and go to state 71
+    '('             shift, and go to state 72
+
+    expression       go to state 137
+    variable         go to state 74
+    constant         go to state 75
+    logical_expr     go to state 76
+    relational_expr  go to state 77
+
+
+State 134
+
+   52 while_stmt: WHILE '(' logical_expr ')' single_stmt .
+
+    $default  reduce using rule 52 (while_stmt)
+
+
+State 135
+
+   50 if_stmt: IF '(' logical_expr ')' single_stmt .
+   51        | IF '(' logical_expr ')' single_stmt . ELSE single_stmt
+
+    ELSE  shift, and go to state 138
+
+    $default  reduce using rule 50 (if_stmt)
+
+
+State 136
+
+   46 expression: logical_expr . '?' expression ':' expression
+   53 do_while_stmt: DO single_stmt WHILE '(' logical_expr . ')' ';'
+   55 logical_expr: logical_expr . AND logical_expr
+   56             | logical_expr . OR logical_expr
+
+    AND  shift, and go to state 101
+    OR   shift, and go to state 102
+    '?'  shift, and go to state 103
+    ')'  shift, and go to state 139
+
+
+State 137
+
+   38 expression: expression . '*' expression
+   39           | expression . '/' expression
+   40           | expression . '+' expression
+   41           | expression . '-' expression
+   46           | logical_expr '?' expression ':' expression .
+   60 relational_expr: expression . LESS_THAN expression
+   61                | expression . LESS_THAN_EQUAL expression
+   62                | expression . GREATER_THAN expression
+   63                | expression . GREATER_THAN_EQUAL expression
+   64                | expression . EQUAL expression
+   65                | expression . NOT_EQUAL expression
+
+    GREATER_THAN        shift, and go to state 90
+    NOT_EQUAL           shift, and go to state 91
+    LESS_THAN           shift, and go to state 92
+    LESS_THAN_EQUAL     shift, and go to state 93
+    EQUAL               shift, and go to state 94
+    GREATER_THAN_EQUAL  shift, and go to state 95
+    '+'                 shift, and go to state 96
+    '-'                 shift, and go to state 97
+    '*'                 shift, and go to state 98
+    '/'                 shift, and go to state 99
+
+    $default  reduce using rule 46 (expression)
+
+
+State 138
+
+   51 if_stmt: IF '(' logical_expr ')' single_stmt ELSE . single_stmt
+
+    NAME    shift, and go to state 49
+    RETURN  shift, and go to state 50
+    WHILE   shift, and go to state 51
+    IF      shift, and go to state 52
+    DO      shift, and go to state 53
+    PRINT   shift, and go to state 54
+    '{'     shift, and go to state 55
+
+    function_call         go to state 57
+    single_stmt           go to state 140
+    assignment_statement  go to state 59
+    variable              go to state 60
+    if_stmt               go to state 61
+    while_stmt            go to state 62
+    do_while_stmt         go to state 63
+    print_stmt            go to state 64
+    sequence_list         go to state 65
+    return_stmt           go to state 66
+
+
+State 139
+
+   53 do_while_stmt: DO single_stmt WHILE '(' logical_expr ')' . ';'
+
+    ';'  shift, and go to state 141
+
+
+State 140
+
+   51 if_stmt: IF '(' logical_expr ')' single_stmt ELSE single_stmt .
+
+    $default  reduce using rule 51 (if_stmt)
+
+
+State 141
+
+   53 do_while_stmt: DO single_stmt WHILE '(' logical_expr ')' ';' .
+
+    $default  reduce using rule 53 (do_while_stmt)

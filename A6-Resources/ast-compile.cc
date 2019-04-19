@@ -336,14 +336,14 @@ Code_For_Ast & Conditional_Expression_Ast::compile(){
 	
 	Ics_Opd * o3 = new Register_Addr_Opd(condcfa.get_reg());
 	string lbl1 = get_new_label();
-	cfa.append_ics(*(new Control_Flow_IC_Stmt(beq, o3, lbl1)));
+	Ics_Opd *zr = new Register_Addr_Opd(machine_desc_object.spim_register_table[zero]);
+	cfa.append_ics(*(new Control_Flow_IC_Stmt(beq, o3, zr, lbl1))); // TODO: 3rd arg
 
 	for(list<Icode_Stmt *>::iterator it = lhsstmts.begin(); it != lhsstmts.end(); ++it){
 		cfa.append_ics(**it);
 	}
 
 	Ics_Opd * o4 = new Register_Addr_Opd(lhscfa.get_reg());
-	Ics_Opd * zr = new Register_Addr_Opd(machine_desc_object.spim_register_table[zero]);
 	if(node_data_type == int_data_type){
 		r = machine_desc_object.get_new_register<int_reg>();
 	} else{
@@ -353,7 +353,7 @@ Code_For_Ast & Conditional_Expression_Ast::compile(){
 	cfa.append_ics(*(new Compute_IC_Stmt(or_t, o4, zr, result)));
 
 	string lbl2 = get_new_label();
-	cfa.append_ics(*(new Control_Flow_IC_Stmt(j, zr, lbl2)));
+	cfa.append_ics(*(new Control_Flow_IC_Stmt(j, zr, zr, lbl2))); // TODO: 3rd arg
 
 	cfa.append_ics(*(new Label_IC_Stmt(label, lbl1)));
 
@@ -562,17 +562,18 @@ Code_For_Ast&Selection_Statement_Ast::compile(){
 
 	Ics_Opd * o3 = new Register_Addr_Opd(condcfa.get_reg());
 	string lbl1 = get_new_label();
+	Ics_Opd *zr = new Register_Addr_Opd(machine_desc_object.spim_register_table[zero]);
 
 	if(cond->get_data_type() == int_data_type){
-		cfa.append_ics(*(new Control_Flow_IC_Stmt(beq, o3, lbl1)));
+		cfa.append_ics(*(new Control_Flow_IC_Stmt(beq, o3, zr, lbl1)));
 	}
 	else{
 		Tgt_Op rel_operator = condstmts.back()->get_op().get_op(); //work
 		if (rel_operator == sle_d || rel_operator == slt_d || rel_operator == seq_d){
-			cfa.append_ics(*(new Control_Flow_IC_Stmt(bc1f, o3, lbl1)));
+			cfa.append_ics(*(new Control_Flow_IC_Stmt(bc1f, o3, zr, lbl1)));
 		}
 		else{
-			cfa.append_ics(*(new Control_Flow_IC_Stmt(bc1t, o3, lbl1)));
+			cfa.append_ics(*(new Control_Flow_IC_Stmt(bc1t, o3, zr, lbl1)));
 		}
 	}
 
@@ -583,11 +584,10 @@ Code_For_Ast&Selection_Statement_Ast::compile(){
 		cfa.append_ics(**it);
 	}
 
-	Ics_Opd * zr = new Register_Addr_Opd(machine_desc_object.spim_register_table[zero]);
 	string lbl2;
 	if(else_part != NULL){
 		lbl2 = get_new_label();
-		cfa.append_ics(*(new Control_Flow_IC_Stmt(j, zr, lbl2)));
+		cfa.append_ics(*(new Control_Flow_IC_Stmt(j, zr, zr, lbl2)));
 	}
 
 	cfa.append_ics(*(new Label_IC_Stmt(label, lbl1)));
@@ -632,7 +632,7 @@ Code_For_Ast&Iteration_Statement_Ast::compile(){
 
 	if (!is_do_form)
 	{
-		cfa.append_ics(*(new Control_Flow_IC_Stmt(j, zr, lbl2)));
+		cfa.append_ics(*(new Control_Flow_IC_Stmt(j, zr, zr, lbl2))); // TODO: check control flow statement args
 	}
 	cfa.append_ics(*(new Label_IC_Stmt(label, lbl1)));
 
@@ -651,15 +651,15 @@ Code_For_Ast&Iteration_Statement_Ast::compile(){
 	Ics_Opd *o3 = new Register_Addr_Opd(condcfa.get_reg());
 
 	if(cond->get_data_type() == int_data_type){
-		cfa.append_ics(*(new Control_Flow_IC_Stmt(bne, o3, lbl1)));
+		cfa.append_ics(*(new Control_Flow_IC_Stmt(bne, o3, zr, lbl1)));
 	}
 	else{
 		Tgt_Op rel_operator = condstmts.back()->get_op().get_op(); //work
 		if (rel_operator == sle_d || rel_operator == slt_d || rel_operator == seq_d){
-			cfa.append_ics(*(new Control_Flow_IC_Stmt(bc1t, o3, lbl1)));
+			cfa.append_ics(*(new Control_Flow_IC_Stmt(bc1t, o3, zr, lbl1)));
 		}
 		else{
-			cfa.append_ics(*(new Control_Flow_IC_Stmt(bc1f, o3, lbl1)));
+			cfa.append_ics(*(new Control_Flow_IC_Stmt(bc1f, o3, zr, lbl1)));
 		}
 	}
 	
@@ -728,6 +728,7 @@ Code_For_Ast &Print_Ast::compile(){
 
 // Call Ast
 Code_For_Ast & Call_Ast::compile(){}
+Code_For_Ast & Call_Ast::compile_and_optimize_ast(Lra_Outcome & lra){}
 
 // Return Ast
-Code_For_Ast & Return_Ast::compile(){}
+Code_For_Ast &Return_Astcompile_and_optimize_ast(Lra_Outcome &lra){}
