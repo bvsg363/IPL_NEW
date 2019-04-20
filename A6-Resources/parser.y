@@ -260,7 +260,7 @@ type_list   :   type_list ',' return_type
             
             ;
 
-return_type     :  INTEGER
+return_type     :   INTEGER
                     {
                         $$ = int_data_type;
                         sample_data_type = int_data_type;

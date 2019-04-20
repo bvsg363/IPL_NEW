@@ -333,7 +333,7 @@ void Control_Flow_IC_Stmt::print_icode(ostream &file_buffer){
 		opd1->print_ics_opd(file_buffer);
 		file_buffer << " , zero : goto " << offset << "\n";
 	}
-	else if (op_desc.get_ic_format() == i_op_st)
+	else if (op_desc.get_ic_format() == i_op_st && op_desc.get_mnemonic() != "j")
 	{
 		file_buffer << "\tgoto " << offset << "\n";
 	}
@@ -374,6 +374,7 @@ void Label_IC_Stmt::print_icode(ostream &file_buffer){
 	file_buffer<< "\n" << label << ":    \t\n";
 }
 void Label_IC_Stmt::print_assembly(ostream &file_buffer) {
+	// if(label == "return") return; //TODO: return in icode
 	file_buffer<< "\n" << label << ":    \t\n";
 }
 
