@@ -733,11 +733,6 @@ Code_For_Ast & Call_Ast::compile(){
 	int offset = 0;
 	Ics_Opd *stack_opd = new Register_Addr_Opd(machine_desc_object.spim_register_table[sp]);
 
-	// if(program_object.get_procedure_prototype(procedure_name)->is_proc_defined()){
-
-	// }
-
-	check_actual_formal_param(program_object.get_procedure_prototype(procedure_name)->get_formal_param_list());
 	for(list<Ast *>::iterator it = actual_param_list.begin(); it != actual_param_list.end(); it++)
     {
     	form_param_itr--;

@@ -74,10 +74,10 @@ extern int yydebug;
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-#line 18 "parser.y" /* yacc.c:1909  */
+#line 19 "parser.y" /* yacc.c:1909  */
 union YYSTYPE
 {
-#line 19 "parser.y" /* yacc.c:1909  */
+#line 20 "parser.y" /* yacc.c:1909  */
    int integer_value;
     double double_value;
     std::string * string_value;
@@ -92,7 +92,7 @@ union YYSTYPE
 
 #line 94 "parser.tab.h" /* yacc.c:1909  */
 };
-#line 18 "parser.y" /* yacc.c:1909  */
+#line 19 "parser.y" /* yacc.c:1909  */
 typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1

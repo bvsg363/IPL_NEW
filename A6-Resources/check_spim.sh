@@ -15,7 +15,7 @@ pass4=0
 fail4=0
 
 
-for i in $(find TestCases -name "test.c");
+for i in $(find TestCases -name "*test_case.c");
 do 
     if [ "$1" == "1" ]
     then
