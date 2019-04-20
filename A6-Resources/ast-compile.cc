@@ -760,15 +760,17 @@ Code_For_Ast & Call_Ast::compile_and_optimize_ast(Lra_Outcome & lra){}
 
 // Return Ast
 Code_For_Ast &Return_Ast::compile(){
+	
 	Code_For_Ast &cfa = *(new Code_For_Ast());
+	Code_For_Ast &returncfa = *(new Code_For_Ast());
 
 	if(return_value != NULL){
-		Code_For_Ast &returncfa = return_value->compile();
+		returncfa = return_value->compile();
 		list<Icode_Stmt *> &returnstmts = returncfa.get_icode_list();
 		for (list<Icode_Stmt *>::iterator it = returnstmts.begin(); it != returnstmts.end(); ++it){
 			cfa.append_ics(**it);
 		}
-		if(return_value.get_data_type() == int_data_type){
+		if(return_value->get_data_type() == int_data_type){
 			Register_Descriptor *rd = machine_desc_object.spim_register_table[v1];
 			Ics_Opd *result = new Register_Addr_Opd(rd);
 			Ics_Opd *o1 = new Register_Addr_Opd(returncfa.get_reg());
@@ -779,12 +781,13 @@ Code_For_Ast &Return_Ast::compile(){
 			Ics_Opd *o1 = new Register_Addr_Opd(returncfa.get_reg());
 			cfa.append_ics(*(new Move_IC_Stmt(move_d, o1, result)));
 		}
+		returncfa.get_reg()->reset_use_for_expr_result();
 	}
 
+
 	Ics_Opd *zr = new Register_Addr_Opd(machine_desc_object.spim_register_table[zero]);
-	cfa.append_ics(*(new Control_Flow_IC_Stmt(j, zr, zr, "epilogue_" + procedure_name)));
-	// cfa.append_ics(*(new Label_IC_Stmt(ret_inst, "return"))); //TODO: return in icode
-	returncfa.get_reg()->reset_use_for_expr_result();
+	cfa.append_ics(*(new Control_Flow_IC_Stmt(j, zr, zr, "epilogue_" + proc_name)));
+	cfa.append_ics(*(new Label_IC_Stmt(ret_inst, "return"))); //TODO: return in icode
 	return cfa;
 }
 Code_For_Ast &Return_Ast::compile_and_optimize_ast(Lra_Outcome &lra){}
