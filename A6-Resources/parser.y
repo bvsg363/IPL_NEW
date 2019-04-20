@@ -89,29 +89,32 @@ function_definition    :   return_type NAME '(' func_def_decl_args_list ')'
 
                             }
                                 variable_declaration_list
+                                {
+                                    Procedure* proc;
+
+                                    if(program_object.is_procedure_exists(*($2))){
+                                        proc = program_object.get_procedure_prototype(*($2));
+                                        if(proc->get_return_type() != $1){
+                                            cerr << "cs316: Error : Line: " <<  yylineno << ": return type in declaration and definition not matching\n";
+                                            exit(0);
+                                        }
+                                        proc->set_local_list(*local_symbol_table);
+                                        // proc->set_ast_list(*($9));
+                                        proc->set_formal_param_list(*($4));
+                                    }
+                                    else{
+                                        proc = new Procedure($1, *($2), yylineno);
+                                        proc->set_local_list(*local_symbol_table);
+                                        // proc->set_ast_list(*($9));
+                                        proc->set_formal_param_list(*($4));
+                                        program_object.set_proc_to_map(*($2), proc);
+                                    }
+
+                                }
                                 statement_list
                             '}'
                             {
-                                Procedure* proc;
-
-                                if(program_object.is_procedure_exists(*($2))){
-                                    proc = program_object.get_procedure_prototype(*($2));
-                                    if(proc->get_return_type() != $1){
-                                        cerr << "cs316: Error : Line: " <<  yylineno << ": return type in declaration and definition not matching\n";
-                                        exit(0);
-                                    }
-                                    proc->set_local_list(*local_symbol_table);
-                                    proc->set_ast_list(*($9));
-                                    proc->set_formal_param_list(*($4));
-                                }
-                                else{
-                                    proc = new Procedure($1, *($2), yylineno);
-                                    proc->set_local_list(*local_symbol_table);
-                                    proc->set_ast_list(*($9));
-                                    proc->set_formal_param_list(*($4));
-                                    program_object.set_proc_to_map(*($2), proc);
-                                }
-
+                                program_object.get_procedure_prototype(*($2))->set_ast_list(*($10));
                                 local_symbol_table = new Symbol_Table();
                             }
                         ;
@@ -447,8 +450,13 @@ expression :   expression '*' expression
 variable    :   NAME
                 {
                     string s = *($1) + "_";
+                    Symbol_Table &formal_param_list = program_object.get_procedure_prototype(present_procedure_name)->get_formal_param_list();
+                    // cout << present_procedure_name << "\n";
                     if(local_symbol_table->variable_in_symbol_list_check(s)){
                         $$ = new Name_Ast(s, local_symbol_table->get_symbol_table_entry(s), yylineno);
+                    }
+                    else if(formal_param_list.variable_in_symbol_list_check(s)){
+                        $$ = new Name_Ast(s, formal_param_list.get_symbol_table_entry(s), yylineno);
                     }
                     else if(global_symbol_table->variable_in_symbol_list_check(s)){
                         $$ = new Name_Ast(s, global_symbol_table->get_symbol_table_entry(s), yylineno);
