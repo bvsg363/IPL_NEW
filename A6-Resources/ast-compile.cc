@@ -730,9 +730,13 @@ Code_For_Ast & Call_Ast::compile(){
 	list<Symbol_Table_Entry *> &formal_param_list = program_object.get_procedure_prototype(procedure_name)->get_formal_param_list().get_table();
 
 	list<Symbol_Table_Entry *>::iterator form_param_itr = formal_param_list.end();
+	list<Ast *>::iterator it = actual_param_list.end();
+	int offset = 0;
 
-	for(list<Ast *>::iterator it = actual_param_list.end(); it != actual_param_list.begin(); it--)
+	for(list<Ast *>::iterator it_dummy = actual_param_list.begin(); it_dummy != actual_param_list.end(); it_dummy++)
     {
+    	form_param_itr--;
+    	it--;
 		Code_For_Ast &argcfa = (*it)->compile();
 		list<Icode_Stmt *> &argstmts = argcfa.get_icode_list();
 
@@ -746,13 +750,33 @@ Code_For_Ast & Call_Ast::compile(){
 
 		if((*it)->get_data_type() == int_data_type){
 			cfa.append_ics(*(new Move_IC_Stmt(load, o1, result)));
+			Symbol_Table_Entry * sym = new Symbol_Table_Entry(s, sample_data_type, yylineno);
+			offset -= 4;
 		}
 		else{
 			cfa.append_ics(*(new Move_IC_Stmt(load_d, o1, result)));
+			offset -= 8;
 		}
-
-		form_param_itr--;		
 	}
+
+	Ics_Opd *zr = new Register_Addr_Opd(machine_desc_object.spim_register_table[zero]);
+	cfa.append_ics(*(new Control_Flow_IC_Stmt(jal, zr, zr, procedure_name)));
+
+	Register_Descriptor *rd;
+	if(get_data_type() == int_data_type){
+		rd = machine_desc_object.get_new_register<int_reg>();
+		Register_Descriptor *ret_reg = machine_desc_object.spim_register_table[v1];
+		Ics_Opd *result = new Register_Addr_Opd(rd);
+		Ics_Opd *o1 = new Register_Addr_Opd(ret_reg);
+		cfa.append_ics(*(new Move_IC_Stmt(mov, o1, result)));
+	} else{
+		rd = machine_desc_object.get_new_register<float_reg>();
+		Register_Descriptor *ret_reg = machine_desc_object.spim_register_table[f0];
+		Ics_Opd *result = new Register_Addr_Opd(rd);
+		Ics_Opd *o1 = new Register_Addr_Opd(ret_reg);
+		cfa.append_ics(*(new Move_IC_Stmt(move_d, o1, result)));
+	}
+	cfa.set_reg(rd);
 	// --------------------------------------------
 	return cfa;
 }

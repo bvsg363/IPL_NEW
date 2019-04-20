@@ -608,14 +608,15 @@ void Call_Ast::check_actual_formal_param(Symbol_Table & formal_param_list)
         cerr << "cs316: Error: Line: " << lineno << ": Actual and formal parameter count do not match\n";
         exit(0);
     }
-    list<Ast *>::iterator itr_ast = actual_param_list.begin();
+    list<Ast *>::iterator itr_ast = actual_param_list.end();
     for(list<Symbol_Table_Entry *>::iterator it = symbol_table_list.begin(); it != symbol_table_list.end(); it++)
     {
+        itr_ast--;
+        // printf("%d %d\n", (*itr_ast)->get_data_type(), (*it)->get_data_type());
         if((*itr_ast)->get_data_type() != (*it)->get_data_type()){
             cerr << "cs316: Error: Line: " << lineno << ": Actual and formal parameters data types are not matching\n";
             exit(0);
         }
-        itr_ast++;
     }
 }
 

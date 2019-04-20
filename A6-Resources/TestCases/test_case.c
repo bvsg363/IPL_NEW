@@ -51,7 +51,7 @@ void main(){
 	// f2 = func3(1.0,f1,f2);
 	print f1; print f2;
 	a = func2(f1, f2, i1);
-	f1 = func5(1);
+	// f1 = func5(1);
 
 	a = i1;
 	if(a == 1){
