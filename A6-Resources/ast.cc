@@ -658,6 +658,7 @@ void Return_Ast::print(ostream &file_buffer)
                 << AST_SPACE << "RETURN ";
     if(return_value != NULL){
         return_value->print(file_buffer);
+        file_buffer << "\n";
     }
     else{
         file_buffer << "<NOTHING>\n";
