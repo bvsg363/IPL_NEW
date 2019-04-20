@@ -724,7 +724,36 @@ Code_For_Ast &Print_Ast::compile(){
 // Call Ast
 Code_For_Ast & Call_Ast::compile(){
 	Code_For_Ast &cfa = *(new Code_For_Ast());
-	cout << "2\n";
+	// cout << "2\n";
+
+	// ------------compiling each argument ---------
+	list<Symbol_Table_Entry *> &formal_param_list = program_object.get_procedure_prototype(procedure_name)->get_formal_param_list().get_table();
+
+	list<Symbol_Table_Entry *>::iterator form_param_itr = formal_param_list.end();
+
+	for(list<Ast *>::iterator it = actual_param_list.end(); it != actual_param_list.begin(); it--)
+    {
+		Code_For_Ast &argcfa = (*it)->compile();
+		list<Icode_Stmt *> &argstmts = argcfa.get_icode_list();
+
+		for(list<Icode_Stmt *>::iterator itr = argstmts.begin(); itr != argstmts.end(); ++itr){
+			cfa.append_ics(**itr);
+		}
+
+		Ics_Opd *result = new Mem_Addr_Opd(**form_param_itr);
+		Ics_Opd *o1 = new Register_Addr_Opd(argcfa.get_reg());
+
+
+		if((*it)->get_data_type() == int_data_type){
+			cfa.append_ics(*(new Move_IC_Stmt(load, o1, result)));
+		}
+		else{
+			cfa.append_ics(*(new Move_IC_Stmt(load_d, o1, result)));
+		}
+
+		form_param_itr--;		
+	}
+	// --------------------------------------------
 	return cfa;
 }
 Code_For_Ast & Call_Ast::compile_and_optimize_ast(Lra_Outcome & lra){}

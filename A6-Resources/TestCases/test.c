@@ -6,10 +6,11 @@ int k;
 // int gln(int, int);
 int func(int a, int b);
 int fun(int a , int k){
-    // f(1, 2, 3);
+    // return 1;
 }
 void main2(float h){
     int a;
+    // return;
 
 }
 void main(){
@@ -17,8 +18,8 @@ void main(){
     int a;
     a = 2;
     g = 6.0;
-    // a = func(1, 2);
-    return;
+    func(1, 2);
+    // return;
 }
 
 // int func(int b){
