@@ -28,3 +28,5 @@ A6-Resources/TestCases/*.ic
 A6-Resources/TestCases/*.eval
 A6-Resources/TestCases/*.sym
 A6-Resources/y.output
+A6-Resources/y.tab.h
+A6-Resources/y.tab.c

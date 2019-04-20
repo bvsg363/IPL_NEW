@@ -108,8 +108,7 @@ do
     fi
 
 done
-#rm test_ast_old.txt
-#rm test_ast_new.txt
+# rm *.txt
 
 echo -e "Passed Cases $pass ast"
 echo -e "Failed Cases $fail ast\n"

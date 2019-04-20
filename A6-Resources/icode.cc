@@ -349,13 +349,6 @@ void Control_Flow_IC_Stmt::print_assembly(ostream &file_buffer) {
 	{
 		file_buffer << "\t" << op_desc.get_mnemonic() << " " << offset;
 		file_buffer << "\n";
-		// if(op_desc.get_mnemonic() == "j"){
-		// 	file_buffer << "\n";
-		// }
-		// else{
-		// 	file_buffer << " \n";
-		// }
-		
 	}
 }
 
