@@ -644,6 +644,7 @@ Return_Ast::Return_Ast(Ast *ret_val, string name, int line)
     lineno = line;
     ast_num_child = unary_arity;
     return_value = ret_val;
+    proc_name = name;
 }
 Return_Ast::~Return_Ast(){}
 
@@ -658,6 +659,7 @@ void Return_Ast::print(ostream &file_buffer)
                 << AST_SPACE << "RETURN ";
     if(return_value != NULL){
         return_value->print(file_buffer);
+        file_buffer << "\n";
     }
     else{
         file_buffer << "<NOTHING>\n";
