@@ -644,6 +644,7 @@ Return_Ast::Return_Ast(Ast *ret_val, string name, int line)
     lineno = line;
     ast_num_child = unary_arity;
     return_value = ret_val;
+    proc_name = name;
 }
 Return_Ast::~Return_Ast(){}
 

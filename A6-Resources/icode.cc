@@ -371,10 +371,15 @@ void Label_IC_Stmt::set_label(string label_given){
 }
 
 void Label_IC_Stmt::print_icode(ostream &file_buffer){
-	file_buffer<< "\n" << label << ":    \t\n";
+	if (label == "return"){
+		file_buffer << "\t" << label << "\n";
+	}
+	else{
+		file_buffer << "\t" << label << ":    \t\n";
+	}
 }
 void Label_IC_Stmt::print_assembly(ostream &file_buffer) {
-	// if(label == "return") return; //TODO: return in icode
+	if(label == "return") return; //TODO: return in icode
 	file_buffer<< "\n" << label << ":    \t\n";
 }
 

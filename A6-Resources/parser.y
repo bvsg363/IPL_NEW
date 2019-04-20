@@ -63,7 +63,6 @@ program     :   total_code
                         cerr << "cs316: Error : Line: " <<  yylineno << ": Main should be defined and it's type should be void\n";
                         exit(0);
                     }
-                    // cout << "exit\n";
                 }
 
 total_code  :   variable_declaration total_code  /* No Actions */
