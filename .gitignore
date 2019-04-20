@@ -15,10 +15,16 @@ A5Resources/*.eval
 A5Resources/*.sym
 A5Resources/*.ast
 
-A6-Resources/*.txt
 A6-Resources/sclp_new
+A6-Resources/*.txt
 A6-Resources/*.spim
 A6-Resources/*.ic
 A6-Resources/*.eval
 A6-Resources/*.sym
 A6-Resources/*.ast
+A6-Resources/TestCases/*.ast
+A6-Resources/TestCases/*.spim
+A6-Resources/TestCases/*.ic
+A6-Resources/TestCases/*.eval
+A6-Resources/TestCases/*.sym
+A6-Resources/y.output

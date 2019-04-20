@@ -375,11 +375,6 @@ Code_For_Ast & Conditional_Expression_Ast::compile(){
 	// ToDo free the lhs register
 }
 
-// Return Ast
-
-Code_For_Ast & Return_Ast::compile(){}
-Code_For_Ast & Return_Ast::compile_and_optimize_ast(Lra_Outcome & lra){}
-
 
 // Relational Expr Ast
 
@@ -727,8 +722,19 @@ Code_For_Ast &Print_Ast::compile(){
 }
 
 // Call Ast
-Code_For_Ast & Call_Ast::compile(){}
+Code_For_Ast & Call_Ast::compile(){
+	Code_For_Ast &cfa = *(new Code_For_Ast());
+	cout << "2\n";
+	return cfa;
+}
 Code_For_Ast & Call_Ast::compile_and_optimize_ast(Lra_Outcome & lra){}
 
 // Return Ast
-Code_For_Ast &Return_Astcompile_and_optimize_ast(Lra_Outcome &lra){}
+Code_For_Ast &Return_Ast::compile(){
+	Code_For_Ast &cfa = *(new Code_For_Ast());
+	// cout << "1\n";
+	return cfa;
+}
+Code_For_Ast &Return_Ast::compile_and_optimize_ast(Lra_Outcome &lra){
+
+}

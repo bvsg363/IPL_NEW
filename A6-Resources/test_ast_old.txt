@@ -1,4 +1,10 @@
 Program:
+   Procedure: fun_, Return Type: INT
+	a_  Type:INT
+	k_  Type:INT
+   Procedure: func_, Return Type: INT
+	a_  Type:INT
+	b_  Type:INT
    Procedure: main, Return Type: VOID
 
          Asgn:
@@ -7,3 +13,6 @@ Program:
          Asgn:
             LHS (Name : g_)
             RHS (Num : 6.00)
+         RETURN <NOTHING>
+   Procedure: main2_, Return Type: VOID
+	h_  Type:FLOAT

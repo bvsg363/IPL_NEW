@@ -592,8 +592,8 @@ Call_Ast::Call_Ast(string name, int line)
 
 Data_Type Call_Ast::get_data_type()
 {
-    // Procedure * p = get_procedure_prototype(procedure_name);
-    // return p.get_return_type();
+    Procedure * p = program_object.get_procedure_prototype(procedure_name);
+    return p->get_return_type();
 }
 
 void Call_Ast::set_register(Register_Descriptor * reg)
@@ -629,12 +629,11 @@ void Call_Ast::print(ostream & file_buffer)
     file_buffer << "\n"
                 << AST_SPACE << "FN CALL: " << procedure_name << "("; //TODO: iterate over actual_param_list
 
-    // list<Symbol_Table_Entry *> &symbol_table_list = actual_param_list;
 
-    // for(list<Symbol_Table_Entry *>::iterator it = symbol_table_list.begin(); it != symbol_table_list.end(); it++)
-    // {
-    //     file_buffer << "\n" << AST_NODE_SPACE << "Name : " << (*it).get_variable_name();
-    // }
+    for(list<Ast *>::iterator it = actual_param_list.begin(); it != actual_param_list.end(); it++)
+    {
+        file_buffer << "\n" << AST_NODE_SPACE << "Name : " << (*it)->get_symbol_entry().get_variable_name();
+    }
     file_buffer << ")";
 }
 
@@ -657,5 +656,11 @@ void Return_Ast::print(ostream &file_buffer)
 {
     file_buffer << "\n"
                 << AST_SPACE << "RETURN ";
-    return_value->print(file_buffer);
+    if(return_value != NULL){
+        return_value->print(file_buffer);
+    }
+    else{
+        file_buffer << "<NOTHING>\n";
+    }
+    
 }

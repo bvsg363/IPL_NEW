@@ -8,7 +8,8 @@ Symbol_Table *local_symbol_table = new Symbol_Table();
 Symbol_Table *global_symbol_table = new Symbol_Table();
 
 int glob_scop = 1;
-string procedure_name;
+string present_procedure_name;
+Data_Type present_procedure_return_type;
 
 Data_Type sample_data_type;
 
@@ -46,13 +47,11 @@ Data_Type sample_data_type;
 
 %type <integer_value>   INTEGER_NUMBER
 %type <double_value>     DOUBLE_NUMBER
-%type <procedure>    procedure_definition
 %type <string_value> NAME
 %type <ast> assignment_statement expression variable constant relational_expr logical_expr if_stmt while_stmt do_while_stmt single_stmt sequence_list print_stmt
-%type <ast> return_stmt function_call
-%type <symbol_table> variable_list variable_declaration variable_declaration_list func_args_list
-%type <ast_list> statement_list
-%type <procedure_list> procedure_definition_list
+%type <ast> return_stmt function_call func_arg
+%type <symbol_table> variable_list variable_declaration variable_declaration_list func_def_decl_args_list type_var_list type_list
+%type <ast_list> statement_list func_call_args_list func_call_args_list1
 %type <data_type> return_type
 
 %%
@@ -60,132 +59,224 @@ Data_Type sample_data_type;
 program     :   total_code
                 {
                     program_object.set_global_table(*global_symbol_table);
-                    if(!program_object.is_procedure_exists("main")){
-                        yyerror("cs316: Error : Main should be defined and it's type should be void");                                                
+                    if(!program_object.is_procedure_exists("main") || (program_object.get_procedure_prototype("main")->get_return_type() != void_data_type)){
+                        cerr << "cs316: Error : Line: " <<  yylineno << ": Main should be defined and it's type should be void\n";
+                        exit(0);
                     }
+                    // cout << "exit\n";
                 }
 
-total_code  :   variable_declaration total_code 
-                {
+total_code  :   variable_declaration total_code  /* No Actions */
 
-                }
+            |   function_declaration total_code /* No Actions */
 
-            |   function_declaration total_code
-                {
-
-                }
-
-            |   procedure_definition_list
-                {
-
-                }
+            |   function_definition_list /* No Actions */
             ;
 
-procedure_definition_list   :   procedure_definition_list
-                                procedure_definition
-                                {
-                                    // $1->push_back($2);
-                                    // $$ = $1;                                    
-                                }
+function_definition_list    :   function_definition_list   /* No Actions */
+                                function_definition
 
-                            |   procedure_definition
-                                {
-                                    // $1->set_return_type(sample_data_type);
-                                    // $$ = new list<Procedure*>;
-                                    // $$->push_back($1);
-                                    // program_object.set_proc_to_map($1->get_proc_name(), $1);
-                                }
+                            |   function_definition /* No Actions */
                             ;
 
-procedure_definition    :   return_type NAME '(' func_args_list ')'
+function_definition    :   return_type NAME '(' func_def_decl_args_list ')'
                             '{'
                             {
+                                if(*($2) != "main")
+                                    *($2) = *($2) + "_";
                                 glob_scop = 0;
+                                present_procedure_name = *($2);
+                                present_procedure_return_type = $1;
+
                             }
                                 variable_declaration_list
                                 statement_list
                             '}'
                             {
-                                $8->set_table_scope(local);
-                                Procedure* proc = new Procedure(void_data_type, *($2), yylineno);
-                                proc->set_local_list(*local_symbol_table);
-                                proc->set_ast_list(*($9));
-                                // cout << "13\n";
-                                // proc->set_formal_param_list(*($4));
-                                // cout << "14\n";
-                                // $$->set_return_type($1);
-                                program_object.set_proc_to_map(*($2), proc);
-                                $$ = proc;
-                                // cout << "15\n";
+                                Procedure* proc;
+
+                                if(program_object.is_procedure_exists(*($2))){
+                                    proc = program_object.get_procedure_prototype(*($2));
+                                    if(proc->get_return_type() != $1){
+                                        cerr << "cs316: Error : Line: " <<  yylineno << ": return type in declaration and definition not matching\n";
+                                        exit(0);
+                                    }
+                                    proc->set_local_list(*local_symbol_table);
+                                    proc->set_ast_list(*($9));
+                                    proc->set_formal_param_list(*($4));
+                                }
+                                else{
+                                    proc = new Procedure($1, *($2), yylineno);
+                                    proc->set_local_list(*local_symbol_table);
+                                    proc->set_ast_list(*($9));
+                                    proc->set_formal_param_list(*($4));
+                                    program_object.set_proc_to_map(*($2), proc);
+                                }
+
+                                local_symbol_table = new Symbol_Table();
                             }
                         ;
 
 
-function_declaration    :   return_type NAME '(' func_args_list ')' ';' /* No Actions */
+function_declaration    :   return_type NAME '(' func_def_decl_args_list ')' ';'
+                            {
+                                if(*($2) != "main")
+                                    *($2) = *($2) + "_";
 
-                        |   return_type NAME '(' type_list ')' ';'  /* No Actions */
+                                Procedure* proc = new Procedure($1, *($2), yylineno);
+                                proc->set_local_list(*local_symbol_table);
+                                proc->set_formal_param_list(*($4));
+                                program_object.set_proc_to_map(*($2), proc);
+                            }
+
+                        |   return_type NAME '(' type_list ')' ';'
+                            {
+                                if(*($2) != "main")
+                                    *($2) = *($2) + "_";
+
+                                Procedure* proc = new Procedure($1, *($2), yylineno);
+                                proc->set_local_list(*local_symbol_table);
+                                proc->set_formal_param_list(*($4));
+                                program_object.set_proc_to_map(*($2), proc);
+                            }
                         ;
 
-func_args_list  :   /* empty */
+func_def_decl_args_list  :   /* empty */
                     {
-
+                        $$ = new Symbol_Table();
                     }
 
                 |   type_var_list
                     {
-
+                        $$ = $1;
                     }
                 ;
                 
 
-function_call   :   NAME '(' func_args_list ')' ';'
+function_call   :   NAME '(' func_call_args_list ')' ';'
                     {
-                        $$ = new Call_Ast(*($1), yylineno);  // TODO:
-                        // $$->check_actual_formal_param($3);
+                        if(*($1) != "main")
+                            *($1)= *($1) + "_";
+                        Call_Ast * call_ast = new Call_Ast(*($1), yylineno);
+                        call_ast->set_actual_param_list(*($3));
+                        call_ast->check_actual_formal_param(program_object.get_procedure_prototype(*($1))->get_formal_param_list());
+                        $$ = call_ast;
                     }
                 ;
 
-type_var_list   :   type_var_list ',' return_type variable
-                    {
+func_call_args_list :   func_call_args_list1
+                        {
+                            $$ = $1;                            
+                        }
 
+                    |   /* empty */
+                        {
+                            $$ = new list<Ast*>;
+                        }
+                    ;
+
+func_call_args_list1    :   func_arg ',' func_call_args_list1
+                            {
+                                $3->push_back($1);
+                                $$ = $3;                                
+                            }
+
+                        |   func_arg
+                            {
+                                $$ = new list<Ast*>;
+                                $$->push_back($1);
+                            }
+                        ;
+
+func_arg    :   variable
+                {
+                    $$ = $1;
+                }
+            
+            |   constant
+                {
+                    $$ = $1;
+                }
+            ;
+
+type_var_list   :   type_var_list ',' return_type NAME
+                    {
+                        *($4) = *($4) + "_";
+                        if($3 == void_data_type){
+                            cerr << "cs316: Error : Line: " <<  yylineno << ": Argument variable cannot be void data type\n";
+                            exit(0);
+                        }
+
+                        if($1->variable_in_symbol_list_check(*($4))){
+                            cerr << "cs316: Error : Line: " <<  yylineno << ": Variable is declared twice\n";                            
+                            exit(0);
+                        }
+
+                        Symbol_Table_Entry * sym = new Symbol_Table_Entry(*($4), $3, yylineno);
+                        $1->push_symbol(sym);
+                        $$ = $1;
                     }
 
-                |   return_type variable
+                |   return_type NAME
                     {
+                        *($2) = *($2) + "_";
+                        if($1 == void_data_type){
+                            cerr << "cs316: Error : Line: " <<  yylineno << ": Argument variable cannot be void data type\n";                            
+                            exit(0);
+                        }
 
+                        $$ = new Symbol_Table();
+                        Symbol_Table_Entry * sym = new Symbol_Table_Entry(*($2), $1, yylineno);
+                        $$->push_symbol(sym);
                     }
 
                 ;
 
 type_list   :   type_list ',' return_type
                 {
-
+                    if($3 == void_data_type){
+                        cerr << "cs316: Error : Line: " <<  yylineno << ": Argument cannot be void data type\n";
+                        exit(0);
+                    }
+                    
+                    string dummy_string = "dummy";
+                    Symbol_Table_Entry * sym = new Symbol_Table_Entry(dummy_string, $3, yylineno);
+                    $1->push_symbol(sym);
+                    $$ = $1;
                 }
 
             |   return_type
                 {
+                    if($1 == void_data_type){
+                        cerr << "cs316: Error : Line: " <<  yylineno << ": Argument cannot be void data type\n";
+                        exit(0);
+                    }
 
+                    $$ = new Symbol_Table();
+                    string dummy_string = "dummy";
+                    Symbol_Table_Entry * sym = new Symbol_Table_Entry(dummy_string, $1, yylineno);
+                    $$->push_symbol(sym);
                 }
             
             ;
 
-return_type :   INTEGER
-                {
-                    $$ = int_data_type;
-                    sample_data_type = int_data_type;
-                }
+return_type     :  INTEGER
+                    {
+                        $$ = int_data_type;
+                        sample_data_type = int_data_type;
+                    }
             
-            |   FLOAT
-                {
-                    $$ = double_data_type;
-                    sample_data_type = double_data_type;
-                }
+                |   FLOAT
+                    {
+                        $$ = double_data_type;
+                        sample_data_type = double_data_type;
+                    }
 
-            |   VOID
-                {
-                    $$ = void_data_type;
-                    sample_data_type = void_data_type;
-                }
+                |   VOID
+                    {
+                        $$ = void_data_type;
+                        sample_data_type = void_data_type;
+                    }
             ;
 
 variable_declaration_list   :   variable_declaration_list
@@ -295,7 +386,7 @@ assignment_statement    :   variable ASSIGN expression ';'
                                 $$->check_ast();
                             }
 
-                        |   variable ASSIGN function_call ';'
+                        |   variable ASSIGN function_call
                             {
                                 $$ = new Assignment_Ast($1, $3, yylineno);
                                 $$->check_ast();
@@ -374,7 +465,7 @@ variable    :   NAME
                         $$ = new Name_Ast(s, global_symbol_table->get_symbol_table_entry(s), yylineno);
                     }
                     else{
-                        yyerror("cs316: Error : Variable has not been declared");
+                        cerr << "cs316: Error : Line: " <<  yylineno << ": Variable has not been declared\n";
                         exit(0);
                     }
                 }
@@ -484,7 +575,7 @@ relational_expr     :   expression LESS_THAN expression
                     |   expression EQUAL expression
                         {
                             $$ = new Relational_Expr_Ast($1, equalto, $3, yylineno);
-                            $$->check_ast();                            
+                            $$->check_ast();
                         }
 
                     |   expression NOT_EQUAL expression
@@ -500,7 +591,7 @@ sequence_list   :   '{'
                     {
                         if ($2->empty())
                         {
-                            yyerror("cs316: Error : Block of statements cannot be empty (Invariant at line 404, file parser.y).");
+                            cerr << "cs316: Error : Line: " <<  yylineno << ": Block of statements cannot be empty (Invariant at line 404, file parser.y).\n";
                             exit(0);
                         }
                         Sequence_Ast * seq_ast_body = new Sequence_Ast(yylineno);
@@ -514,7 +605,16 @@ sequence_list   :   '{'
 
 return_stmt :   RETURN expression ';'
                 {
-                    $$ = new Return_Ast($2, "", yylineno); //TODO: check 2nd argument - procedure name
+                    if(present_procedure_return_type != $2->get_data_type()){
+                        cerr << "cs316: Error : Line: " <<  yylineno << ": Return type not matching\n";
+                        exit(0);
+                    }
+                    $$ = new Return_Ast($2, present_procedure_name, yylineno); //TODO: check 2nd argument - procedure name
+                }
+
+            |   RETURN ';'
+                {
+                    $$ = new Return_Ast(NULL, present_procedure_name, yylineno);
                 }
 
             ;
