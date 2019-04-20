@@ -49,7 +49,7 @@ Data_Type sample_data_type;
 %type <double_value>     DOUBLE_NUMBER
 %type <string_value> NAME
 %type <ast> assignment_statement expression variable constant relational_expr logical_expr if_stmt while_stmt do_while_stmt single_stmt sequence_list print_stmt
-%type <ast> return_stmt function_call func_arg
+%type <ast> return_stmt function_call
 %type <symbol_table> variable_list variable_declaration variable_declaration_list func_def_decl_args_list type_var_list type_list
 %type <ast_list> statement_list func_call_args_list func_call_args_list1
 %type <data_type> return_type
@@ -175,29 +175,19 @@ func_call_args_list :   func_call_args_list1
                         }
                     ;
 
-func_call_args_list1    :   func_arg ',' func_call_args_list1
+func_call_args_list1    :   expression ',' func_call_args_list1
                             {
                                 $3->push_back($1);
                                 $$ = $3;                                
                             }
 
-                        |   func_arg
+                        |   expression
                             {
                                 $$ = new list<Ast*>;
                                 $$->push_back($1);
                             }
                         ;
 
-func_arg    :   variable
-                {
-                    $$ = $1;
-                }
-            
-            |   constant
-                {
-                    $$ = $1;
-                }
-            ;
 
 type_var_list   :   type_var_list ',' return_type NAME
                     {
@@ -614,6 +604,10 @@ return_stmt :   RETURN expression ';'
 
             |   RETURN ';'
                 {
+                    if(present_procedure_return_type != void_data_type){
+                        cerr << "cs316: Error : Line: " <<  yylineno << ": Return type not matching\n";
+                        exit(0);
+                    }
                     $$ = new Return_Ast(NULL, present_procedure_name, yylineno);
                 }
 
